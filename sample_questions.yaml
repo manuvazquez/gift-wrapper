@@ -1,0 +1,7 @@
+- name: Constellation
+  statement: |
+    Consider the constellation in the figure
+    http\://www.tsc.uc3m.es/\~mvazquez/foo.svg
+  images_settings:
+    width: 500
+    height: 300

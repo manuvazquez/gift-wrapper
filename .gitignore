@@ -1,0 +1,6 @@
+changelog
+.idea
+__pycache__
+.directory
+*.svg
+environment.yml
