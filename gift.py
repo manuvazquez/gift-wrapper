@@ -23,26 +23,6 @@ def from_question_name(name: str) -> str:
 	return f'::{name}::'
 
 
-def process_latex(text: str) -> str:
-	"""
-	Adapts every occurrence of $$ to GIT.
-
-	Parameters
-	----------
-	text : str
-		Input text.
-
-	Returns
-	-------
-	out: str
-		GIFT-ready text.
-
-	"""
-
-	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
-	return re.sub('\$([^\$]*)\$', r'\(\1\)', text)
-
-
 def from_image_url(url: str, width: int, height: int) -> str:
 	"""
 	Generates GIFT text for a URL.
@@ -73,6 +53,26 @@ def from_image_url(url: str, width: int, height: int) -> str:
 		res = res.replace(to_be_escaped, '\\' + to_be_escaped)
 
 	return res
+
+
+def process_latex(text: str) -> str:
+	"""
+	Adapts every occurrence of $$ to GIT.
+
+	Parameters
+	----------
+	text : str
+		Input text.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
+	return re.sub('\$([^\$]*)\$', r'\(\1\)', text)
 
 
 def process_url_images(text: str, width: int, height: int) -> str:

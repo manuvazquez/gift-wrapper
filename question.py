@@ -19,8 +19,20 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	@property
 	def gift(self):
 
-		return gift.from_question_name(self.name) + gift.html + gift.process_url_images(
-			gift.process_new_lines(self.statement), width=self.images_width, height=self.images_width)
+		# for the sake of convenience (easily reordering the steps below)
+		processed_statement = self.statement
+
+		# URLs are processed
+		processed_statement = gift.process_url_images(
+			processed_statement, width=self.images_width, height=self.images_width)
+
+		# new lines are replaced
+		processed_statement = gift.process_new_lines(processed_statement)
+
+		# Latex's $'s are processed
+		processed_statement = gift.process_latex(processed_statement)
+
+		return gift.from_question_name(self.name) + gift.html + processed_statement
 
 	def __repr__(self):
 

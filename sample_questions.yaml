@@ -1,7 +1,8 @@
-- name: WTF
+- name: q1
   statement: |
     Let's try
     http://www.tsc.uc3m.es/~mvazquez/foo.svg
+    What is $a_2$?
   images_settings:
     width: 500
     height: 300
