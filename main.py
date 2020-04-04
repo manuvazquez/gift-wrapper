@@ -28,11 +28,6 @@ i_question = 0
 
 q = question.Numerical(**questions[i_question])
 
-res = gift.from_image_url('http://www.tsc.uc3m.es/~mvazquez/foo.svg', 200, 300)
-
-test = 'http://www.tsc.uc3m.es/~mvazquez/foo.svg' + ' bla bla ' + 'http://www.tsc.uc3m.es/~mvazquez/foo.svg'
-res2 = gift.process_url_images(test, 20, 10)
-
 with open('out.txt', 'w') as f:
 
-	f.write(res)
+	f.write(q.gift)
