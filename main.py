@@ -24,9 +24,15 @@ with open(command_line_arguments.questions_file.name) as yaml_data:
 
 	questions = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
-i_question = 0
+# i_question = 0
+i_question = 1
 
-q = question.Numerical(**questions[i_question])
+question_class = getattr(question, questions[i_question]['class'])
+
+# the class is removed from the dictionary so that it doesn't get passed to the initializer
+del questions[i_question]['class']
+
+q = question_class(**questions[i_question])
 
 with open('out.txt', 'w') as f:
 

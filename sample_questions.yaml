@@ -1,4 +1,7 @@
+  # the identifier of the question once imported
 - name: q1
+  class: Numerical
+  # vertical bar, "|", signals a *multiline* string
   statement: |
     Let's try
     http://www.tsc.uc3m.es/~mvazquez/foo.svg
@@ -6,4 +9,20 @@
   images_settings:
     width: 500
     height: 300
-  solution: 3.1415
+  solution:
+    value: 3.1415
+    error: 0.5
+# --------------------------------------------------------
+- name: q2
+  class: MultipleChoice
+  statement: |
+    Blah blah...
+  images_settings:
+    width: 500
+    height: 300
+  answers:
+    perfect: right on!!
+    wrong:
+      - [sort of, 80]
+      - [well..., 10]
+      - no idea
