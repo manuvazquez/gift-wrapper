@@ -2,14 +2,12 @@
 
 import argparse
 import sys
-import re
-import pathlib
 import logging.config
 
 import yaml
 
-import gift
 import question
+import remote
 
 # ================================= command line arguments
 
@@ -37,3 +35,11 @@ q = question_class(**questions[i_question])
 with open('out.txt', 'w') as f:
 
 	f.write(q.gift)
+
+
+with open('parameters.yaml') as yaml_data:
+
+	parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
+
+connection = remote.Connection(**parameters['images hosting']['ssh'])
+connection.copy('out.txt', parameters['images hosting']['directory'])
