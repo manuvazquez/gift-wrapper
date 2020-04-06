@@ -98,6 +98,8 @@ class MultipleChoice(HtmlQuestion):
 		return '{\n\t' + '\n\t'.join(self.processed_answers) + '\n}'
 
 
+# ========================================== Decorators
+
 class QuestionDecorator:
 
 	def __init__(self, decorated: HtmlQuestion):
@@ -109,6 +111,16 @@ class QuestionDecorator:
 
 		# ...is relayed to the *decorated* object
 		return getattr(self._decorated, item)
+
+	def __setattr__(self, key, value):
+
+		# except for the `_decorated` attribute...
+		if key == '_decorated':
+			object.__setattr__(self, key, value)
+		# ...everything else...
+		else:
+			# ...is relayed to the decorated object
+			setattr(self._decorated, key, value)
 
 	def transform_files(
 			self, pattern: str, process_match: Callable[[str], None],
@@ -138,15 +150,25 @@ class TexToSvg(QuestionDecorator):
 
 class SvgToHttp(QuestionDecorator):
 
-	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, remote_directory: str, public_url: str):
+	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, remote_directory: dict, public_url: str):
 
 		super().__init__(decorated)
 
-		# pattern = '(\S*\.svg)'
-		# # replacement_string = public_url + r'\1'
-		# replacement = lambda m: public_url + pathlib.Path(m.group(0)).name
-		# breakpoint()
+		assert ('base' in remote_directory) and ('subdirectory' in remote_directory)
 
+		# make a new directory if necessary
+		connection.make_directory_at(remote_directory['subdirectory'], remote_directory['base'])
+
+		assert pathlib.Path(remote_directory['subdirectory']).parent.as_posix() == '.',\
+			f'subdirectory, "{remote_directory["subdirectory"]}" ,should have a single component'
+
+		# assembled remote path
+		assembled_path = pathlib.Path(remote_directory['base']).joinpath(remote_directory['subdirectory'])
+
+		# when replacing the file in the text, we need `public_url`/`remote_directory['subdirectory']`/<file name>
+		# meaning that the local directory in which the files are stored corresponds to remote directory
+		# `remote_directory['subdirectory']`
 		self.transform_files(
-			'(\S*\.svg)', functools.partial(connection.copy, remote_directory=remote_directory),
-			lambda m: public_url + pathlib.Path(m.group(0)).name)
+			'(\S*\.svg)', functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
+			lambda m: public_url + (
+					assembled_path.relative_to(remote_directory['base']) / pathlib.Path(m.group(0)).name).as_posix())

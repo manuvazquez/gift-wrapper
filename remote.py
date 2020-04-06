@@ -46,3 +46,15 @@ class Connection:
 		remote = pathlib.Path(remote_directory) / local.name
 
 		self.sftp.put(local.as_posix(), self.sftp.normalize(remote.as_posix()))
+
+	def make_directory_at(self, new: str, at: str):
+
+		self.sftp.chdir(at)
+
+		# if the directory does not exist...
+		if new not in self.sftp.listdir('.'):
+
+			self.sftp.mkdir(new)
+
+		# the "current working directory" in unset
+		self.sftp.chdir(None)

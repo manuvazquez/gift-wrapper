@@ -8,7 +8,10 @@ images hosting:
     # machine into which files will be copied
     host: hidra1
 
-    # "." stands for the working directory when you ssh into the machine
-    directory: ./public_html
+    directory:
+      # "." stands for the working directory when you ssh into the machine; this *should* exist
+      base: ./public_html
+      # this will be created if necessary
+      subdirectory: ex1
 
   public URL: http://www.tsc.uc3m.es/~mvazquez/

@@ -25,6 +25,12 @@ with open('parameters.yaml') as yaml_data:
 
 connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
+# breakpoint()
+#
+# connection.make_directory_at('whaaaat', './public_html')
+# connection.sftp.listdir('./public_html')
+# connection.sftp.mkdir('./public_html/foo/a')
+
 with open(command_line_arguments.questions_file.name) as yaml_data:
 
 	questions = yaml.load(yaml_data, Loader=yaml.FullLoader)
