@@ -1,7 +1,14 @@
 images hosting:
+
   ssh:
-    host: hidra1
     user: mvazquez
     public_key: ~/.ssh/id_rsa_totolaca.pub
-  # "." stands for the working directory when you ssh into the machine
-  directory: ./public_html
+
+  copy:
+    # machine into which files will be copied
+    host: hidra1
+
+    # "." stands for the working directory when you ssh into the machine
+    directory: ./public_html
+
+  public URL: http://www.tsc.uc3m.es/~mvazquez/

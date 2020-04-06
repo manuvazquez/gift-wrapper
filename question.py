@@ -1,9 +1,12 @@
 import abc
 import functools
+import re
 import pathlib
-from typing import Union
+from typing import Union, Callable
 
 import gift
+import image
+import remote
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
@@ -68,11 +71,6 @@ class Numerical(HtmlQuestion):
 
 		return '{\n\t=%100%' + self.solution_value + self.solution_error + '#\n}'
 
-	# @property
-	# def gift(self):
-	#
-	# 	return super().gift + self.answer
-
 
 class MultipleChoice(HtmlQuestion):
 
@@ -98,3 +96,57 @@ class MultipleChoice(HtmlQuestion):
 	def answer(self):
 
 		return '{\n\t' + '\n\t'.join(self.processed_answers) + '\n}'
+
+
+class QuestionDecorator:
+
+	def __init__(self, decorated: HtmlQuestion):
+
+		self._decorated = decorated
+
+	# any method/attribute not implemented here...
+	def __getattr__(self, item):
+
+		# ...is relayed to the *decorated* object
+		return getattr(self._decorated, item)
+
+	def transform_files(
+			self, pattern: str, process_match: Callable[[str], None],
+			replacement: Union[str, Callable[[re.Match], str]]):
+
+		# all the matching files in the statement of the problem
+		files = re.findall(pattern, self._decorated.statement)
+
+		# every one of them...
+		for file in files:
+
+			# ...is processed
+			process_match(file)
+
+		# extension of TeX files is changed to pdf
+		self._decorated.statement = re.sub(pattern, replacement, self._decorated.statement)
+
+
+class TexToSvg(QuestionDecorator):
+
+	def __init__(self, decorated: HtmlQuestion):
+
+		super().__init__(decorated)
+
+		self.transform_files('(\S*)\.tex', lambda x: image.pdf_to_svg(image.compile_tex(x)), r'\1.svg')
+
+
+class SvgToHttp(QuestionDecorator):
+
+	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, remote_directory: str, public_url: str):
+
+		super().__init__(decorated)
+
+		# pattern = '(\S*\.svg)'
+		# # replacement_string = public_url + r'\1'
+		# replacement = lambda m: public_url + pathlib.Path(m.group(0)).name
+		# breakpoint()
+
+		self.transform_files(
+			'(\S*\.svg)', functools.partial(connection.copy, remote_directory=remote_directory),
+			lambda m: public_url + pathlib.Path(m.group(0)).name)

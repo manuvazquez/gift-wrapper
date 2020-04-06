@@ -33,12 +33,16 @@ class Connection:
 
 		self.connection.close()
 
-	def copy(self, source: Union[str, pathlib.Path], relative_remote_directory: str):
+	def is_active(self):
+
+		return self.connection.get_transport().is_active()
+
+	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
 
 		local = pathlib.Path(source)
 
 		assert local.exists(), f'file {local} does not exist'
 
-		remote = pathlib.Path(relative_remote_directory) / local.name
+		remote = pathlib.Path(remote_directory) / local.name
 
 		self.sftp.put(local.as_posix(), self.sftp.normalize(remote.as_posix()))
