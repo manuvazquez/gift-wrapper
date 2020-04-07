@@ -2,7 +2,7 @@ import abc
 import functools
 import re
 import pathlib
-from typing import Union, Callable
+from typing import Union, Callable, Optional
 
 import gift
 import image
@@ -11,10 +11,11 @@ import remote
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
 
-	def __init__(self, name: str, statement: str, images_settings: dict):
+	def __init__(self, name: str, statement: str, images_settings: dict, feedback: Optional[str] = None):
 
 		self.name = name
 		self.statement = statement.rstrip()
+		self.feedback = feedback
 
 		assert ('width' in images_settings) and ('height' in images_settings),\
 			'"width" and/or "height" missing in "image_settings"'
@@ -26,17 +27,38 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			gift.process_new_lines, gift.process_latex
 		]
 
-	@property
-	def gift(self):
+	def process_text(self, text: str) -> str:
+		"""
+		Functions in `self.processing_functions` are applied on the given input.
 
-		# for the sake of convenience (easily reordering the steps below)
-		processed_statement = self.statement
+		Parameters
+		----------
+		text : str
+			Input text.
+
+		Returns
+		-------
+		out: str
+			Text processed with the previously defined functions.
+
+		"""
 
 		for function in self.processing_functions:
 
-			processed_statement = function(processed_statement)
+			text = function(text)
 
-		return gift.from_question_name(self.name) + gift.html + processed_statement + self.answer
+		return text
+
+	@property
+	def gift(self):
+
+		# feedback part of the answer if any
+		feedback = ("\n\t" + gift.from_feedback(self.feedback.rstrip())) if self.feedback else ""
+
+		# the full answer
+		answer = f'{{\n{self.answer + feedback}\n}}'
+
+		return gift.from_question_name(self.name) + gift.html + self.process_text(self.statement) + answer
 
 	def __repr__(self):
 
@@ -51,9 +73,10 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 class Numerical(HtmlQuestion):
 
-	def __init__(self, name: str, statement: str, images_settings: dict, solution: dict):
+	def __init__(
+			self, name: str, statement: str, images_settings: dict, solution: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings)
+		super().__init__(name, statement, images_settings, feedback)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -69,14 +92,14 @@ class Numerical(HtmlQuestion):
 	@property
 	def answer(self):
 
-		return '{\n\t=%100%' + self.solution_value + self.solution_error + '#\n}'
+		return '\t=%100%' + self.solution_value + self.solution_error + '#'
 
 
 class MultipleChoice(HtmlQuestion):
 
-	def __init__(self, name: str, statement: str, images_settings: dict, answers: dict):
+	def __init__(self, name: str, statement: str, images_settings: dict, answers: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings)
+		super().__init__(name, statement, images_settings, feedback)
 
 		self.processed_answers = ['=' + answers['perfect']]
 
@@ -95,7 +118,7 @@ class MultipleChoice(HtmlQuestion):
 	@property
 	def answer(self):
 
-		return '{\n\t' + '\n\t'.join(self.processed_answers) + '\n}'
+		return '\t' + '\n\t'.join(self.processed_answers)
 
 
 # ========================================== Decorators
@@ -148,7 +171,7 @@ class TexToSvg(QuestionDecorator):
 		super().__init__(decorated)
 
 		# the "\1" in the last argument refers to the match in the first one
-		self.transform_files('(\S*)\.tex', lambda x: image.pdf_to_svg(image.compile_tex(x)), r'\1.svg')
+		self.transform_files('(\S+)\.tex', lambda x: image.pdf_to_svg(image.compile_tex(x)), r'\1.svg')
 
 
 class SvgToHttp(QuestionDecorator):

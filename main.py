@@ -32,8 +32,8 @@ with open(questions_file) as yaml_data:
 
 	categories = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
-connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
-# connection = remote.FakeConnection()
+# connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+connection = remote.FakeConnection()
 
 with open(questions_file.with_suffix('.gift'), 'w') as f:
 

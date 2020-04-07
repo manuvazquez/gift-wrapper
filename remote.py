@@ -61,6 +61,9 @@ class Connection:
 
 
 class FakeConnection:
+	"""
+	For debugging purposes.
+	"""
 
 	def __init__(self):
 

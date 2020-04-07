@@ -76,9 +76,28 @@ def from_category(name: str, within_the_course: bool = True) -> str:
 	return '$CATEGORY: ' + (r'$course$/' if within_the_course else '') + name + '\n\n'
 
 
+def from_feedback(text: str) -> str:
+	"""
+	Generates GIFT-ready text from a feedback string.
+
+	Parameters
+	----------
+	text : str
+		Input text.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	return '#'*4 + text
+
+
 def process_latex(text: str) -> str:
 	"""
-	Adapts every occurrence of $$ to GIT.
+	Adapts every occurrence of $$ to GIFT.
 
 	Parameters
 	----------
@@ -98,7 +117,7 @@ def process_latex(text: str) -> str:
 
 def process_url_images(text: str, width: int, height: int) -> str:
 	"""
-	Adapts every to GIT every URL in a given text.
+	Adapts every to GIFT every URL in a given text.
 
 	Parameters
 	----------
@@ -117,14 +136,14 @@ def process_url_images(text: str, width: int, height: int) -> str:
 	"""
 
 	return re.sub(
-		r'http(\S*)',
+		'http(\S+)\??(?!\S)',
 		lambda m: '<p>' + from_image_url(m.group(0), width=width, height=height) + '<br></p>',
 		text)
 
 
 def process_new_lines(text: str) -> str:
 	"""
-	Adapts every to GIT every new line.
+	Adapts every to GIFT every new line.
 
 	Parameters
 	----------
