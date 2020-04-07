@@ -129,6 +129,8 @@ class QuestionDecorator:
 		# all the matching files in the statement of the problem
 		files = re.findall(pattern, self._decorated.statement)
 
+		# breakpoint()
+
 		# every one of them...
 		for file in files:
 
@@ -145,6 +147,7 @@ class TexToSvg(QuestionDecorator):
 
 		super().__init__(decorated)
 
+		# the "\1" in the last argument refers to the match in the first one
 		self.transform_files('(\S*)\.tex', lambda x: image.pdf_to_svg(image.compile_tex(x)), r'\1.svg')
 
 
@@ -169,6 +172,7 @@ class SvgToHttp(QuestionDecorator):
 		# meaning that the local directory in which the files are stored corresponds to remote directory
 		# `remote_directory['subdirectory']`
 		self.transform_files(
-			'(\S*\.svg)', functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
+			'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
+			functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
 			lambda m: public_url + (
 					assembled_path.relative_to(remote_directory['base']) / pathlib.Path(m.group(0)).name).as_posix())

@@ -55,6 +55,27 @@ def from_image_url(url: str, width: int, height: int) -> str:
 	return res
 
 
+def from_category(name: str, within_the_course: bool = True) -> str:
+	"""
+	Generates GIFT text for a category.
+
+	Parameters
+	----------
+	name : str
+		Category name.
+	within_the_course: bool
+		If True, the category will belong to the course in which the questions are imported.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	return '$CATEGORY: ' + (r'$course$/' if within_the_course else '') + name + '\n\n'
+
+
 def process_latex(text: str) -> str:
 	"""
 	Adapts every occurrence of $$ to GIT.

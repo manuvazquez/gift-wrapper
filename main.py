@@ -2,13 +2,14 @@
 
 import argparse
 import sys
+import pathlib
 import logging.config
 
 import yaml
 
 import question
 import remote
-import image
+import gift
 
 # ================================= command line arguments
 
@@ -19,41 +20,38 @@ parser.add_argument(
 
 command_line_arguments = parser.parse_args(sys.argv[1:])
 
+# the file with the parameters is read
 with open('parameters.yaml') as yaml_data:
 
 	parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
+questions_file = pathlib.Path(command_line_arguments.questions_file.name)
+
+# the file containing the questions is read
+with open(questions_file) as yaml_data:
+
+	categories = yaml.load(yaml_data, Loader=yaml.FullLoader)
+
 connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+# connection = remote.FakeConnection()
 
-# breakpoint()
-#
-# connection.make_directory_at('whaaaat', './public_html')
-# connection.sftp.listdir('./public_html')
-# connection.sftp.mkdir('./public_html/foo/a')
+with open(questions_file.with_suffix('.gift'), 'w') as f:
 
-with open(command_line_arguments.questions_file.name) as yaml_data:
+	for cat in categories:
 
-	questions = yaml.load(yaml_data, Loader=yaml.FullLoader)
+		if cat['name']:
 
-# i_question = 0
-# i_question = 1
-i_question = 2
+			f.write(gift.from_category(cat['name']))
 
-question_class = getattr(question, questions[i_question]['class'])
+		for q in cat['questions']:
 
-# the class is removed from the dictionary so that it doesn't get passed to the initializer
-del questions[i_question]['class']
+			question_class = getattr(question, q['class'])
 
-# q = question.TexToSvg(question_class(**questions[i_question]))
-q = question.SvgToHttp(
-	question.TexToSvg(question_class(**questions[i_question])), connection,
-	parameters['images hosting']['copy']['directory'], parameters['images hosting']['public URL'])
+			# the class is removed from the dictionary so that it doesn't get passed to the initializer
+			del q['class']
 
-with open('out.txt', 'w') as f:
+			q = question.SvgToHttp(
+				question.TexToSvg(question_class(**q)), connection,
+				parameters['images hosting']['copy']['directory'], parameters['images hosting']['public URL'])
 
-	f.write(q.gift)
-
-# connection.copy('out.txt', parameters['images hosting']['copy']['directory'])
-
-# res = image.compile_tex('pictures/constellation.tex')
-# res = image.compile_tex('pictures/quixote.tex')
+			f.write(f'{q.gift}\n\n')

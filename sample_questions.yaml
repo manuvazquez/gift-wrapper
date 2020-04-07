@@ -1,62 +1,49 @@
-  # the identifier of the question once imported
-- name: q1
-  class: Numerical
-  # vertical bar, "|", signals a *multiline* string
-  statement: |
-    Let's try
-    http://www.tsc.uc3m.es/~mvazquez/foo.svg
-    What is $a_2$?
-  images_settings:
-    width: 500
-    height: 300
-  solution:
-    value: 3.1415
-    error: 0.5
-# --------------------------------------------------------
-- name: Pi
-  class: Numerical
-  # vertical bar, "|", signals a *multiline* string
-  statement: |
-    What is the value of $\pi$?
-  images_settings:
-    width: 500
-    height: 300
-  solution:
-    value: 3.1415
-    error: 0.1
-# --------------------------------------------------------
-- name: Quixote
-  class: MultipleChoice
-  statement: |
-    What is the main character in pictures/quixote.tex?
-  images_settings:
-    width: 500
-    height: 300
-  answers:
-    # the correct answer
-    perfect: Don Quixote
-    # the wrong (to different extents) ones
-    wrong:
-      # if a list, the 1st element is the (wrong) answer, and the 2nd one the percentage of the total grade it yields
-      - [Sancho Panza, 90]
-      - [Dulcinea del Toboso, 10]
-      # no credit is given for this answer
-      - Some guy
-# --------------------------------------------------------
-- name: q2
-  class: MultipleChoice
-  statement: |
-    Blah blah...
-  images_settings:
-    width: 500
-    height: 300
-  answers:
-    # the correct answer
-    perfect: right on!!
-    # the wrong (to different extents) ones
-    wrong:
-      # if a list, the 1st element is the (wrong) answer, and the 2nd one the percentage of the total grade it yields
-      - [sort of, 80]
-      - [well..., 10]
-      # no credit is given for this answer
-      - no idea
+# ============================================================= Category
+  # leave it blank if you don't want subsequent questions to belong to any category
+- name: foo
+  questions:
+    # the identifier of the question once imported
+  - name: Numerical passign an URL
+    class: Numerical
+    # vertical bar, "|", signals a *multiline* string
+    statement: |
+      Check the constellation below
+      http://www.tsc.uc3m.es/~mvazquez/foo.svg
+      What is $a_2$?
+    images_settings:
+      width: 500
+      height: 300
+    solution:
+      value: 2.1
+      error: 0.5
+  # --------------------------------------------------------
+  - name: Pi
+    class: Numerical
+    # vertical bar, "|", signals a *multiline* string
+    statement: |
+      What is the value of $\pi$?
+    images_settings:
+      width: 500
+      height: 300
+    solution:
+      value: 3.1415
+      error: 0.1
+  # --------------------------------------------------------
+  - name: Quixote
+    class: MultipleChoice
+    statement: |
+      What is the main character in pictures/quixote.tex?
+    images_settings:
+      width: 500
+      height: 300
+    answers:
+      # the correct answer
+      perfect: Don Quixote
+      # the wrong (to different extents) ones
+      wrong:
+        # if a list, the 1st element is the (wrong) answer, and the 2nd one the percentage of the total grade it yields
+        - [Sancho Panza, 90]
+        - [Dulcinea del Toboso, 10]
+        # no credit is given for this answer
+        - Some guy
+  # --------------------------------------------------------

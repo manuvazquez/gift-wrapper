@@ -58,3 +58,29 @@ class Connection:
 
 		# the "current working directory" in unset
 		self.sftp.chdir(None)
+
+
+class FakeConnection:
+
+	def __init__(self):
+
+		pass
+
+	def __del__(self):
+
+		pass
+
+	@staticmethod
+	def is_active():
+
+		return False
+
+	@staticmethod
+	def copy(source: Union[str, pathlib.Path], remote_directory: str):
+
+		print(f'*should* copy {source} to {remote_directory}')
+
+	@staticmethod
+	def make_directory_at(new: str, at: str):
+
+		print(f'*should* make directory {new} at {at}')
