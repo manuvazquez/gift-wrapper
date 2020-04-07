@@ -3,7 +3,6 @@
 import argparse
 import sys
 import pathlib
-import logging.config
 
 import yaml
 import tqdm
@@ -14,13 +13,13 @@ import gift
 
 # ================================= command line arguments
 
-parser = argparse.ArgumentParser(description='Uncertainty propagation')
+parser = argparse.ArgumentParser(description='GIFT-wrapper')
 
 parser.add_argument(
-	'parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file', nargs='?')
+	'-p', '--parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file', nargs='?')
 
 parser.add_argument(
-	'questions_file', type=argparse.FileType('r'), default='sample_questions.yaml', help='questions file', nargs='?')
+	'-q', '--questions_file', type=argparse.FileType('r'), default='bank.yaml', help='questions file', nargs='?')
 
 parser.add_argument(
 	'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
@@ -57,7 +56,10 @@ else:
 	# ...an actual connection with the requested host is opened
 	connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
-with open(questions_file.with_suffix('.gift'), 'w') as f:
+# output file has the same name as the input with the ".gift" suffix
+output_file = questions_file.with_suffix('.gift')
+
+with open(output_file, 'w') as f:
 
 	# for every category...
 	for cat in tqdm.tqdm(categories, desc='category'):
@@ -66,6 +68,12 @@ with open(questions_file.with_suffix('.gift'), 'w') as f:
 		if cat['name']:
 
 			f.write(gift.from_category(cat['name']))
+
+		# the names of *all* the questions
+		all_names = [q['name'] for q in cat['questions']]
+
+		# all the names should be different
+		assert len(all_names) == len(set(all_names)), f'duplicates in category {cat["name"]}'
 
 		# for every question in the category...
 		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
@@ -82,3 +90,5 @@ with open(questions_file.with_suffix('.gift'), 'w') as f:
 				parameters['images hosting']['copy']['directory'], parameters['images hosting']['public URL'])
 
 			f.write(f'{q.gift}\n\n')
+
+print(f'file "{output_file}" created')
