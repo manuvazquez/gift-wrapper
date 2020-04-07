@@ -191,11 +191,24 @@ class SvgToHttp(QuestionDecorator):
 		# assembled remote path
 		assembled_path = pathlib.Path(remote_directory['base']).joinpath(remote_directory['subdirectory'])
 
+		def replacement_function(m: re.Match) -> str:
+
+			file = pathlib.Path(m.group(0))
+
+			return public_url + assembled_path.as_posix() + '/' + file.as_posix()
+
+		# process_match = lambda f: connection.copy(f, remote_directory=assembled_path / pathlib.Path(f).parent)
+		# breakpoint()
+
 		# when replacing the file in the text, we need `public_url`/`remote_directory['subdirectory']`/<file name>
 		# meaning that the local directory in which the files are stored corresponds to remote directory
 		# `remote_directory['subdirectory']`
 		self.transform_files(
 			'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-			functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
-			lambda m: public_url + (
-					assembled_path.relative_to(remote_directory['base']) / pathlib.Path(m.group(0)).name).as_posix())
+			lambda f: connection.copy(f, remote_directory=assembled_path / pathlib.Path(f).parent),
+			replacement_function)
+		# self.transform_files(
+		# 	'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
+		# 	functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
+		# 	lambda m: public_url + (
+		# 			assembled_path.relative_to(remote_directory['base']) / pathlib.Path(m.group(0)).name).as_posix())

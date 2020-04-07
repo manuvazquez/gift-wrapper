@@ -6,6 +6,7 @@ import pathlib
 import logging.config
 
 import yaml
+import tqdm
 
 import question
 import remote
@@ -32,18 +33,18 @@ with open(questions_file) as yaml_data:
 
 	categories = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
-# connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
-connection = remote.FakeConnection()
+connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+# connection = remote.FakeConnection()
 
 with open(questions_file.with_suffix('.gift'), 'w') as f:
 
-	for cat in categories:
+	for cat in tqdm.tqdm(categories, desc='category'):
 
 		if cat['name']:
 
 			f.write(gift.from_category(cat['name']))
 
-		for q in cat['questions']:
+		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
 
 			question_class = getattr(question, q['class'])
 

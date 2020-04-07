@@ -40,21 +40,31 @@ class Connection:
 	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
 
 		local = pathlib.Path(source)
+		remote_directory = pathlib.Path(remote_directory)
 
 		assert local.exists(), f'file {local} does not exist'
 
-		remote = pathlib.Path(remote_directory) / local.name
+		self.make_directory_at(remote_directory.relative_to(remote_directory.parts[0]), remote_directory.parts[0])
+
+		remote = remote_directory / local.name
 
 		self.sftp.put(local.as_posix(), self.sftp.normalize(remote.as_posix()))
 
-	def make_directory_at(self, new: str, at: str):
+	def make_directory_at(self, new: Union[str, pathlib.Path], at: str):
 
 		self.sftp.chdir(at)
 
-		# if the directory does not exist...
-		if new not in self.sftp.listdir('.'):
+		# for every path component in the `new` directory...
+		for subdirectory in pathlib.Path(new).parts:
 
-			self.sftp.mkdir(new)
+			# if the subdirectory does not exist...
+			if subdirectory not in self.sftp.listdir('.'):
+
+				# ...it is made...
+				self.sftp.mkdir(subdirectory)
+
+				# ...and becomes the current working directory
+			self.sftp.chdir(subdirectory)
 
 		# the "current working directory" in unset
 		self.sftp.chdir(None)
@@ -81,9 +91,9 @@ class FakeConnection:
 	@staticmethod
 	def copy(source: Union[str, pathlib.Path], remote_directory: str):
 
-		print(f'*should* copy {source} to {remote_directory}')
+		print(f'you *should* copy {source} to {remote_directory}')
 
 	@staticmethod
 	def make_directory_at(new: str, at: str):
 
-		print(f'*should* make directory {new} at {at}')
+		print(f'you *should* make directory {new} at {at}')
