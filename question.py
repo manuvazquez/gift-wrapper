@@ -53,7 +53,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	def gift(self):
 
 		# feedback part of the answer if any
-		feedback = ("\n\t" + gift.from_feedback(self.feedback.rstrip())) if self.feedback else ""
+		feedback = ("\n\t" + gift.from_feedback(self.process_text(self.feedback.rstrip()))) if self.feedback else ""
 
 		# the full answer
 		answer = f'{{\n{self.answer + feedback}\n}}'
@@ -108,12 +108,12 @@ class MultipleChoice(HtmlQuestion):
 			# if it is a list
 			if isinstance(a, list):
 
-				self.processed_answers.append(f'~%{a[1]}%{a[0]}')
+				self.processed_answers.append(f'~%{a[1]}%{self.process_text(a[0])}')
 
 			# if it is a scalar
 			else:
 
-				self.processed_answers.append(f'~{a}')
+				self.processed_answers.append(f'~{self.process_text(a)}')
 
 	@property
 	def answer(self):
@@ -189,26 +189,18 @@ class SvgToHttp(QuestionDecorator):
 			f'subdirectory, "{remote_directory["subdirectory"]}" ,should have a single component'
 
 		# assembled remote path
-		assembled_path = pathlib.Path(remote_directory['base']).joinpath(remote_directory['subdirectory'])
+		base_subdirectory = pathlib.Path(remote_directory['base']).joinpath(remote_directory['subdirectory'])
 
 		def replacement_function(m: re.Match) -> str:
 
 			file = pathlib.Path(m.group(0))
 
-			return public_url + assembled_path.as_posix() + '/' + file.as_posix()
-
-		# process_match = lambda f: connection.copy(f, remote_directory=assembled_path / pathlib.Path(f).parent)
-		# breakpoint()
+			return public_url + remote_directory['subdirectory'] + '/' + file.as_posix()
 
 		# when replacing the file in the text, we need `public_url`/`remote_directory['subdirectory']`/<file name>
 		# meaning that the local directory in which the files are stored corresponds to remote directory
 		# `remote_directory['subdirectory']`
 		self.transform_files(
 			'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-			lambda f: connection.copy(f, remote_directory=assembled_path / pathlib.Path(f).parent),
+			lambda f: connection.copy(f, remote_directory=base_subdirectory / pathlib.Path(f).parent),
 			replacement_function)
-		# self.transform_files(
-		# 	'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-		# 	functools.partial(connection.copy, remote_directory=assembled_path.as_posix()),
-		# 	lambda m: public_url + (
-		# 			assembled_path.relative_to(remote_directory['base']) / pathlib.Path(m.group(0)).name).as_posix())

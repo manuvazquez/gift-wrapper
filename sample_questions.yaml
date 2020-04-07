@@ -4,6 +4,7 @@
   questions:
     # the identifier of the question once imported
   - name: Numerical passign an URL
+    # it must be one of: Numerical, MultipleChoice
     class: Numerical
     # vertical bar, "|", signals a *multiline* string
     statement: |
@@ -21,7 +22,6 @@
   # --------------------------------------------------------
   - name: Pi
     class: Numerical
-    # vertical bar, "|", signals a *multiline* string
     statement: |
       What is the value of $\pi$?
     images_settings:
@@ -30,12 +30,12 @@
     solution:
       value: 3.1415
       error: 0.1
-    feedback:
+    feedback: well, $\pi$
   # --------------------------------------------------------
   - name: Quixote
     class: MultipleChoice
     statement: |
-      What is the main character in pictures/quixote.tex?
+      What is the main character in pictures/quixote.tex ?
     images_settings:
       width: 500
       height: 300
@@ -49,6 +49,7 @@
         - [Dulcinea del Toboso, 10]
         # no credit is given for this answer
         - Some guy
+        - $Q\left(x\right)$
     feedback: |
       you know, well...you know...you know you know....
   # --------------------------------------------------------

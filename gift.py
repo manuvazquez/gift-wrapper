@@ -136,7 +136,7 @@ def process_url_images(text: str, width: int, height: int) -> str:
 	"""
 
 	return re.sub(
-		'http(\S+)\??(?!\S)',
+		'http(\S+)(?!\S)',
 		lambda m: '<p>' + from_image_url(m.group(0), width=width, height=height) + '<br></p>',
 		text)
 

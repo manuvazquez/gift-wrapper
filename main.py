@@ -17,40 +17,66 @@ import gift
 parser = argparse.ArgumentParser(description='Uncertainty propagation')
 
 parser.add_argument(
+	'parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file', nargs='?')
+
+parser.add_argument(
 	'questions_file', type=argparse.FileType('r'), default='sample_questions.yaml', help='questions file', nargs='?')
+
+parser.add_argument(
+	'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
 
 command_line_arguments = parser.parse_args(sys.argv[1:])
 
+# ================================= parameters' reading
+
 # the file with the parameters is read
-with open('parameters.yaml') as yaml_data:
+with open(command_line_arguments.parameters_file.name) as yaml_data:
 
 	parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
 questions_file = pathlib.Path(command_line_arguments.questions_file.name)
+
+# ================================= questions' reading
 
 # the file containing the questions is read
 with open(questions_file) as yaml_data:
 
 	categories = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
-connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
-# connection = remote.FakeConnection()
+# =================================
+
+# if "local" running was requested...
+if command_line_arguments.local:
+
+	# ...a "fake" connections is instantiated
+	connection = remote.FakeConnection()
+
+# if NO local running was requested...
+else:
+
+	# ...an actual connection with the requested host is opened
+	connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 with open(questions_file.with_suffix('.gift'), 'w') as f:
 
+	# for every category...
 	for cat in tqdm.tqdm(categories, desc='category'):
 
+		# if a name was actually provided...
 		if cat['name']:
 
 			f.write(gift.from_category(cat['name']))
 
+		# for every question in the category...
 		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
 
+			# that class that will be instantiated for this particular question
 			question_class = getattr(question, q['class'])
 
 			# the class is removed from the dictionary so that it doesn't get passed to the initializer
 			del q['class']
 
+			# question is instantiated and decorated
 			q = question.SvgToHttp(
 				question.TexToSvg(question_class(**q)), connection,
 				parameters['images hosting']['copy']['directory'], parameters['images hosting']['public URL'])
