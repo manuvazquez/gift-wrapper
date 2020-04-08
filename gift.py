@@ -124,8 +124,18 @@ def process_latex(text: str) -> str:
 
 	"""
 
+	def replacement(m: re.Match) -> str:
+
+		latex_source = m.group(1)
+
+		for to_be_escaped in ['\\', '{', '}']:
+
+			latex_source = latex_source.replace(to_be_escaped, '\\' + to_be_escaped)
+
+		return r'\\(' + latex_source + r'\\)'
+
 	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
-	return re.sub('\$([^\$]*)\$', r'\(\1\)', text)
+	return re.sub('\$([^\$]*)\$', replacement, text)
 
 
 def process_url_images(text: str, width: int, height: int) -> str:
