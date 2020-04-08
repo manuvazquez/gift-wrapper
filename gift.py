@@ -43,10 +43,23 @@ def from_image_url(url: str, width: int, height: int) -> str:
 
 	"""
 
-	res = (
-		f'<img src="{url}" alt="" role="presentation" class="atto_image_button_text-bottom" '
-		f'width="{width}" height="{height}">'
-	)
+	if (width is not None) ^ (height is not None):
+
+		raise Exception('both width and height should be passed or none')
+
+	else:
+
+		# `width` is checked, but `height` could be as well used: either both are set or both are `None`
+		if width is not None:
+
+			# notice the space at the beginning
+			width_height = f' width="{width}" height="{height}"'
+
+		else:
+
+			width_height = ''
+
+	res = f'<img src="{url}" alt="" role="presentation" class="atto_image_button_text-bottom"{width_height}>'
 
 	for to_be_escaped in [':', '~', '=']:
 

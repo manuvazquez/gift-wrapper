@@ -217,7 +217,8 @@ class TexToSvg(QuestionDecorator):
 
 		super().__init__(decorated)
 
-		# a new pre-processing function is appended (the "\1" in `replacement` refers to matches in `pattern`)
+		# a new pre-processing function is attached to the corresponding list
+		# (the "\1" in `replacement` refers to matches in `pattern`)
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(\S+)\.tex', process_match=lambda x: image.pdf_to_svg(image.compile_tex(x)),
 			replacement=r'\1.svg'))
@@ -243,7 +244,7 @@ class SvgToHttp(QuestionDecorator):
 
 			return public_url + directories['subdirectory'] + '/' + file.as_posix()
 
-		# a new pre-processing function is appended
+		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
 			process_match=lambda f: connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent),

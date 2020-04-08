@@ -85,6 +85,12 @@ with open(output_file, 'w') as f:
 			# that class that will be instantiated for this particular question
 			question_class = getattr(question, q['class'])
 
+			# if field `images_settings` is not present...
+			if 'images_settings' not in q:
+
+				# `None` values for width and height are assumed (meaning automatic size adjustment)
+				q['images_settings'] = {'width': None, 'height': None}
+
 			# the class is removed from the dictionary so that it doesn't get passed to the initializer
 			del q['class']
 

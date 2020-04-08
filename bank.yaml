@@ -12,6 +12,7 @@
       Check the constellation below
       http://www.tsc.uc3m.es/~mvazquez/foo.svg
       What is $a_2$?
+    # if the section below is absent, size of the images is automatically adjusted
     images_settings:
       width: 500
       height: 300
