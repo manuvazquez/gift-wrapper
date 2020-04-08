@@ -10,8 +10,25 @@ import remote
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
+	"""
+	Abstract class implementing an html-based question.
+	"""
 
 	def __init__(self, name: str, statement: str, images_settings: dict, feedback: Optional[str] = None):
+		"""
+		Initializer.
+
+		Parameters
+		----------
+		name : str
+			Name of the question.
+		statement : str
+			Statement of the question.
+		images_settings : dict
+			width and height of *all* the images in the question.
+		feedback : str
+			Feedback for the question.
+		"""
 
 		self.name = name
 		self.statement = statement.rstrip()
@@ -26,6 +43,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_width),
 			gift.process_new_lines, gift.process_latex
 		]
+
+		# this might be tampered with by subclasses/decorator
+		self.pre_processing_functions = []
 
 	def process_text(self, text: str) -> str:
 		"""
@@ -43,7 +63,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		"""
 
-		for function in self.processing_functions:
+		for function in (self.pre_processing_functions + self.processing_functions):
 
 			text = function(text)
 
@@ -51,6 +71,15 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 	@property
 	def gift(self):
+		"""
+		Builds the question in the GIFT format.
+
+		Returns
+		-------
+		out: str
+			GIFT-ready text.
+
+		"""
 
 		# feedback part of the answer if any
 		feedback = ("\n\t" + gift.from_feedback(self.process_text(self.feedback.rstrip()))) if self.feedback else ""
@@ -67,11 +96,23 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	@property
 	@abc.abstractmethod
 	def answer(self):
+		"""
+		Abstract method yielding the GIFT-ready answer to the question.
+
+		Returns
+		-------
+		out: str
+			GIFT-ready text with the answer.
+
+		"""
 
 		pass
 
 
 class Numerical(HtmlQuestion):
+	"""
+	Class implementing a numerical question.
+	"""
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, solution: dict, feedback: Optional[str] = None):
@@ -96,29 +137,34 @@ class Numerical(HtmlQuestion):
 
 
 class MultipleChoice(HtmlQuestion):
+	"""
+	Class implementing a multiple-choice question.
+	"""
 
 	def __init__(self, name: str, statement: str, images_settings: dict, answers: dict, feedback: Optional[str] = None):
 
 		super().__init__(name, statement, images_settings, feedback)
 
-		self.processed_answers = ['=' + answers['perfect']]
-
-		for a in answers['wrong']:
-
-			# if it is a list
-			if isinstance(a, list):
-
-				self.processed_answers.append(f'~%{a[1]}%{self.process_text(a[0])}')
-
-			# if it is a scalar
-			else:
-
-				self.processed_answers.append(f'~{self.process_text(a)}')
+		self.answers = answers
 
 	@property
 	def answer(self):
 
-		return '\t' + '\n\t'.join(self.processed_answers)
+		processed_answers = ['=' + self.answers['perfect']]
+
+		for a in self.answers['wrong']:
+
+			# if it is a list
+			if isinstance(a, list):
+
+				processed_answers.append(f'~%{a[1]}%{self.process_text(a[0])}')
+
+			# if it is a scalar
+			else:
+
+				processed_answers.append(f'~{self.process_text(a)}')
+
+		return '\t' + '\n\t'.join(processed_answers)
 
 
 # ========================================== Decorators
@@ -145,12 +191,13 @@ class QuestionDecorator:
 			# ...is relayed to the decorated object
 			setattr(self._decorated, key, value)
 
+	@staticmethod
 	def transform_files(
-			self, pattern: str, process_match: Callable[[str], None],
+			text: str, pattern: str, process_match: Callable[[str], None],
 			replacement: Union[str, Callable[[re.Match], str]]):
 
-		# all the matching files in the statement of the problem
-		files = re.findall(pattern, self._decorated.statement)
+		# all the matching files in the given text
+		files = re.findall(pattern, text)
 
 		# breakpoint()
 
@@ -160,8 +207,8 @@ class QuestionDecorator:
 			# ...is processed
 			process_match(file)
 
-		# extension of TeX files is changed to pdf
-		self._decorated.statement = re.sub(pattern, replacement, self._decorated.statement)
+		# replacement of matches
+		return re.sub(pattern, replacement, text)
 
 
 class TexToSvg(QuestionDecorator):
@@ -170,8 +217,10 @@ class TexToSvg(QuestionDecorator):
 
 		super().__init__(decorated)
 
-		# the "\1" in the last argument refers to the match in the first one
-		self.transform_files('(\S+)\.tex', lambda x: image.pdf_to_svg(image.compile_tex(x)), r'\1.svg')
+		# a new pre-processing function is appended (the "\1" in `replacement` refers to matches in `pattern`)
+		self.pre_processing_functions.append(functools.partial(
+			self.transform_files, pattern='(\S+)\.tex', process_match=lambda x: image.pdf_to_svg(image.compile_tex(x)),
+			replacement=r'\1.svg'))
 
 
 class SvgToHttp(QuestionDecorator):
@@ -194,10 +243,8 @@ class SvgToHttp(QuestionDecorator):
 
 			return public_url + directories['subdirectory'] + '/' + file.as_posix()
 
-		# when replacing the file in the text, we need `public_url`/`remote_directory['subdirectory']`/<file name>
-		# meaning that the local directory in which the files are stored corresponds to remote directory
-		# `remote_directory['subdirectory']`
-		self.transform_files(
-			'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-			lambda f: connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent),
-			replacement_function)
+		# a new pre-processing function is appended
+		self.pre_processing_functions.append(functools.partial(
+			self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
+			process_match=lambda f: connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent),
+			replacement=replacement_function))

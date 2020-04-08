@@ -1,6 +1,6 @@
 # ============================================================= Category
   # leave it blank if you don't want subsequent questions to belong to any category
-- name: foo
+- name: foo3
   questions:
     # the identifier of the question once imported
   - name: Numerical passing an URL
@@ -51,6 +51,8 @@
         # no credit is given for this answer
         - Some guy
         - $Q\left(x\right)$
+        - It should be on the cover of pictures/quixote.tex
     feedback: |
+      if you look at the cover of pictures/quixote.tex
       you know, well...you know...you know you know....
   # --------------------------------------------------------
