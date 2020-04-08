@@ -2,15 +2,18 @@ images hosting:
 
   ssh:
     user: mvazquez
+
+    # either "password" or "public_key" must be provided but NOT both of them
+    password:
     public_key: ~/.ssh/id_rsa_totolaca.pub
 
   copy:
     # machine into which files will be copied
     host: hidra1
 
-    directory:
+    directories:
       # "." stands for the working directory when you ssh into the machine; this *should* exist
-      base: ./public_html
+      public filesystem root: ./public_html
       # this will be created if necessary
       subdirectory: ex1
 

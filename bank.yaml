@@ -3,10 +3,11 @@
 - name: foo
   questions:
     # the identifier of the question once imported
-  - name: Numerical passign an URL
+  - name: Numerical passing an URL
     # it must be one of: Numerical, MultipleChoice
     class: Numerical
-    # vertical bar, "|", signals a *multiline* string
+    # vertical bar, "|", signals a *multiline* string; when embedding a file name or URL in the text, it should be
+    # surrounded by spaces (meaning that, e.g., "foo.svg?" would not be correctly parsed)
     statement: |
       Check the constellation below
       http://www.tsc.uc3m.es/~mvazquez/foo.svg

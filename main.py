@@ -3,6 +3,7 @@
 import argparse
 import sys
 import pathlib
+import collections
 
 import yaml
 import tqdm
@@ -72,8 +73,11 @@ with open(output_file, 'w') as f:
 		# the names of *all* the questions
 		all_names = [q['name'] for q in cat['questions']]
 
+		# list with names that show up more than once
+		duplicates = [name for name, count in collections.Counter(all_names).items() if count > 1]
+
 		# all the names should be different
-		assert len(all_names) == len(set(all_names)), f'duplicates in category {cat["name"]}'
+		assert not duplicates, f'duplicates in category {cat["name"]}: {duplicates}'
 
 		# for every question in the category...
 		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
@@ -87,7 +91,7 @@ with open(output_file, 'w') as f:
 			# question is instantiated and decorated
 			q = question.SvgToHttp(
 				question.TexToSvg(question_class(**q)), connection,
-				parameters['images hosting']['copy']['directory'], parameters['images hosting']['public URL'])
+				parameters['images hosting']['copy']['directories'], parameters['images hosting']['public URL'])
 
 			f.write(f'{q.gift}\n\n')
 

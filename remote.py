@@ -6,10 +6,18 @@ import paramiko
 
 class Connection:
 
-	def __init__(self, host: str, user: str, public_key: Union[str, pathlib.Path]):
+	def __init__(self, host: str, user: str, password: str, public_key: Union[str, pathlib.Path]):
 
-		# just in case "~" is in the given path
-		public_key = pathlib.Path(public_key).expanduser()
+		# useful in `__del__` if the assertion below fails
+		self.connection = None
+
+		assert (password is not None) ^ (public_key is not None),\
+			f'either "password" or "public_key" must be passed, but not both'
+
+		if public_key is not None:
+
+			# just in case "~" is in the given path
+			public_key = pathlib.Path(public_key).expanduser().as_posix()
 
 		self.config = paramiko.SSHConfig()
 
@@ -24,14 +32,16 @@ class Connection:
 		self.connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 		# connection is established
-		self.connection.connect(host, username=user, key_filename=public_key.as_posix())
+		self.connection.connect(host, username=user, password=password, key_filename=public_key)
 
 		# FTP component of the connection
 		self.sftp = paramiko.SFTPClient.from_transport(self.connection.get_transport())
 
 	def __del__(self):
 
-		self.connection.close()
+		if self.connection is not None:
+
+			self.connection.close()
 
 	def is_active(self):
 

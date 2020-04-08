@@ -176,31 +176,28 @@ class TexToSvg(QuestionDecorator):
 
 class SvgToHttp(QuestionDecorator):
 
-	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, remote_directory: dict, public_url: str):
+	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, directories: dict, public_url: str):
 
 		super().__init__(decorated)
 
-		assert ('base' in remote_directory) and ('subdirectory' in remote_directory)
+		assert ('public filesystem root' in directories) and ('subdirectory' in directories)
 
 		# make a new directory if necessary
-		connection.make_directory_at(remote_directory['subdirectory'], remote_directory['base'])
-
-		assert pathlib.Path(remote_directory['subdirectory']).parent.as_posix() == '.',\
-			f'subdirectory, "{remote_directory["subdirectory"]}" ,should have a single component'
+		connection.make_directory_at(directories['subdirectory'], directories['public filesystem root'])
 
 		# assembled remote path
-		base_subdirectory = pathlib.Path(remote_directory['base']).joinpath(remote_directory['subdirectory'])
+		remote_subdirectory = pathlib.Path(directories['public filesystem root']).joinpath(directories['subdirectory'])
 
 		def replacement_function(m: re.Match) -> str:
 
 			file = pathlib.Path(m.group(0))
 
-			return public_url + remote_directory['subdirectory'] + '/' + file.as_posix()
+			return public_url + directories['subdirectory'] + '/' + file.as_posix()
 
 		# when replacing the file in the text, we need `public_url`/`remote_directory['subdirectory']`/<file name>
 		# meaning that the local directory in which the files are stored corresponds to remote directory
 		# `remote_directory['subdirectory']`
 		self.transform_files(
 			'(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-			lambda f: connection.copy(f, remote_directory=base_subdirectory / pathlib.Path(f).parent),
+			lambda f: connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent),
 			replacement_function)
