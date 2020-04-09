@@ -3,8 +3,10 @@ import shutil
 import subprocess
 from typing import Union, Optional
 
+import colors
 
-def compile_tex(source_file: Union[str, pathlib.Path]) -> pathlib.Path:
+
+def compile_tex(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pathlib.Path:
 	"""
 	Compiles a TeX file.
 
@@ -12,6 +14,8 @@ def compile_tex(source_file: Union[str, pathlib.Path]) -> pathlib.Path:
 	----------
 	source_file : str or pathlib.Path
 		Tex file.
+	timeout: int
+		Seconds that are given to compile the source.
 
 	Returns
 	-------
@@ -26,11 +30,23 @@ def compile_tex(source_file: Union[str, pathlib.Path]) -> pathlib.Path:
 
 	assert path_to_compiler, 'cannot find pdflatex'
 
-	command = [path_to_compiler, source_file.name]
+	command = [path_to_compiler, '-halt-on-error', source_file.name]
 
-	run_summary = subprocess.run(command, capture_output=True, cwd=source_file.parent)
+	try:
 
-	assert run_summary.returncode == 0, f"couldn't compile {source_file}"
+		run_summary = subprocess.run(command, capture_output=True, cwd=source_file.parent, timeout=timeout)
+
+	except subprocess.TimeoutExpired:
+
+		print(
+			f'{colors.error}could not compile "{colors.reset}{source_file}{colors.error}"'
+			f' in {colors.reset}{timeout}{colors.error} seconds...probably some bug in the code'
+		)
+
+		raise SystemExit
+
+	assert run_summary.returncode == 0,\
+		f'{colors.error}errors were found while compiling "{colors.reset}{source_file}{colors.error}"'
 
 	return source_file.with_suffix('.pdf')
 
