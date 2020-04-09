@@ -20,7 +20,7 @@ parser.add_argument(
 	'-p', '--parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file', nargs='?')
 
 parser.add_argument(
-	'-q', '--questions_file', type=argparse.FileType('r'), default='bank.yaml', help='questions file', nargs='?')
+	'-i', '--input_file', type=argparse.FileType('r'), default='bank.yaml', help='questions file', nargs='?')
 
 parser.add_argument(
 	'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
@@ -34,14 +34,17 @@ with open(command_line_arguments.parameters_file.name) as yaml_data:
 
 	parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
-questions_file = pathlib.Path(command_line_arguments.questions_file.name)
+input_file = pathlib.Path(command_line_arguments.input_file.name)
 
 # ================================= questions' reading
 
 # the file containing the questions is read
-with open(questions_file) as yaml_data:
+with open(input_file) as yaml_data:
 
-	categories = yaml.load(yaml_data, Loader=yaml.FullLoader)
+	input_data = yaml.load(yaml_data, Loader=yaml.FullLoader)
+
+categories = input_data['categories']
+pictures_base_directory = input_data['pictures base directory']
 
 # =================================
 
@@ -58,7 +61,7 @@ else:
 	connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 # output file has the same name as the input with the ".gift" suffix
-output_file = questions_file.with_suffix('.gift')
+output_file = input_file.with_suffix('.gift')
 
 with open(output_file, 'w') as f:
 
@@ -97,7 +100,8 @@ with open(output_file, 'w') as f:
 			# question is instantiated and decorated
 			q = question.SvgToHttp(
 				question.TexToSvg(question_class(**q)), connection,
-				parameters['images hosting']['copy']['directories'], parameters['images hosting']['public URL'])
+				parameters['images hosting']['copy']['public filesystem root'],
+				pictures_base_directory, parameters['images hosting']['public URL'])
 
 			f.write(f'{q.gift}\n\n')
 

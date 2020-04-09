@@ -1,7 +1,9 @@
 import pathlib
-from typing import Union, List
+from typing import Union
 
 import paramiko
+
+import colors
 
 
 class Connection:
@@ -118,9 +120,9 @@ class FakeConnection:
 	@staticmethod
 	def copy(source: Union[str, pathlib.Path], remote_directory: str):
 
-		print(f'you *should* copy {source} to {remote_directory}')
+		print(f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to {colors.reset}{remote_directory}')
 
 	@staticmethod
 	def make_directory_at(new: str, at: str):
 
-		print(f'you *should* make directory {new} at {at}')
+		print(f'{colors.info}you *should* make directory {colors.reset}{new}{colors.info} at {colors.reset}{at}')

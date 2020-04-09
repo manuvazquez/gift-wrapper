@@ -31,6 +31,7 @@ def compile_tex(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pat
 	assert path_to_compiler, 'cannot find pdflatex'
 
 	command = [path_to_compiler, '-halt-on-error', source_file.name]
+	# command = [path_to_compiler, r'-interaction=nonstopmode', source_file.name]
 
 	try:
 
@@ -39,14 +40,13 @@ def compile_tex(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pat
 	except subprocess.TimeoutExpired:
 
 		print(
-			f'{colors.error}could not compile "{colors.reset}{source_file}{colors.error}"'
+			f'{colors.error}could not compile {colors.reset}{source_file}'
 			f' in {colors.reset}{timeout}{colors.error} seconds...probably some bug in the code'
 		)
 
 		raise SystemExit
 
-	assert run_summary.returncode == 0,\
-		f'{colors.error}errors were found while compiling "{colors.reset}{source_file}{colors.error}"'
+	assert run_summary.returncode == 0, f'{colors.error}errors were found while compiling {colors.reset}{source_file}'
 
 	return source_file.with_suffix('.pdf')
 
@@ -78,6 +78,7 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 
 	run_summary = subprocess.run(command, capture_output=True, cwd=input_file.parent)
 
-	assert run_summary.returncode == 0, f"couldn't convert {input_file} to svg"
+	assert run_summary.returncode == 0,\
+		f"{colors.error}could not convert {colors.reset}{input_file}{colors.error} to svg"
 
 	return output_file

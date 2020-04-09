@@ -12,7 +12,10 @@ The most interesting point is probably the last one.
 
 Python requirements are:
 
-- paramiko
+- [paramiko](http://www.paramiko.org/)
+- [colorama](https://pypi.org/project/colorama/)
+- [pyyaml](https://pypi.org/project/PyYAML/)
+- [tqdm](https://github.com/tqdm/tqdm)
 
 If you use Anaconda, the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
 

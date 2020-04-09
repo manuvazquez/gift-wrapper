@@ -171,7 +171,7 @@ class MultipleChoice(HtmlQuestion):
 
 class QuestionDecorator:
 
-	def __init__(self, decorated: HtmlQuestion):
+	def __init__(self, decorated: Union[HtmlQuestion, 'QuestionDecorator']):
 
 		self._decorated = decorated
 
@@ -213,7 +213,7 @@ class QuestionDecorator:
 
 class TexToSvg(QuestionDecorator):
 
-	def __init__(self, decorated: HtmlQuestion):
+	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
 
 		super().__init__(decorated)
 
@@ -226,23 +226,23 @@ class TexToSvg(QuestionDecorator):
 
 class SvgToHttp(QuestionDecorator):
 
-	def __init__(self, decorated: HtmlQuestion, connection: remote.Connection, directories: dict, public_url: str):
+	def __init__(
+			self, decorated: Union[HtmlQuestion, QuestionDecorator], connection: remote.Connection,
+			public_filesystem_root: str, pictures_base_directory: str, public_url: str):
 
 		super().__init__(decorated)
 
-		assert ('public filesystem root' in directories) and ('subdirectory' in directories)
-
 		# make a new directory if necessary
-		connection.make_directory_at(directories['subdirectory'], directories['public filesystem root'])
+		connection.make_directory_at(pictures_base_directory, public_filesystem_root)
 
 		# assembled remote path
-		remote_subdirectory = pathlib.Path(directories['public filesystem root']).joinpath(directories['subdirectory'])
+		remote_subdirectory = pathlib.Path(public_filesystem_root).joinpath(pictures_base_directory)
 
 		def replacement_function(m: re.Match) -> str:
 
 			file = pathlib.Path(m.group(0))
 
-			return public_url + directories['subdirectory'] + '/' + file.as_posix()
+			return public_url + pictures_base_directory + '/' + file.as_posix()
 
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(

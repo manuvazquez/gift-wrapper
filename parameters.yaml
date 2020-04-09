@@ -13,10 +13,7 @@ images hosting:
     # machine into which files will be copied
     host: hidra1
 
-    directories:
-      # "." stands for the working directory when you ssh into the machine; this *should* exist
-      public filesystem root: ./public_html
-      # this will be created if necessary
-      subdirectory: example
+    # "." stands for the working directory when you ssh into the machine; this *should* exist
+    public filesystem root: ./public_html
 
   public URL: http://www.tsc.uc3m.es/~mvazquez/
