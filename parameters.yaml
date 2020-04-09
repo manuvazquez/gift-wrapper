@@ -5,6 +5,8 @@ images hosting:
 
     # either "password" or "public_key" must be provided but NOT both of them
     password:
+
+    # "~" stands for the user's home directory (in Linux for one...)
     public_key: ~/.ssh/id_rsa_totolaca.pub
 
   copy:
@@ -15,6 +17,6 @@ images hosting:
       # "." stands for the working directory when you ssh into the machine; this *should* exist
       public filesystem root: ./public_html
       # this will be created if necessary
-      subdirectory: ex1
+      subdirectory: example
 
   public URL: http://www.tsc.uc3m.es/~mvazquez/

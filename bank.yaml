@@ -1,6 +1,6 @@
 # ============================================================= Category
   # leave it blank if you don't want subsequent questions to belong to any category
-- name: foo3
+- name: Sample category 1
   questions:
     # the identifier of the question once imported
   - name: Numerical passing an URL
@@ -9,18 +9,19 @@
     # vertical bar, "|", signals a *multiline* string; when embedding a file name or URL in the text, it should be
     # surrounded by spaces (meaning that, e.g., "foo.svg?" would not be correctly parsed)
     statement: |
-      Check the constellation below
-      http://www.tsc.uc3m.es/~mvazquez/foo.svg
-      What is $a_2$?
+      Compute the mean energy of the constellation
+      sample_images/1D_3_elements.svg
+      ,i.e., what is $E_s$?
     # if the section below is absent, size of the images is automatically adjusted
     images_settings:
       width: 500
       height: 300
     solution:
-      value: 2.1
-      error: 0.5
+      value: 1.6666666666666667
+      error: 0.1
     # leave it blank if you don't want to provide any feedback
-    feedback:
+    feedback: |
+      The mean energy is $E_s = \frac{0^2 + 1^2 + 2^2}{3}$
   # --------------------------------------------------------
   - name: Pi
     class: Numerical
@@ -31,13 +32,17 @@
       height: 300
     solution:
       value: 3.1415
-      error: 0.1
+      error: 0.25
     feedback: well, $\pi$
+# ============================================================= Category
+  # leave it blank if you don't want subsequent questions to belong to any category
+- name: Sample category 2
+  questions:
   # --------------------------------------------------------
   - name: Quixote
     class: MultipleChoice
     statement: |
-      What is the main character in pictures/quixote.tex ?
+      What is the main character in sample_images/quixote.tex ?
     images_settings:
       width: 500
       height: 300
@@ -51,9 +56,9 @@
         - [Dulcinea del Toboso, 10]
         # no credit is given for this answer
         - Some guy
-        - $Q\left(x\right)$
-        - It should be on the cover of pictures/quixote.tex
+        - $\frac{2}{3}$
+        - It should be on the cover of sample_images/quixote.tex
     feedback: |
-      if you look at the cover of pictures/quixote.tex
+      if you look at the cover of sample_images/quixote.tex
       you know, well...you know...you know you know....
   # --------------------------------------------------------

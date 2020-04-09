@@ -43,21 +43,18 @@ def from_image_url(url: str, width: int, height: int) -> str:
 
 	"""
 
-	if (width is not None) ^ (height is not None):
+	# either both are set or none
+	assert not ((width is not None) ^ (height is not None)), 'both "width" and "height" should be set or none of them'
 
-		raise Exception('both width and height should be passed or none')
+	# `width` is checked, but `height` could be as well used (at this point either both are set or none)
+	if width is not None:
+
+		# notice the space at the beginning
+		width_height = f' width="{width}" height="{height}"'
 
 	else:
 
-		# `width` is checked, but `height` could be as well used: either both are set or both are `None`
-		if width is not None:
-
-			# notice the space at the beginning
-			width_height = f' width="{width}" height="{height}"'
-
-		else:
-
-			width_height = ''
+		width_height = ''
 
 	res = f'<img src="{url}" alt="" role="presentation" class="atto_image_button_text-bottom"{width_height}>'
 

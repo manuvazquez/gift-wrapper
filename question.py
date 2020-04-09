@@ -40,7 +40,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.images_width, self.images_height = images_settings['width'], images_settings['height']
 
 		self.processing_functions = [
-			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_width),
+			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_height),
 			gift.process_new_lines, gift.process_latex
 		]
 

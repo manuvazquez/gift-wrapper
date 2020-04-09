@@ -1,5 +1,5 @@
 import pathlib
-from typing import Union
+from typing import Union, List
 
 import paramiko
 
@@ -17,22 +17,47 @@ class Connection:
 		if public_key is not None:
 
 			# just in case "~" is in the given path
-			public_key = pathlib.Path(public_key).expanduser().as_posix()
+			public_key = pathlib.Path(public_key).expanduser()
 
-		self.config = paramiko.SSHConfig()
+			assert public_key.exists(), f'public key file, {public_key}, does not exist'
 
-		# ssh settings are parsed in
-		with open(pathlib.Path.home() / '.ssh' / 'config') as f:
+			# below, an actual string is needed
+			public_key = public_key.as_posix()
 
-			self.config.parse(f)
+		# # NOTE: ssh_config: List[str] = ['~', '.ssh', 'config'] is required above
+		# self.config = paramiko.SSHConfig()
+		#
+		# # the list of path components is turned into a Pathlib's path
+		# ssh_config = pathlib.Path(*ssh_config).expanduser()
+		#
+		# if ssh_config.exists():
+		#
+		# 	# ssh settings are parsed in
+		# 	with open(ssh_config) as f:
+		#
+		# 		self.config.parse(f)
 
 		self.connection = paramiko.SSHClient()
 
 		# so that it finds the key (no known_hosts error?)
 		self.connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-		# connection is established
-		self.connection.connect(host, username=user, password=password, key_filename=public_key)
+		try:
+
+			# connection is established
+			self.connection.connect(host, username=user, password=password, key_filename=public_key)
+
+		except paramiko.ssh_exception.AuthenticationException:
+
+			print(f'provided username ({user}) and/or password are not valid')
+
+			raise SystemExit
+
+		except paramiko.ssh_exception.SSHException:
+
+			print(f'the provided public key ({public_key}) is not valid or has not been decrypted')
+
+			raise SystemExit
 
 		# FTP component of the connection
 		self.sftp = paramiko.SFTPClient.from_transport(self.connection.get_transport())
@@ -84,14 +109,6 @@ class FakeConnection:
 	"""
 	For debugging purposes.
 	"""
-
-	def __init__(self):
-
-		pass
-
-	def __del__(self):
-
-		pass
 
 	@staticmethod
 	def is_active():
