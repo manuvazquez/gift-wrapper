@@ -12,6 +12,7 @@ The most interesting point is probably the last one.
 
 Python requirements are:
 
+- Python >= 3.6
 - [paramiko](http://www.paramiko.org/)
 - [colorama](https://pypi.org/project/colorama/)
 - [pyyaml](https://pypi.org/project/PyYAML/)
@@ -31,11 +32,11 @@ pip install pyyaml paramiko tqdm colorama
 
 should install all the required packages. If you use Anaconda, the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
 
-After that, you should be able to run the latest release of the package.
+After that, you should be able to run the [latest release](https://github.com/manuvazquez/gift-wrapper/releases/latest) of the package.
 
 ## Usage
 
-You can check the available command-line options with
+The main program is `wrap.py` and you can check the available command-line options with
 ```
 wrap.py -h
 ```
@@ -45,7 +46,7 @@ python wrap.py -h
 ```
 if `wrap.py` doesn't have execution permissions. 
 
-If you don't pass any argument, a `parameters.yaml` and a `bank.yaml` file are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
+If you don't pass any argument, a `parameters.yaml` and a `bank.yaml` files are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
 
 The output will be a text file in GIFT format with the same name as the input one (the file with the questions) but `.gift` extension (by default, `bank.gift` then).
 
@@ -79,9 +80,14 @@ Also, there is (probably) nothing special about *pdf2svg* and, in principle, you
 
 ## Remote access
 
-Images should be copied into some remote host that is public so that it can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). In the `parameters.yaml` file, ssh (user and password) or (user and path to a public key file)
+Images should be copied into some remote host that is public so that it can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). In the `parameters.yaml` file, within `ssh` either
 
-You can run the program locally, i.e., omitting the transferring of the images to a remote host by using `-l` command line argument.
+* user and password, or
+* user and path to a public key file
+
+(but **not both**) should be specified.
+
+You can run the program locally, i.e., omitting the transferring of the images to a remote host by using `-l` command line argument. This is especially meaningful if you don't have any embedded image in your questions (and hence nothing needs to be copied to a remote host).
 
 ## Current limitations
 

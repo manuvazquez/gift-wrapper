@@ -150,7 +150,7 @@ class MultipleChoice(HtmlQuestion):
 	@property
 	def answer(self):
 
-		processed_answers = ['=' + self.answers['perfect']]
+		processed_answers = ['=' + self.process_text(self.answers['perfect'])]
 
 		for a in self.answers['wrong']:
 
