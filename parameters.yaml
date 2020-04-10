@@ -3,11 +3,12 @@ images hosting:
   ssh:
     user: mvazquez
 
-    # either "password" or "public_key" must be provided but NOT both of them
+    # below, one should specify either a password for the user or  "public key" file but NOT both of them
+
     password:
 
     # "~" stands for the user's home directory (in Linux for one...)
-    public_key: ~/.ssh/id_rsa_totolaca.pub
+    public_key: ~/.ssh/id_rsa_mymachine.pub
 
   copy:
     # machine into which files will be copied
@@ -16,4 +17,5 @@ images hosting:
     # "." stands for the working directory when you ssh into the machine; this *should* exist
     public filesystem root: ./public_html
 
+  # public address from which the images will hang
   public URL: http://www.tsc.uc3m.es/~mvazquez/

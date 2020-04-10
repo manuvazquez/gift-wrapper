@@ -11,6 +11,7 @@ import tqdm
 import question
 import remote
 import gift
+import colors
 
 # ================================= command line arguments
 
@@ -80,7 +81,7 @@ with open(output_file, 'w') as f:
 		duplicates = [name for name, count in collections.Counter(all_names).items() if count > 1]
 
 		# all the names should be different
-		assert not duplicates, f'duplicates in category {cat["name"]}: {duplicates}'
+		assert not duplicates, f'{colors.error}duplicates in category {colors.reset}{cat["name"]}: {duplicates}'
 
 		# for every question in the category...
 		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):

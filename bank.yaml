@@ -2,9 +2,12 @@
 pictures base directory: example
 
 categories:
+
   # ============================================================= Category
-    # leave it blank if you don't want subsequent questions to belong to any category
+
+  # leave it blank if you don't want subsequent questions to belong to any category
   - name: Sample category 1
+    # --------------------------------------------------------
     questions:
       # the identifier of the question once imported
     - name: Numerical passing an URL
@@ -16,7 +19,8 @@ categories:
         Compute the mean energy of the constellation
         sample_images/1D_3_elements.svg
         ,i.e., what is $E_s$?
-      # if the section below is absent, size of the images is automatically adjusted
+      # if the section below is absent, size of the images is automatically adjusted (that is probably what you
+      # want most of the time)
       images_settings:
         width: 500
         height: 300
@@ -38,8 +42,9 @@ categories:
         value: 3.1415
         error: 0.25
       feedback: well, $\pi$
+
   # ============================================================= Category
-    # leave it blank if you don't want subsequent questions to belong to any category
+
   - name: Sample category 2
     questions:
     # --------------------------------------------------------
@@ -47,15 +52,13 @@ categories:
       class: MultipleChoice
       statement: |
         What is the main character in sample_images/quixote.tex ?
-      images_settings:
-        width: 500
-        height: 300
       answers:
         # the correct answer
         perfect: Don Quixote
         # the wrong (to different extents) ones
         wrong:
-          # if a list, the 1st element is the (wrong) answer, and the 2nd one the percentage of the total grade it yields
+          # if a list, the 1st element is the (wrong) answer, and the 2nd one the percentage of the total grade
+          # it yields
           - [Sancho Panza, 90]
           - [Dulcinea del Toboso, 10]
           # no credit is given for this answer
