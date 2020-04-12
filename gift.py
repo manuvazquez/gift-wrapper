@@ -125,9 +125,11 @@ def process_latex(text: str) -> str:
 
 		latex_source = m.group(1)
 
-		for to_be_escaped in ['\\', '{', '}']:
+		for to_be_escaped in ['\\', '{', '}', '=']:
 
 			latex_source = latex_source.replace(to_be_escaped, '\\' + to_be_escaped)
+
+		latex_source = latex_source.replace('&', '&amp;')
 
 		return r'\\(' + latex_source + r'\\)'
 
@@ -163,7 +165,7 @@ def process_url_images(text: str, width: int, height: int) -> str:
 
 def process_new_lines(text: str) -> str:
 	"""
-	Adapts every to GIFT every new line.
+	Adapts every new line to GIFT.
 
 	Parameters
 	----------

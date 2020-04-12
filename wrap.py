@@ -62,7 +62,7 @@ else:
 	connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 # output file has the same name as the input with the ".gift" suffix
-output_file = input_file.with_suffix('.gift')
+output_file = input_file.with_suffix('.gift.txt')
 
 with open(output_file, 'w') as f:
 

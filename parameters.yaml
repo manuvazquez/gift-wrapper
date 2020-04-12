@@ -14,7 +14,7 @@ images hosting:
     # machine into which files will be copied
     host: hidra1
 
-    # "." stands for the working directory when you ssh into the machine; this *should* exist
+    # this *should* exist ("." stands for the working directory when you ssh into the machine)
     public filesystem root: ./public_html
 
   # public address from which the images will hang
