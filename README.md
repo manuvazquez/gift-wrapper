@@ -12,7 +12,7 @@ The most interesting point is probably the last one.
 
 Python requirements are:
 
-- Python >= 3.6
+- Python &#8805; 3.6
 - [paramiko](http://www.paramiko.org/)
 - [colorama](https://pypi.org/project/colorama/)
 - [pyyaml](https://pypi.org/project/PyYAML/)
@@ -32,7 +32,7 @@ pip install pyyaml paramiko tqdm colorama
 
 should install all the required packages. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
 
-After that, you should be able to run the [latest release](https://github.com/manuvazquez/gift-wrapper/releases/latest) of the package.
+After that, you should be able to run the program. You can either download the [latest release](https://github.com/manuvazquez/gift-wrapper/releases/latest) (not necessarily up-to-date) or click *Clone or download* above to get the most recent version.
 
 ## Usage
 
@@ -48,7 +48,7 @@ if `wrap.py` doesn't have execution permissions.
 
 If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
 
-The output will be a text file in GIFT format with the same name as the input one (the file with the questions) but `.gift` extension (by default, `bank.gift` then).
+The output will be a text file in GIFT format with the same name as the input one (the file with the questions) but `.gift.txt` extension (by default, `bank.gift.txt` then). It seems that *sometimes* Moodle has troubles importing (recognizing) a text file if the extension is not `.txt`. 
 
 ### Parameters
 

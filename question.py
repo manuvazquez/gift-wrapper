@@ -133,7 +133,7 @@ class Numerical(HtmlQuestion):
 	@property
 	def answer(self):
 
-		return '\t=%100%' + self.solution_value + self.solution_error + '#'
+		return '#\t=%100%' + self.solution_value + self.solution_error + '#'
 
 
 class MultipleChoice(HtmlQuestion):
