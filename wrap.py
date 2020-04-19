@@ -61,8 +61,11 @@ else:
 	# ...an actual connection with the requested host is opened
 	connection = remote.Connection(parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
-# output file has the same name as the input with the ".gift" suffix
+# output file has the same name as the input with the ".gift.txt" suffix
 output_file = input_file.with_suffix('.gift.txt')
+
+# to keep track of files already compiled/transferred
+history = {'already compiled': set(), 'already transferred': set()}
 
 with open(output_file, 'w') as f:
 
@@ -86,7 +89,7 @@ with open(output_file, 'w') as f:
 		# for every question in the category...
 		for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
 
-			# that class that will be instantiated for this particular question
+			# the class that will be instantiated for this particular question
 			question_class = getattr(question, q['class'])
 
 			# if field `images_settings` is not present...
@@ -98,7 +101,10 @@ with open(output_file, 'w') as f:
 			# the class is removed from the dictionary so that it doesn't get passed to the initializer
 			del q['class']
 
-			# question is instantiated and decorated
+			# "history" is passed
+			q['history'] = history
+
+			# question is instantiated and "decorated"
 			q = question.SvgToHttp(
 				question.TexToSvg(question_class(**q)), connection,
 				parameters['images hosting']['copy']['public filesystem root'],
@@ -106,4 +112,4 @@ with open(output_file, 'w') as f:
 
 			f.write(f'{q.gift}\n\n')
 
-print(f'file "{output_file}" created')
+print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')

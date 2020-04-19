@@ -56,11 +56,11 @@ The output will be a text file in GIFT format with the same name as the input on
 
 ### Questions
 
-Questions are specified through another *YAML* file. The first parameter, `pictures base directory`, refers to the base directory that will be created in the remote host for all your embedded images. It is meant to separate different question banks (so that you can have, e.g., directories `quiz 1` and `quiz 2`). The remaining of the file is a **list of categories**, and inside each one there is a **list of questions**. Hopefully, the format is clear from either the name of the settings and/or its companion comments. You are probably better of taking a look at the [provided example](bank.yaml).
+Questions are specified through another *YAML* file. The first parameter, `pictures base directory`, refers to the base directory that will be created in the remote host for all your embedded images. It is meant to separate different question banks (so that you can have, e.g., directories `quiz 1` and `quiz 2`). The remaining of the file is a **list of categories**, and inside each one there is a **list of questions**. Hopefully, the format is clear from either the name of the settings and/or its companion comments. You are probably better off taking a look at the [provided example](bank.yaml).
 
 ### Example
 
-If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift` file which you can import from Moodle (choosing the GIFT format when asked).
+If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked).
 
 ## Including images
 
@@ -72,6 +72,10 @@ If you run the program inside the `gift-wrapper` directory as is, it will proces
 In any case, you just need to write the path to the file inside the text of the question (whether in the `statement`, the `answer` or the `feedbak`). If in the second scenario, i.e., you are including a *TeX* file, this will be compiled into a pdf with *pdflatex*, and then converted to an svg with *pdf2svg*. Hence, a *svg* file will be, in the end, available for every image.
 
 Images (*svg*s) are then copied to a remote host, and properly linked in the output GIFT file.
+
+### Browser compatibility
+
+It seems (it has been reported) not every browser properly handles svg images (maybe other types too) embedded in a question as an URL. My experience so far is both *Firefox* and *Chromium* (at the time of writing this) work just fine. 
 
 ### Do I really need pdf2svg?
 

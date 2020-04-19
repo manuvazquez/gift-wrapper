@@ -109,20 +109,32 @@ class Connection:
 
 class FakeConnection:
 	"""
-	For debugging purposes.
+	For offline runs.
 	"""
+
+	def __init__(self) -> None:
+
+		self.already_copied = set()
 
 	@staticmethod
 	def is_active():
 
 		return False
 
-	@staticmethod
-	def copy(source: Union[str, pathlib.Path], remote_directory: str):
+	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
 
-		print(f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to {colors.reset}{remote_directory}')
+		source = pathlib.Path(source)
+
+		if source.as_posix() not in self.already_copied:
+
+			print(
+				f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to'
+				f' {colors.reset}{remote_directory}')
+
+			self.already_copied.add(source.as_posix())
 
 	@staticmethod
 	def make_directory_at(new: str, at: str):
 
-		print(f'{colors.info}you *should* make directory {colors.reset}{new}{colors.info} at {colors.reset}{at}')
+		pass
+		# print(f'{colors.info}you *should* make directory {colors.reset}{new}{colors.info} at {colors.reset}{at}')

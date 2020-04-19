@@ -14,7 +14,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	Abstract class implementing an html-based question.
 	"""
 
-	def __init__(self, name: str, statement: str, images_settings: dict, feedback: Optional[str] = None):
+	def __init__(self, name: str, statement: str, images_settings: dict, history: dict, feedback: Optional[str] = None):
 		"""
 		Initializer.
 
@@ -33,6 +33,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.name = name
 		self.statement = statement.rstrip()
 		self.feedback = feedback
+		self.history = history
 
 		assert ('width' in images_settings) and ('height' in images_settings),\
 			'"width" and/or "height" missing in "image_settings"'
@@ -115,9 +116,10 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, solution: dict, feedback: Optional[str] = None):
+			self, name: str, statement: str, images_settings: dict, history: dict, solution: dict,
+			feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, feedback)
+		super().__init__(name, statement, images_settings, history, feedback)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -141,9 +143,11 @@ class MultipleChoice(HtmlQuestion):
 	Class implementing a multiple-choice question.
 	"""
 
-	def __init__(self, name: str, statement: str, images_settings: dict, answers: dict, feedback: Optional[str] = None):
+	def __init__(
+			self, name: str, statement: str, images_settings: dict, history: dict, answers: dict,
+			feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, feedback)
+		super().__init__(name, statement, images_settings, history, feedback)
 
 		self.answers = answers
 
@@ -199,8 +203,6 @@ class QuestionDecorator:
 		# all the matching files in the given text
 		files = re.findall(pattern, text)
 
-		# breakpoint()
-
 		# every one of them...
 		for file in files:
 
@@ -217,11 +219,25 @@ class TexToSvg(QuestionDecorator):
 
 		super().__init__(decorated)
 
+		def process_match(f):
+
+			# if this file has not been already compiled-converted...
+			if f not in self.history['already compiled']:
+
+				# ...it is...
+				image.pdf_to_svg(image.compile_tex(f))
+
+				# ...and a note is made of it
+				self.history['already compiled'].add(f)
+
+			# else:
+			#
+			# 	print(f'{f} already compiled-converted...')
+
 		# a new pre-processing function is attached to the corresponding list
 		# (the "\1" in `replacement` refers to matches in `pattern`)
 		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern='(\S+)\.tex', process_match=lambda x: image.pdf_to_svg(image.compile_tex(x)),
-			replacement=r'\1.svg'))
+			self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r'\1.svg'))
 
 
 class SvgToHttp(QuestionDecorator):
@@ -244,8 +260,22 @@ class SvgToHttp(QuestionDecorator):
 
 			return public_url + pictures_base_directory + '/' + file.as_posix()
 
+		def process_match(f):
+
+			# if this file has not been already transferred...
+			if f not in self.history['already transferred']:
+
+				# ...it is...
+				connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent)
+
+				# ...and a note is made of it
+				self.history['already transferred'].add(f)
+
+			# else:
+			#
+			# 	print(f'{f} already transferred...')
+
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
-			process_match=lambda f: connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent),
-			replacement=replacement_function))
+			process_match=process_match, replacement=replacement_function))
