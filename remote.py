@@ -51,13 +51,15 @@ class Connection:
 
 		except paramiko.ssh_exception.AuthenticationException:
 
-			print(f'provided username ({user}) and/or password are not valid')
+			print(f'{colors.error}provided username {colors.reset}({user}){colors.error} and/or password are not valid')
 
 			raise SystemExit
 
 		except paramiko.ssh_exception.SSHException:
 
-			print(f'the provided public key ({public_key}) is not valid or has not been decrypted')
+			print(
+				f'{colors.error}the provided public key {colors.reset}({public_key}){colors.error}'
+				f' is not valid or has not been decrypted')
 
 			raise SystemExit
 
@@ -112,8 +114,9 @@ class FakeConnection:
 	For offline runs.
 	"""
 
-	def __init__(self) -> None:
+	def __init__(self, host: str) -> None:
 
+		self.host = host
 		self.already_copied = set()
 
 	@staticmethod
@@ -129,7 +132,7 @@ class FakeConnection:
 
 			print(
 				f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to'
-				f' {colors.reset}{remote_directory}')
+				f' {colors.reset}{remote_directory}{colors.info} in {colors.reset}{self.host}')
 
 			self.already_copied.add(source.as_posix())
 

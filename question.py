@@ -7,6 +7,7 @@ from typing import Union, Callable, Optional
 import gift
 import image
 import remote
+import colors
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
@@ -14,7 +15,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	Abstract class implementing an html-based question.
 	"""
 
-	def __init__(self, name: str, statement: str, images_settings: dict, history: dict, feedback: Optional[str] = None):
+	def __init__(
+			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
+			feedback: Optional[str] = None):
 		"""
 		Initializer.
 
@@ -42,7 +45,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		self.processing_functions = [
 			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_height),
-			gift.process_new_lines, gift.process_latex
+			gift.process_new_lines, functools.partial(gift.process_latex, check_compliance=check_latex_formulas)
 		]
 
 		# this might be tampered with by subclasses/decorator
@@ -66,7 +69,17 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		for function in (self.pre_processing_functions + self.processing_functions):
 
-			text = function(text)
+			try:
+
+				text = function(text)
+
+			except gift.NotCompliantLatexFormula as e:
+
+				print(
+					f'\n{colors.error}cannot compile latex formula\n {colors.extra_info}{e.formula}{colors.reset} in '
+					f'{colors.info}{self.name}')
+
+				raise SystemExit
 
 		return text
 
@@ -116,10 +129,10 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, history: dict, solution: dict,
-			feedback: Optional[str] = None):
+			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
+			solution: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, history, feedback)
+		super().__init__(name, statement, images_settings, history, check_latex_formulas, feedback)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -144,10 +157,10 @@ class MultipleChoice(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, history: dict, answers: dict,
-			feedback: Optional[str] = None):
+			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
+			answers: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, history, feedback)
+		super().__init__(name, statement, images_settings, history, check_latex_formulas, feedback)
 
 		self.answers = answers
 
@@ -174,6 +187,9 @@ class MultipleChoice(HtmlQuestion):
 # ========================================== Decorators
 
 class QuestionDecorator:
+	"""
+	Abstract class to implement a question decorator.
+	"""
 
 	def __init__(self, decorated: Union[HtmlQuestion, 'QuestionDecorator']):
 
@@ -199,6 +215,27 @@ class QuestionDecorator:
 	def transform_files(
 			text: str, pattern: str, process_match: Callable[[str], None],
 			replacement: Union[str, Callable[[re.Match], str]]):
+		"""
+		It searches in a text for strings corresponding to files (maybe including a path), replaces them by another
+		string according to some function and, additionally, processes each file according to another function.
+
+		Parameters
+		----------
+		text : str
+			Input text.
+		pattern : str
+			Regular expression including a capturing group that yields the file.
+		process_match : Callable[[str], None]
+			Function that will *process* each file.
+		replacement : str or Callable[[re.Match], str]
+			Regular expression making use of the capturing group or function processing the match delivered by `pattern`
+
+		Returns
+		-------
+		out: str
+			Output text with the replacements performed, after having processed all the files.
+
+		"""
 
 		# all the matching files in the given text
 		files = re.findall(pattern, text)
@@ -214,6 +251,9 @@ class QuestionDecorator:
 
 
 class TexToSvg(QuestionDecorator):
+	"""
+	Decorator to converts TeX files into svg files.
+	"""
 
 	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
 
@@ -225,7 +265,7 @@ class TexToSvg(QuestionDecorator):
 			if f not in self.history['already compiled']:
 
 				# ...it is...
-				image.pdf_to_svg(image.compile_tex(f))
+				image.pdf_to_svg(image.tex_to_pdf(f))
 
 				# ...and a note is made of it
 				self.history['already compiled'].add(f)
@@ -241,6 +281,9 @@ class TexToSvg(QuestionDecorator):
 
 
 class SvgToHttp(QuestionDecorator):
+	"""
+	Decorator to transfer svg files to a remote location.
+	"""
 
 	def __init__(
 			self, decorated: Union[HtmlQuestion, QuestionDecorator], connection: remote.Connection,

@@ -1,5 +1,18 @@
 import re
 
+import latex
+
+
+class NotCompliantLatexFormula(Exception):
+
+	def __init__(self, formula: str) -> None:
+
+		self.formula = formula
+
+	def __str__(self) -> str:
+
+		return self.formula
+
 
 html = '[html]'
 
@@ -105,7 +118,7 @@ def from_feedback(text: str) -> str:
 	return '#'*4 + text
 
 
-def process_latex(text: str) -> str:
+def process_latex(text: str, check_compliance: bool = True) -> str:
 	"""
 	Adapts every occurrence of $$ to GIFT.
 
@@ -113,6 +126,8 @@ def process_latex(text: str) -> str:
 	----------
 	text : str
 		Input text.
+	check_compliance: bool
+		Whether or not to check if the formula can be compiled.
 
 	Returns
 	-------
@@ -125,6 +140,12 @@ def process_latex(text: str) -> str:
 
 		latex_source = m.group(1)
 
+		if check_compliance:
+
+			if not latex.formula_can_be_compiled(latex_source):
+
+				raise NotCompliantLatexFormula(latex_source)
+
 		for to_be_escaped in ['\\', '{', '}', '=']:
 
 			latex_source = latex_source.replace(to_be_escaped, '\\' + to_be_escaped)
@@ -134,7 +155,7 @@ def process_latex(text: str) -> str:
 		return r'\\(' + latex_source + r'\\)'
 
 	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
-	return re.sub('\$([^\$]*)\$', replacement, text)
+	return re.sub(r'\$([^\$]*)\$', replacement, text)
 
 
 def process_url_images(text: str, width: int, height: int) -> str:

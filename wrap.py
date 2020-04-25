@@ -15,7 +15,7 @@ import colors
 
 # ================================= command line arguments
 
-parser = argparse.ArgumentParser(description='GIFT-wrapper')
+parser = argparse.ArgumentParser(description='Build GIFT files (Moodle) from a simple specification')
 
 parser.add_argument(
 	'-p', '--parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file', nargs='?')
@@ -25,6 +25,9 @@ parser.add_argument(
 
 parser.add_argument(
 	'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
+
+parser.add_argument(
+	'-n', '--no-checks', default=False, action='store_true', help="don't check latex formulas (much faster)")
 
 command_line_arguments = parser.parse_args(sys.argv[1:])
 
@@ -53,7 +56,7 @@ pictures_base_directory = input_data['pictures base directory']
 if command_line_arguments.local:
 
 	# ...a "fake" connections is instantiated
-	connection = remote.FakeConnection()
+	connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
 
 # if NO local running was requested...
 else:
@@ -101,13 +104,17 @@ with open(output_file, 'w') as f:
 			# the class is removed from the dictionary so that it doesn't get passed to the initializer
 			del q['class']
 
+			# whether or not latex formulas should be checked
+			q['check_latex_formulas'] = not command_line_arguments.no_checks
+
 			# "history" is passed
 			q['history'] = history
 
 			# question is instantiated and "decorated"
 			q = question.SvgToHttp(
-				question.TexToSvg(question_class(**q)), connection,
-				parameters['images hosting']['copy']['public filesystem root'],
+				question.TexToSvg(
+					question_class(**q)
+				), connection, parameters['images hosting']['copy']['public filesystem root'],
 				pictures_base_directory, parameters['images hosting']['public URL'])
 
 			f.write(f'{q.gift}\n\n')

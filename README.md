@@ -105,9 +105,13 @@ Only formulas inside `$`s are processed (no, e.g., `\textit` or `\textbf` inside
 - `\left(` and `\right)`
 - `\left[` and `\right]`
 - `\begin{bmatrix}` and `\end{bmatrix}`
-- symbols `\sim`
+- symbols `\sim`, `\approx`
 
 More things are probably ok, but I have not tried them yet.
+
+### Safety checks
+
+By default, `wrap` checks whether or not the formulas you wrote between `$`'s can actually be compiled. Right now this involves a call to `pdflatex` *for every formula*, meaning that it can significantly slow down the process. It can be disabled by passing ` --no-checks` (or simply `-n`). It is probably a good idea to actually check the formulas every once in a while (e.g., every time you add a new one), though, since *bad* latex formulas will be (silently) imported by Moodle anyway, and not only will they be incorrectly rendered but they may also mess up subsequent content.  
 
 ## Current limitations
 
