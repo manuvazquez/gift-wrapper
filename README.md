@@ -24,15 +24,23 @@ Now, if you want to make the most of the software you also need:
 * [pdf2svg](https://github.com/dawbarton/pdf2svg/)
 * disk space in a remote server that can host your images
 
+## Install
+
+```
+pip install gift-wrapper
+```
+
+should suffice.
+
 ### Manual setup
 
-If you rather clone this repository (more up-to-date) than install the software using `pip`
+If you rather clone this repository, (in order to, potentially, get the latest additions/modifications)  
 
 ```
 pip install pyyaml paramiko tqdm colorama
 ```
 
-should install all the required packages. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
+should install all the additional requirements. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
 
 After that, you should be able to run the program. You can either download the [latest release](https://github.com/manuvazquez/gift-wrapper/releases/latest) (not necessarily up-to-date) or click *Clone or download* above to get the most recent version.
 
@@ -46,7 +54,7 @@ or
 ```
 python wrap.py -h
 ```
-if `wrap.py` doesn't have execution permissions. 
+if did a manual installation and `wrap.py` doesn't have execution permissions. 
 
 If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
 
@@ -77,7 +85,7 @@ Images (*svg*s) are then copied to a remote host, and properly linked in the out
 
 ### Browser compatibility
 
-It seems (it has been reported) not every browser properly handles svg images (maybe other types too) embedded in a question as an URL. My experience so far is both *Firefox* and *Chromium* (at the time of writing this) work just fine. 
+It seems (it has been reported) not every browser properly handles svg images (maybe other types too) embedded in a question as an URL. My experience so far is both [Firefox](https://www.mozilla.org/en-US/firefox) and [Chromium](https://www.chromium.org/Home) (at the time of writing this) work just fine. 
 
 ### Do I really need pdf2svg?
 

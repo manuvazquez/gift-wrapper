@@ -130,8 +130,3 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 				f.write(f'{q.gift}\n\n')
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
-
-
-if __name__ == '__main__':
-
-	main()
