@@ -4,10 +4,10 @@ import re
 import pathlib
 from typing import Union, Callable, Optional
 
-import gift
-import image
-import remote
-import colors
+from . import gift
+from . import image
+from . import remote
+from . import colors
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):

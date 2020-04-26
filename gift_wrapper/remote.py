@@ -3,7 +3,7 @@ from typing import Union
 
 import paramiko
 
-import colors
+from . import colors
 
 
 class Connection:

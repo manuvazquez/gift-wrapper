@@ -5,3 +5,14 @@ __pycache__
 *.svg
 environment.yml
 *.gift
+
+# --- latex
+
+*.tex
+*.log
+*.aux
+
+# --- pip
+
+*.egg-info
+dist

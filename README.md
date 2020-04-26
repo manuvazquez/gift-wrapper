@@ -24,7 +24,9 @@ Now, if you want to make the most of the software you also need:
 * [pdf2svg](https://github.com/dawbarton/pdf2svg/)
 * disk space in a remote server that can host your images
 
-### Python setup
+### Manual setup
+
+If you rather clone this repository (more up-to-date) than install the software using `pip`
 
 ```
 pip install pyyaml paramiko tqdm colorama

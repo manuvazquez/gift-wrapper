@@ -1,6 +1,6 @@
 import re
 
-import latex
+from . import latex
 
 
 class NotCompliantLatexFormula(Exception):

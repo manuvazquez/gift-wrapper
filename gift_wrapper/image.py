@@ -3,9 +3,8 @@ import shutil
 import subprocess
 from typing import Union
 
-import colors
-
-import latex
+from . import colors
+from . import latex
 
 
 def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pathlib.Path:
