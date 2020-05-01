@@ -4,15 +4,20 @@ __pycache__
 .directory
 *.svg
 environment.yml
-*.gift
+*.gift.txt
+*.md.backup
+TODO
 
 # --- latex
 
 *.tex
 *.log
 *.aux
+*.pdf
+*.synctex.gz
 
 # --- pip
 
 *.egg-info
 dist
+build

@@ -206,7 +206,13 @@ class MultipleChoice(HtmlQuestion):
 
 		for a in self.answers['wrong']:
 
-			res += f'* {a}\n'
+			if isinstance(a, list):
+
+				res += f'* {a[0]}\n'
+
+			else:
+
+				res += f'* {a}\n'
 
 		return res
 
