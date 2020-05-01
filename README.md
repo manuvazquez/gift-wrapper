@@ -20,7 +20,7 @@ Python requirements are:
 
 Now, if you want to make the most of the software you also need:
 
-* [pdflatex](https://en.wikipedia.org/wiki/PdfTeX)
+* [pdflatex](https://en.wikipedia.org/wiki/PdfTeX) (i.e. a [TeX](https://en.wikipedia.org/wiki/TeX) distribution)
 * [pdf2svg](https://github.com/dawbarton/pdf2svg/)
 * disk space in a remote server that can host your images
 
@@ -54,7 +54,7 @@ or
 ```
 python wrap.py -h
 ```
-if did a manual installation and `wrap.py` doesn't have execution permissions. 
+if you did a manual installation and `wrap.py` doesn't have execution permissions. 
 
 If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
 
@@ -62,7 +62,7 @@ The output will be a text file in GIFT format with the same name as the input on
 
 ### Parameters
 
-`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it only contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments.
+`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it only contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments. It should be fairly easy to tweak the [provided sample](parameters.yaml) for your own setup.
 
 ### Questions
 
@@ -77,7 +77,7 @@ If you run the program inside the `gift-wrapper` directory as is, it will proces
 `gift-wrapper` has been designed to work with [svg](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) images. Then, in order to include any image in a question, two scenarios are contemplated:
 
 * you already have an svg
-* you have a [TeX](https://en.wikipedia.org/wiki/TeX) file **that can be compiled with *pdflatex***
+* you have a TeX file **that can be compiled with *pdflatex***
 
 In any case, you just need to write the path to the file inside the text of the question (whether in the `statement`, the `answer` or the `feedbak`). If in the second scenario, i.e., you are including a *TeX* file, this will be compiled into a pdf with *pdflatex*, and then converted to an svg with *pdf2svg*. Hence, a *svg* file will be, in the end, available for every image.
 
@@ -90,7 +90,7 @@ It seems (it has been reported) not every browser properly handles svg images (m
 ### Do I really need pdf2svg?
 
 Only if you want automatic conversion from `.tex` (passing through `.pdf`) to `.svg`, i.e., only if you embed a `.tex` somewhere.
-Also, there is (probably) nothing special about *pdf2svg* and, in principle, you can use any command-line program that takes as arguments the input pdf and the output svg. However, I've only tested the program with *pdf2svg* since it's the one included in [Gentoo](https://www.gentoo.org/) Linux.
+Also, there is (probably) nothing special about *pdf2svg* and, in principle, you can use any command-line program that takes as arguments the input pdf and the output svg. However, I've only tested the program with *pdf2svg* since it's the one included in [Gentoo Linux](https://www.gentoo.org/).
 
 ## Remote access
 
@@ -117,11 +117,11 @@ Only formulas inside `$`s are processed (no, e.g., `\textit` or `\textbf` inside
 - `\begin{bmatrix}` and `\end{bmatrix}`
 - symbols `\sim`, `\approx`
 
-More things are probably ok, but I have not tried them yet.
+More things are probably OK, but I have not tried them yet.
 
 ### Safety checks
 
-By default, `wrap` checks whether or not the formulas you wrote between `$`'s can actually be compiled. Right now this involves a call to `pdflatex` *for every formula*, meaning that it can significantly slow down the process. It can be disabled by passing ` --no-checks` (or simply `-n`). It is probably a good idea to actually check the formulas every once in a while (e.g., every time you add a new one), though, since *bad* latex formulas will be (silently) imported by Moodle anyway, and not only will they be incorrectly rendered but they may also mess up subsequent content.  
+By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s can actually be compiled. Right now this involves a call to `pdflatex` *for every formula*, meaning that it can significantly slow down the process. It can be disabled by passing ` --no-checks` (or simply `-n`). It is probably a good idea to actually check the formulas every once in a while (e.g., every time you add a new one), though, since *bad* latex formulas will be (silently) imported by Moodle anyway, and not only will they be incorrectly rendered but they may also mess up subsequent content.  
 
 ## Current limitations
 

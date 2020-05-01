@@ -1,3 +1,4 @@
+import sys
 import pathlib
 from typing import Union
 
@@ -53,7 +54,7 @@ class Connection:
 
 			print(f'{colors.error}provided username {colors.reset}({user}){colors.error} and/or password are not valid')
 
-			raise SystemExit
+			sys.exit(1)
 
 		except paramiko.ssh_exception.SSHException:
 
@@ -61,7 +62,7 @@ class Connection:
 				f'{colors.error}the provided public key {colors.reset}({public_key}){colors.error}'
 				f' is not valid or has not been decrypted')
 
-			raise SystemExit
+			sys.exit(1)
 
 		# FTP component of the connection
 		self.sftp = paramiko.SFTPClient.from_transport(self.connection.get_transport())

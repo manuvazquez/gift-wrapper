@@ -160,7 +160,7 @@ def process_latex(text: str, check_compliance: bool = True) -> str:
 
 def process_url_images(text: str, width: int, height: int) -> str:
 	"""
-	Adapts every to GIFT every URL in a given text.
+	Adapts to GIFT every URL in a given text.
 
 	Parameters
 	----------

@@ -1,3 +1,4 @@
+import sys
 import abc
 import functools
 import re
@@ -79,7 +80,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 					f'\n{colors.error}cannot compile latex formula\n {colors.extra_info}{e.formula}{colors.reset} in '
 					f'{colors.info}{self.name}')
 
-				raise SystemExit
+				sys.exit(1)
 
 		return text
 

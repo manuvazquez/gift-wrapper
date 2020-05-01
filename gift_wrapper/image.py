@@ -1,3 +1,4 @@
+import sys
 import pathlib
 import shutil
 import subprocess
@@ -9,7 +10,7 @@ from . import latex
 
 def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pathlib.Path:
 	"""
-	Compiles a TeX file.
+	Turns a TeX file into a pdf.
 
 	Parameters
 	----------
@@ -38,7 +39,7 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 			f' {colors.error}in {colors.reset}{timeout}{colors.error} seconds'
 		)
 
-		raise SystemExit
+		sys.exit(1)
 
 	assert exit_status == 0, f'{colors.error}errors were found while compiling {colors.reset}{source_file}'
 

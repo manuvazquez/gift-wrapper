@@ -35,9 +35,6 @@ categories:
       class: Numerical
       statement: |
         What is the value of $\pi$?
-      images_settings:
-        width: 500
-        height: 300
       solution:
         value: 3.1415
         error: 0.25
