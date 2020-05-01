@@ -123,6 +123,12 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		pass
 
+	def to_jupyter(self):
+
+		feedback = ('# Feedback\n' + self.feedback.rstrip()) if self.feedback else ''
+
+		return f'# Statement\n{self.statement}\n{feedback}\n'
+
 
 class Numerical(HtmlQuestion):
 	"""
@@ -150,6 +156,12 @@ class Numerical(HtmlQuestion):
 	def answer(self):
 
 		return '#\t=%100%' + self.solution_value + self.solution_error + '#'
+
+	def to_jupyter(self):
+
+		res = super().to_jupyter()
+
+		return res + f'# Solution\n {self.solution_value} (error: {self.solution_error[1:]})\n'
 
 
 class MultipleChoice(HtmlQuestion):
@@ -183,6 +195,20 @@ class MultipleChoice(HtmlQuestion):
 				processed_answers.append(f'~{self.process_text(a)}')
 
 		return '\t' + '\n\t'.join(processed_answers)
+
+	def to_jupyter(self):
+
+		res = super().to_jupyter()
+
+		res += '# Choices\n'
+
+		res += f'* {self.answers["perfect"]}\n'
+
+		for a in self.answers['wrong']:
+
+			res += f'* {a}\n'
+
+		return res
 
 
 # ========================================== Decorators
@@ -323,3 +349,22 @@ class SvgToHttp(QuestionDecorator):
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
 			process_match=process_match, replacement=replacement_function))
+
+
+class SvgToMarkdown(QuestionDecorator):
+	"""
+	Decorator to reformat svg files for including them in markdown strings.
+	"""
+
+	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
+
+		super().__init__(decorated)
+
+		def process_match(f):
+
+			pass
+
+		# a new pre-processing function is attached to the corresponding list
+		self.pre_processing_functions.append(functools.partial(
+			self.transform_files, pattern='(\S+)\.svg',
+			process_match=process_match, replacement=r'![](' + r'\1' + '.svg)'))
