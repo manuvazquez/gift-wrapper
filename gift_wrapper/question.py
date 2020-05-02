@@ -10,6 +10,8 @@ from . import image
 from . import remote
 from . import colors
 
+re_percentage = re.compile('(\d*\.\d+|\d+)\s*%')
+
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
@@ -144,7 +146,27 @@ class Numerical(HtmlQuestion):
 		assert ('value' in solution), '"value" missing in "solution"'
 
 		self.solution_value = str(solution['value'])
-		self.solution_error = ':' + str(solution['error']) if 'error' in solution else ''
+
+		if 'error' in solution:
+
+			self.solution_error = ':'
+
+			# try to match a percentage
+			m = re_percentage.match(str(solution['error']))
+
+			# if so...
+			if m:
+
+				self.solution_error += str(solution['value'] * float(m.group(1)) / 100.)
+
+			else:
+
+				self.solution_error += str(solution['error'])
+
+		# an error was NOT provided
+		else:
+
+			self.solution_error = ''
 
 	def __repr__(self):
 

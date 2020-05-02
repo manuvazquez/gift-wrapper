@@ -26,6 +26,7 @@ categories:
         height: 300
       solution:
         value: 1.6666666666666667
+        # either a number or a percentage of the value
         error: 0.1
       # leave it blank if you don't want to provide any feedback
       feedback: |
@@ -37,7 +38,7 @@ categories:
         What is the value of $\pi$?
       solution:
         value: 3.1415
-        error: 0.25
+        error: 50%
       feedback: well, $\pi$
 
   # ============================================================= Category
