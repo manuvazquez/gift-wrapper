@@ -1,6 +1,7 @@
 import argparse
 import pathlib
 import collections
+import sys
 
 import yaml
 import tqdm
@@ -78,6 +79,14 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 	# to keep track of files already compiled/transferred
 	history = {'already compiled': set(), 'already transferred': set()}
 
+	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
+
+	# if latex checks are enabled and the given auxiliary file already exists...
+	if (not no_checks) and latex_auxiliary_file.exists():
+
+		print(f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists')
+		sys.exit(1)
+
 	with open(output_file, 'w') as f:
 
 		# for every category...
@@ -112,8 +121,11 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 				# the class is removed from the dictionary so that it doesn't get passed to the initializer
 				del q['class']
 
-				# whether or not latex formulas should be checked
+				# whether or not latex formulas should be checked...
 				q['check_latex_formulas'] = not no_checks
+
+				# ...if so, this auxiliary file will be used (created)
+				q['latex_auxiliary_file'] = latex_auxiliary_file
 
 				# "history" is passed
 				q['history'] = history
@@ -128,3 +140,11 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 				f.write(f'{q.gift}\n\n')
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
+
+	# if latex checks are enabled...
+	if not no_checks:
+
+		# latex auxiliary files are deleted
+		for suffix in ['.tex', '.aux', '.log']:
+
+			latex_auxiliary_file.with_suffix(suffix).unlink()

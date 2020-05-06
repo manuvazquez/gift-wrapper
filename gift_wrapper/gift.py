@@ -1,4 +1,6 @@
 import re
+import pathlib
+from typing import Union
 
 from . import latex
 
@@ -118,7 +120,7 @@ def from_feedback(text: str) -> str:
 	return '#'*4 + text
 
 
-def process_latex(text: str, check_compliance: bool = True) -> str:
+def process_latex(text: str, latex_auxiliary_file: Union[str, pathlib.Path], check_compliance: bool = True) -> str:
 	"""
 	Adapts every occurrence of $$ to GIFT.
 
@@ -126,6 +128,8 @@ def process_latex(text: str, check_compliance: bool = True) -> str:
 	----------
 	text : str
 		Input text.
+	latex_auxiliary_file: str or pathlib.Path
+		(Auxiliary) TeX file that is created to check the formula.
 	check_compliance: bool
 		Whether or not to check if the formula can be compiled.
 
@@ -142,7 +146,7 @@ def process_latex(text: str, check_compliance: bool = True) -> str:
 
 		if check_compliance:
 
-			if not latex.formula_can_be_compiled(latex_source):
+			if not latex.formula_can_be_compiled(latex_source, auxiliary_file=latex_auxiliary_file):
 
 				raise NotCompliantLatexFormula(latex_source)
 

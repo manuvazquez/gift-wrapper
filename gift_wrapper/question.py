@@ -10,6 +10,7 @@ from . import image
 from . import remote
 from . import colors
 
+# regular expression to extract a percentage
 re_percentage = re.compile('(\d*\.\d+|\d+)\s*%')
 
 
@@ -20,7 +21,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], feedback: Optional[str] = None):
 		"""
 		Initializer.
 
@@ -48,7 +49,8 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		self.processing_functions = [
 			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_height),
-			gift.process_new_lines, functools.partial(gift.process_latex, check_compliance=check_latex_formulas)
+			gift.process_new_lines, functools.partial(
+				gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas)
 		]
 
 		# this might be tampered with by subclasses/decorator
@@ -139,9 +141,10 @@ class Numerical(HtmlQuestion):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			solution: dict, feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, history, check_latex_formulas, feedback)
+		super().__init__(
+			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -193,9 +196,10 @@ class MultipleChoice(HtmlQuestion):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			answers: dict, feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, feedback: Optional[str] = None):
 
-		super().__init__(name, statement, images_settings, history, check_latex_formulas, feedback)
+		super().__init__(
+			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback)
 
 		self.answers = answers
 
@@ -266,10 +270,12 @@ class QuestionDecorator:
 			# ...is relayed to the decorated object
 			setattr(self._decorated, key, value)
 
+	# TODO: when minimum Python version is forwarded to 3.8, `[re.Match]` should replace `...` as the the signature
+	#  of the `Callable` in the type hinting for `replacement`
 	@staticmethod
 	def transform_files(
 			text: str, pattern: str, process_match: Callable[[str], None],
-			replacement: Union[str, Callable[[re.Match], str]]):
+			replacement: Union[str, Callable[..., str]]):
 		"""
 		It searches in a text for strings corresponding to files (maybe including a path), replaces them by another
 		string according to some function and, additionally, processes each file according to another function.
@@ -352,7 +358,8 @@ class SvgToHttp(QuestionDecorator):
 		# assembled remote path
 		remote_subdirectory = pathlib.Path(public_filesystem_root).joinpath(pictures_base_directory)
 
-		def replacement_function(m: re.Match) -> str:
+		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
+		def replacement_function(m) -> str:
 
 			file = pathlib.Path(m.group(0))
 

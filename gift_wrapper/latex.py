@@ -54,7 +54,7 @@ $$
 ''')
 
 
-def formula_can_be_compiled(formula: str, auxiliary_file: str = '__latex_check.tex') -> bool:
+def formula_can_be_compiled(formula: str, auxiliary_file: Union[str, pathlib.Path]) -> bool:
 	"""
 	Checks whether a latex formula can be compiled with the above template, `latex_template`.
 
@@ -62,7 +62,7 @@ def formula_can_be_compiled(formula: str, auxiliary_file: str = '__latex_check.t
 	----------
 	formula : str
 		Latex formula.
-	auxiliary_file : str
+	auxiliary_file : str or pathlib.Path
 		(Auxiliary) TeX file that is created to check the formula.
 
 	Returns

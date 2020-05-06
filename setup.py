@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gift-wrapper", # Replace with your own username
-    version="1.2.4",
+    version="1.2.5",
     author="Manuel A. Vázquez",
     author_email="manuavazquez@gmail.com",
     description="Build GIFT (Moodle compatible) files easily",
