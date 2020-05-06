@@ -141,8 +141,8 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
 
-	# if latex checks are enabled...
-	if not no_checks:
+	# if latex checks are enabled *and* some formula was processed...
+	if (not no_checks) and latex_auxiliary_file.exists():
 
 		# latex auxiliary files are deleted
 		for suffix in ['.tex', '.aux', '.log']:
