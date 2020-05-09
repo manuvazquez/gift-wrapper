@@ -27,19 +27,6 @@ class Connection:
 			# below, an actual string is needed
 			public_key = public_key.as_posix()
 
-		# # NOTE: ssh_config: List[str] = ['~', '.ssh', 'config'] is required above
-		# self.config = paramiko.SSHConfig()
-		#
-		# # the list of path components is turned into a Pathlib's path
-		# ssh_config = pathlib.Path(*ssh_config).expanduser()
-		#
-		# if ssh_config.exists():
-		#
-		# 	# ssh settings are parsed in
-		# 	with open(ssh_config) as f:
-		#
-		# 		self.config.parse(f)
-
 		self.connection = paramiko.SSHClient()
 
 		# so that it finds the key (no known_hosts error?)
@@ -119,6 +106,7 @@ class FakeConnection:
 
 		self.host = host
 		self.already_copied = set()
+		self.files_to_copy = []
 
 	@staticmethod
 	def is_active():
@@ -131,11 +119,12 @@ class FakeConnection:
 
 		if source.as_posix() not in self.already_copied:
 
-			print(
-				f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to'
-				f' {colors.reset}{remote_directory}{colors.info} in {colors.reset}{self.host}')
+			# print(
+			# 	f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to'
+			# 	f' {colors.reset}{remote_directory}{colors.info} in {colors.reset}{self.host}')
 
 			self.already_copied.add(source.as_posix())
+			self.files_to_copy.append((source, remote_directory))
 
 	@staticmethod
 	def make_directory_at(new: str, at: str):

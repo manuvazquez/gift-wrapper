@@ -3,6 +3,7 @@ import abc
 import functools
 import re
 import pathlib
+import string
 from typing import Union, Callable, Optional
 
 from . import gift
@@ -12,6 +13,14 @@ from . import colors
 
 # regular expression to extract a percentage
 re_percentage = re.compile('(\d*\.\d+|\d+)\s*%')
+
+# a string template to be used in markdown generation
+markdown_header_template = string.Template('<span style="font-family:Papyrus; font-size:2em;">$text</span>')
+
+
+def markdown_header(text: str) -> str:
+
+	return f'\n{markdown_header_template.substitute(text=text)}\n\n'
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
@@ -129,9 +138,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 	def to_jupyter(self):
 
-		feedback = ('# Feedback\n' + self.feedback.rstrip()) if self.feedback else ''
+		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
 
-		return f'# Statement\n{self.statement}\n{feedback}\n'
+		return f'{markdown_header("Statement")}{self.statement}\n{feedback}\n'
 
 
 class Numerical(HtmlQuestion):
@@ -186,7 +195,7 @@ class Numerical(HtmlQuestion):
 
 		res = super().to_jupyter()
 
-		return res + f'# Solution\n {self.solution_value} (error: {self.solution_error[1:]})\n'
+		return res + f'{markdown_header("Solution")} {self.solution_value} (error: {self.solution_error[1:]})\n'
 
 
 class MultipleChoice(HtmlQuestion):
@@ -226,9 +235,13 @@ class MultipleChoice(HtmlQuestion):
 
 		res = super().to_jupyter()
 
-		res += '# Choices\n'
+		res += markdown_header('Choices')
+
+		res += f'---\n'
 
 		res += f'* {self.answers["perfect"]}\n'
+
+		res += f'---\n'
 
 		for a in self.answers['wrong']:
 
@@ -313,7 +326,7 @@ class QuestionDecorator:
 
 class TexToSvg(QuestionDecorator):
 	"""
-	Decorator to converts TeX files into svg files.
+	Decorator to convert TeX files into svg files.
 	"""
 
 	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):

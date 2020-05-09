@@ -4,7 +4,8 @@ import collections
 import sys
 
 import yaml
-import tqdm
+# import tqdm
+from tqdm.autonotebook import tqdm
 
 from . import question
 from . import remote
@@ -84,13 +85,15 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 	# if latex checks are enabled and the given auxiliary file already exists...
 	if (not no_checks) and latex_auxiliary_file.exists():
 
-		print(f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists')
+		print(
+			f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists'
+			f' (and would be overwritten)')
 		sys.exit(1)
 
 	with open(output_file, 'w') as f:
 
 		# for every category...
-		for cat in tqdm.tqdm(categories, desc='category'):
+		for cat in tqdm(categories, desc='category'):
 
 			# if a name was actually provided...
 			if cat['name']:
@@ -107,7 +110,7 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 			assert not duplicates, f'{colors.error}duplicates in category {colors.reset}{cat["name"]}: {duplicates}'
 
 			# for every question in the category...
-			for q in tqdm.tqdm(cat['questions'], desc='question', leave=False):
+			for q in tqdm(cat['questions'], desc='question', leave=False):
 
 				# the class that will be instantiated for this particular question
 				question_class = getattr(question, q['class'])
@@ -140,6 +143,20 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 				f.write(f'{q.gift}\n\n')
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
+
+	# if this is a "fake" connection
+	if type(connection) == remote.FakeConnection:
+
+		# if there is any file to be copied...
+		if connection.files_to_copy:
+
+			print(f'{colors.info}you *should* copy:')
+
+			for source, remote_directory in connection.files_to_copy:
+
+				print(
+					f'{source}{colors.info} to '
+					f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
 
 	# if latex checks are enabled *and* some formula was processed...
 	if (not no_checks) and latex_auxiliary_file.exists():
