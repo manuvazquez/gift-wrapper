@@ -30,7 +30,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], feedback: Optional[str] = None, time: Optional[int] = None):
 		"""
 		Initializer.
 
@@ -49,6 +49,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.name = name
 		self.statement = statement.rstrip()
 		self.feedback = feedback
+		self.time = time
 		self.history = history
 
 		assert ('width' in images_settings) and ('height' in images_settings),\
@@ -62,7 +63,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 				gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas)
 		]
 
-		# this might be tampered with by subclasses/decorator
+		# this might be tampered with by subclasses/decorators
 		self.pre_processing_functions = []
 
 	def process_text(self, text: str) -> str:
@@ -115,6 +116,12 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		# the full answer
 		answer = f'{{\n{self.answer + feedback}\n}}'
 
+		# if a `time` estimate was passed...
+		if self.time:
+
+			# ...it is appended at the end of the statement
+			self.statement += '\n\n\n' + r'<i>Estimated time\: ' + str(self.time) + r' minutes</i>' + '\n'
+
 		return gift.from_question_name(self.name) + gift.html + self.process_text(self.statement) + answer
 
 	def __repr__(self):
@@ -150,10 +157,11 @@ class Numerical(HtmlQuestion):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, feedback: Optional[str] = None,
+			time: Optional[int] = None):
 
 		super().__init__(
-			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback)
+			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback, time)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -205,10 +213,11 @@ class MultipleChoice(HtmlQuestion):
 
 	def __init__(
 			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, feedback: Optional[str] = None):
+			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, feedback: Optional[str] = None,
+			time: Optional[int] = None):
 
 		super().__init__(
-			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback)
+			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback, time)
 
 		self.answers = answers
 

@@ -31,6 +31,9 @@ categories:
       # leave it blank if you don't want to provide any feedback
       feedback: |
         The mean energy is $E_s = \frac{0^2 + 1^2 + 2^2}{3}$
+      # (optional) if present, an estimate of the time (in minutes) needed to solve the exercise will be added
+      # (highlighted) after the statement
+      time: 2
     # --------------------------------------------------------
     - name: Pi
       class: Numerical

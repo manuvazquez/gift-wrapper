@@ -140,7 +140,8 @@ def process_latex(text: str, latex_auxiliary_file: Union[str, pathlib.Path], che
 
 	"""
 
-	def replacement(m: re.Match) -> str:
+	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
+	def replacement(m) -> str:
 
 		latex_source = m.group(1)
 

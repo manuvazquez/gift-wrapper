@@ -110,7 +110,7 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 			assert not duplicates, f'{colors.error}duplicates in category {colors.reset}{cat["name"]}: {duplicates}'
 
 			# for every question in the category...
-			for q in tqdm(cat['questions'], desc='question', leave=False):
+			for q in tqdm(cat['questions'], desc='question', leave=True):
 
 				# the class that will be instantiated for this particular question
 				question_class = getattr(question, q['class'])
