@@ -95,10 +95,18 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 		# for every category...
 		for cat in tqdm(categories, desc='category'):
 
-			# if a name was actually provided...
+			# if "something" was actually provided...
 			if cat['name']:
 
-				f.write(gift.from_category(cat['name']))
+				# ...if it's *not* a list...
+				if type(cat['name']) != list:
+
+					# ...it is turned into one
+					cat['name'] = [cat['name']]
+
+				for c in cat['name']:
+
+					f.write(gift.from_category(c))
 
 			# the names of *all* the questions
 			all_names = [q['name'] for q in cat['questions']]

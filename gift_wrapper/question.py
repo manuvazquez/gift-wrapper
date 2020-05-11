@@ -145,9 +145,17 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 	def to_jupyter(self):
 
+		statement = self.statement
+
+		# if a `time` estimate was passed...
+		if self.time:
+
+			# ...it is appended at the end of the statement
+			statement += f'\n\n\n*Estimated time: {self.time} minutes*\n'
+
 		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
 
-		return f'{markdown_header("Statement")}{self.statement}\n{feedback}\n'
+		return f'{markdown_header("Statement")}{statement}\n{feedback}\n'
 
 
 class Numerical(HtmlQuestion):

@@ -5,8 +5,9 @@ categories:
 
   # ============================================================= Category
 
-  # leave it blank if you don't want subsequent questions to belong to any category
-  - name: Sample category 1
+  # leave it blank if you don't want subsequent questions to belong to any category; it can be a single name
+  # (see below) or a list
+  - name: [Sample category 1,Sample category 1/sample subcategory]
     # --------------------------------------------------------
     questions:
       # the identifier of the question once imported

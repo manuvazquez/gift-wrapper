@@ -127,8 +127,6 @@ By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s
 
 - only *numerical* and *multiple-choice* questions are supported (notice that the GIFT format itself doesn't support every type of question available in Moodle)
 
-- only one category can be specified for every list of questions
-
 - the latex support is very basic
 
 - embedded paths to images are only parsed correctly when surrounded by things usually recognized as whitespace (" ", new line)
