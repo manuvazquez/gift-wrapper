@@ -42,7 +42,7 @@ pip install pyyaml paramiko tqdm colorama
 
 should install all the additional requirements. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
 
-After that, you should be able to run the program. You can either download the [latest release](https://github.com/manuvazquez/gift-wrapper/releases/latest) (not necessarily up-to-date) or click *Clone or download* above to get the most recent version.
+After that, you should be able to run the program.
 
 ## Usage
 
@@ -70,7 +70,7 @@ Questions are specified through another *YAML* file. The first parameter, `pictu
 
 ### Example
 
-If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked).
+If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line.
 
 ## Including images
 
