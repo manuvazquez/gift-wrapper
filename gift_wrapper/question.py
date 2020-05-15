@@ -232,7 +232,10 @@ class MultipleChoice(HtmlQuestion):
 	@property
 	def answer(self):
 
-		processed_answers = ['=' + self.process_text(self.answers['perfect'])]
+		processed_answers = []
+
+		# the maximum grade allowed by partially correct answers
+		max_grade = 0.
 
 		for a in self.answers['wrong']:
 
@@ -241,10 +244,31 @@ class MultipleChoice(HtmlQuestion):
 
 				processed_answers.append(f'~%{a[1]}%{self.process_text(a[0])}')
 
+				# if the grade is positive...
+				if a[1] > 0:
+
+					# ...it is accounted when computing the maximum
+					max_grade += float(a[1])
+
 			# if it is a scalar
 			else:
 
 				processed_answers.append(f'~{self.process_text(a)}')
+
+		# if a "perfect" (100% credit) was provided...
+		if 'perfect' in self.answers:
+
+			# ...it is added in a special way
+			# processed_answers.append('=' + self.process_text(self.answers['perfect']))
+			processed_answers.insert(0, '=' + self.process_text(self.answers['perfect']))
+
+		else:
+
+			# if it's not possible to get full credit...
+			if max_grade < 100.:
+				print(
+					f"{colors.extra_info}question{colors.reset} \"{self.name}\" {colors.extra_info} won't allow "
+					f"full credit {colors.reset}{max_grade}")
 
 		return '\t' + '\n\t'.join(processed_answers)
 
@@ -254,17 +278,19 @@ class MultipleChoice(HtmlQuestion):
 
 		res += markdown_header('Choices')
 
-		res += f'---\n'
+		if 'perfect' in self.answers:
 
-		res += f'* {self.answers["perfect"]}\n'
+			res += f'---\n'
 
-		res += f'---\n'
+			res += f'* {self.answers["perfect"]}\n'
+
+			res += f'---\n'
 
 		for a in self.answers['wrong']:
 
 			if isinstance(a, list):
 
-				res += f'* {a[0]}\n'
+				res += f'* {a[0]} (**{a[1]}%**)\n'
 
 			else:
 

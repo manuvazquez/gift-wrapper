@@ -71,3 +71,17 @@ categories:
         if you look at the cover of sample_images/quixote.tex
         you know, well...you know...you know you know....
     # --------------------------------------------------------
+    - name: Infinite Jest
+      class: MultipleChoice
+      statement: |
+        Check stuff from DFW's Infinite Jest
+      answers:
+        # no perfect answer is given
+        wrong:
+          - [Y.D.A.U., 50]
+          - [Incandenza, 50]
+          - [Woland, -50]
+          - [s'all good man, -50]
+      # no feedback will be presented after trying to solve the question
+      feedback:
+    # --------------------------------------------------------

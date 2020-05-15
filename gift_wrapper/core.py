@@ -4,7 +4,6 @@ import collections
 import sys
 
 import yaml
-# import tqdm
 from tqdm.autonotebook import tqdm
 
 from . import question
@@ -30,15 +29,22 @@ def main():
 	parser.add_argument(
 		'-n', '--no-checks', default=False, action='store_true', help="don't check latex formulas (much faster)")
 
+	parser.add_argument(
+		'-o', '--overwrite-existing-latex-files', default=False, action='store_true',
+		help="overwrite existing latex files instead of shutting down")
+
 	command_line_arguments = parser.parse_args()
 
 	wrap(
 		parameters_file=command_line_arguments.parameters_file.name,
 		questions_file=command_line_arguments.input_file.name, local_run=command_line_arguments.local,
-		no_checks=command_line_arguments.no_checks)
+		no_checks=command_line_arguments.no_checks,
+		overwrite_existing_latex_files=command_line_arguments.overwrite_existing_latex_files)
 
 
-def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: bool):
+def wrap(
+		parameters_file: str, questions_file: str, local_run: bool, no_checks: bool,
+		overwrite_existing_latex_files: bool):
 
 	# ================================= parameters' reading
 
@@ -82,12 +88,12 @@ def wrap(parameters_file: str, questions_file: str, local_run: bool, no_checks: 
 
 	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
 
-	# if latex checks are enabled and the given auxiliary file already exists...
-	if (not no_checks) and latex_auxiliary_file.exists():
+	# if overwriting files was not requested and latex checks are enabled and the given auxiliary file already exists...
+	if (not overwrite_existing_latex_files) and (not no_checks) and latex_auxiliary_file.exists():
 
 		print(
 			f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists'
-			f' (and would be overwritten)')
+			f' and would be overwritten (pass "-o" to skip this check)')
 		sys.exit(1)
 
 	with open(output_file, 'w') as f:
