@@ -11,25 +11,32 @@ from . import image
 from . import remote
 from . import colors
 
-# # a string ended in ".svg" that does *not* begin with "http"
-# pattern_svg_file = '(?<!\S)(?!http)(\S+\.svg)(?!\S)'
-# # pattern_svg_file = '(?:^|\s)(?!http)\S+\.svg(?!\S)'
-# # pattern_svg_file = '(?:^| )(?!http)\S+\.svg(?!\S)'
-# # pattern_svg_file = '(?:^| )(?!http)\S+\.svg(?!\.\S{3})'
-# # pattern_svg_file = '(?:^| |>)(?!http)(\S+\.svg)(?!\.\S{3})'
-# # pattern_svg_file = '(?:^| |>)(?!http)([a-zA-Z0-9_/]+\.svg)(?!\.\S{3})'
-# # pattern_svg_file = r'(?<!\S)(?!http)(\S+\.svg)(?:<br>)?(?!\S)'
-
 # regular expression to extract a percentage
-re_percentage = re.compile('(\d*\.\d+|\d+)\s*%')
-
-# a string template to be used in markdown generation
-markdown_header_template = string.Template('<span style="font-family:Papyrus; font-size:2em;">$text</span>')
+re_percentage = re.compile(r'(\d*\.\d+|\d+)\s*%')
 
 
-def markdown_header(text: str) -> str:
+def markdown_header(
+		text: str,
+		template: string.Template = string.Template('<span style="font-family:Papyrus; font-size:2em;">$text</span>')
+) -> str:
+	"""
+	Returns a markdown header for a given text.
 
-	return f'\n{markdown_header_template.substitute(text=text)}\n\n'
+	Parameters
+	----------
+	text : str
+		Text for the header.
+	template : string template
+		The template that defines the appearance of the header, and in which `text` will be embedded.
+
+	Returns
+	-------
+	str:
+		Markdown-compatible text.
+
+	"""
+
+	return f'\n{template.substitute(text=text)}\n\n'
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
@@ -269,7 +276,6 @@ class MultipleChoice(HtmlQuestion):
 		if 'perfect' in self.answers:
 
 			# ...it is added in a special way
-			# processed_answers.append('=' + self.process_text(self.answers['perfect']))
 			processed_answers.insert(0, '=' + self.process_text(self.answers['perfect']))
 
 		else:
@@ -408,7 +414,6 @@ class TexToSvg(QuestionDecorator):
 		# NOTE: an extra space is added in the replacement for `SvgToInline` --- not anymore
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r'\1.svg'))
-			# self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r' \1.svg'))
 
 
 class SvgToHttp(QuestionDecorator):
@@ -448,14 +453,9 @@ class SvgToHttp(QuestionDecorator):
 				# ...and a note is made of it
 				self.history['already transferred'].add(f)
 
-			# else:
-			#
-			# 	print(f'{f} already transferred...')
-
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern=self.pattern_svg_file,
-			# self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
 			process_match=process_match, replacement=replacement_function))
 
 
@@ -483,8 +483,6 @@ class SvgToInline(QuestionDecorator):
 	Decorator to reformat svg files for including them in markdown strings.
 	"""
 
-	# pattern_svg_file = r'<br>\s*(?!<br>)(\S+\.svg)\s*<br>'
-
 	# notice the order is important: each pattern will result in a different post-processing function and they are
 	# applied *sequentially*, each one on the result of the previous one
 	patterns = [r'<br>\s*(?!<br>)(\S+\.svg)\s*<br>', r'(\S+\.svg)']
@@ -509,8 +507,3 @@ class SvgToInline(QuestionDecorator):
 			# a new pre-processing function is attached to the corresponding list
 			self.post_processing_functions.append(functools.partial(
 				self.transform_files, pattern=p, process_match=process_match, replacement=replacement_function))
-
-		# # a new pre-processing function is attached to the corresponding list
-		# self.post_processing_functions.append(functools.partial(
-		# 	self.transform_files, pattern=self.pattern_svg_file,
-		# 	process_match=process_match, replacement=replacement_function))
