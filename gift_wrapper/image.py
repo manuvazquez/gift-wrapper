@@ -21,7 +21,7 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 
 	Returns
 	-------
-	out: str
+	out: pathlib.Path
 		The path to the compiled pdf.
 
 	"""
@@ -57,7 +57,7 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 
 	Returns
 	-------
-	out: str
+	out: pathlib.Path
 		The path to the svg file.
 
 	"""
@@ -77,3 +77,30 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 		f"{colors.error}could not convert {colors.reset}{input_file}{colors.error} to svg"
 
 	return output_file
+
+
+def svg_to_html(input_file: Union[str, pathlib.Path]) -> str:
+	"""
+
+	Parameters
+	----------
+	input_file : str or pathlib.Path
+		svg file.
+
+	Returns
+	-------
+
+	"""
+
+	# <!--?xml version\="1.0" encoding\="UTF-8"?-->
+
+	# input file is read
+	with open(input_file) as f:
+
+		file_content = f.read()
+
+	for to_be_escaped in [':', '~', '=', '#']:
+
+		file_content = file_content.replace(to_be_escaped, '\\' + to_be_escaped)
+
+	return r'<body>' + '\n' + file_content + r'</body>'

@@ -62,7 +62,7 @@ The output will be a text file in GIFT format with the same name as the input on
 
 ### Parameters
 
-`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it only contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments. It should be fairly easy to tweak the [included example](parameters.yaml) for your own setup.
+`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it mostly contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments. It should be fairly easy to tweak the [included example](parameters.yaml) for your own setup.
 
 ### Questions
 
@@ -70,7 +70,7 @@ Questions are specified through another *YAML* file. The first parameter, `pictu
 
 ### Example
 
-If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line.
+If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line, or try and embed every image in its corresponding question with `-e` (right now sort of experimental).
 
 ## Including images
 
@@ -81,7 +81,7 @@ If you run the program inside the `gift-wrapper` directory as is, it will proces
 
 In any case, you just need to write the path to the file inside the text of the question (whether in the `statement`, the `answer` or the `feedbak`). If in the second scenario, i.e., you are including a *TeX* file, this will be compiled into a pdf with *pdflatex*, and then converted to an svg with *pdf2svg*. Hence, a *svg* file will be, in the end, available for every image.
 
-Images (*svg*s) are then copied to a remote host, and properly linked in the output GIFT file.
+Images (*svg*s) are either copied to a remote host (and properly linked in the output GIFT file), or directly embedded in their corresponding questions.
 
 ### Browser compatibility
 
@@ -94,7 +94,7 @@ Also, there is (probably) nothing special about *pdf2svg* and, in principle, you
 
 ## Remote access
 
-Images should be copied into some remote host that is public so that it can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). In the `parameters.yaml` file, within `ssh` either
+By default, images are copied into some remote host (with a publicly visible directory) so that they can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). For this to work, in the `parameters.yaml` file, within `ssh` either
 
 * user and password, or
 * user and path to a public key file

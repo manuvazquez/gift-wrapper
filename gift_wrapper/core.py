@@ -31,7 +31,11 @@ def main():
 
 	parser.add_argument(
 		'-o', '--overwrite-existing-latex-files', default=False, action='store_true',
-		help="overwrite existing latex files instead of shutting down")
+		help="overwrite existing latex files if necessary instead of exiting")
+
+	parser.add_argument(
+		'-e', '--embed-images', default=False, action='store_true',
+		help="embed the images rather than link to them (experimental)")
 
 	command_line_arguments = parser.parse_args()
 
@@ -39,12 +43,13 @@ def main():
 		parameters_file=command_line_arguments.parameters_file.name,
 		questions_file=command_line_arguments.input_file.name, local_run=command_line_arguments.local,
 		no_checks=command_line_arguments.no_checks,
-		overwrite_existing_latex_files=command_line_arguments.overwrite_existing_latex_files)
+		overwrite_existing_latex_files=command_line_arguments.overwrite_existing_latex_files,
+		embed_images=command_line_arguments.embed_images)
 
 
 def wrap(
 		parameters_file: str, questions_file: str, local_run: bool, no_checks: bool,
-		overwrite_existing_latex_files: bool):
+		overwrite_existing_latex_files: bool, embed_images: bool):
 
 	# ================================= parameters' reading
 
@@ -67,18 +72,27 @@ def wrap(
 
 	# =================================
 
-	# if "local" running was requested...
-	if local_run:
+	# if images embedding was requested...
+	if embed_images:
 
-		# ...a "fake" connections is instantiated
-		connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
+		# ...a connection is not needed
+		connection = None
 
-	# if NO local running was requested...
+	# if images are *not* to be embedded...
 	else:
 
-		# ...an actual connection with the requested host is opened
-		connection = remote.Connection(
-			parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+		# if "local" running was requested...
+		if local_run:
+
+			# ...a "fake" connections is instantiated
+			connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
+
+		# if NO local running was requested...
+		else:
+
+			# ...an actual connection with the requested host is opened
+			connection = remote.Connection(
+				parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 	# output file has the same name as the input with the ".gift.txt" suffix
 	output_file = input_file.with_suffix('.gift.txt')
@@ -147,30 +161,40 @@ def wrap(
 				# "history" is passed
 				q['history'] = history
 
-				# question is instantiated and "decorated"
-				q = question.SvgToHttp(
-					question.TexToSvg(
-						question_class(**q)
-					), connection, parameters['images hosting']['copy']['public filesystem root'],
-					pictures_base_directory, parameters['images hosting']['public URL'])
+				if embed_images:
+
+					# question is instantiated and "decorated"
+					q = question.SvgToInline(question.TexToSvg(question_class(**q)))
+
+				else:
+
+					# question is instantiated and "decorated"
+					q = question.SvgToHttp(
+						question.TexToSvg(
+							question_class(**q)
+						), connection, parameters['images hosting']['copy']['public filesystem root'],
+						pictures_base_directory, parameters['images hosting']['public URL'])
 
 				f.write(f'{q.gift}\n\n')
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
 
-	# if this is a "fake" connection
-	if type(connection) == remote.FakeConnection:
+	# if images are *not* to be embedded...
+	if not embed_images:
 
-		# if there is any file to be copied...
-		if connection.files_to_copy:
+		# if this is a "fake" connection
+		if type(connection) == remote.FakeConnection:
 
-			print(f'{colors.info}you *should* copy:')
+			# if there is any file to be copied...
+			if connection.files_to_copy:
 
-			for source, remote_directory in connection.files_to_copy:
+				print(f'{colors.info}you *should* copy:')
 
-				print(
-					f'{source}{colors.info} to '
-					f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
+				for source, remote_directory in connection.files_to_copy:
+
+					print(
+						f'{source}{colors.info} to '
+						f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
 
 	# if latex checks are enabled *and* some formula was processed...
 	if (not no_checks) and latex_auxiliary_file.exists():

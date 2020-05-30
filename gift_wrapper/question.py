@@ -11,6 +11,15 @@ from . import image
 from . import remote
 from . import colors
 
+# # a string ended in ".svg" that does *not* begin with "http"
+# pattern_svg_file = '(?<!\S)(?!http)(\S+\.svg)(?!\S)'
+# # pattern_svg_file = '(?:^|\s)(?!http)\S+\.svg(?!\S)'
+# # pattern_svg_file = '(?:^| )(?!http)\S+\.svg(?!\S)'
+# # pattern_svg_file = '(?:^| )(?!http)\S+\.svg(?!\.\S{3})'
+# # pattern_svg_file = '(?:^| |>)(?!http)(\S+\.svg)(?!\.\S{3})'
+# # pattern_svg_file = '(?:^| |>)(?!http)([a-zA-Z0-9_/]+\.svg)(?!\.\S{3})'
+# # pattern_svg_file = r'(?<!\S)(?!http)(\S+\.svg)(?:<br>)?(?!\S)'
+
 # regular expression to extract a percentage
 re_percentage = re.compile('(\d*\.\d+|\d+)\s*%')
 
@@ -63,8 +72,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 				gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas)
 		]
 
-		# this might be tampered with by subclasses/decorators
+		# these might be tampered with by subclasses/decorators
 		self.pre_processing_functions = []
+		self.post_processing_functions = []
 
 	def process_text(self, text: str) -> str:
 		"""
@@ -82,7 +92,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		"""
 
-		for function in (self.pre_processing_functions + self.processing_functions):
+		for function in (self.pre_processing_functions + self.processing_functions + self.post_processing_functions):
 
 			try:
 
@@ -357,6 +367,8 @@ class QuestionDecorator:
 		# all the matching files in the given text
 		files = re.findall(pattern, text)
 
+		# breakpoint()
+
 		# every one of them...
 		for file in files:
 
@@ -393,14 +405,18 @@ class TexToSvg(QuestionDecorator):
 
 		# a new pre-processing function is attached to the corresponding list
 		# (the "\1" in `replacement` refers to matches in `pattern`)
+		# NOTE: an extra space is added in the replacement for `SvgToInline` --- not anymore
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r'\1.svg'))
+			# self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r' \1.svg'))
 
 
 class SvgToHttp(QuestionDecorator):
 	"""
 	Decorator to transfer svg files to a remote location.
 	"""
+
+	pattern_svg_file = r'(?<!\S)(?!http)(\S+\.svg)(?!\S)'
 
 	def __init__(
 			self, decorated: Union[HtmlQuestion, QuestionDecorator], connection: remote.Connection,
@@ -438,7 +454,8 @@ class SvgToHttp(QuestionDecorator):
 
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
+			self.transform_files, pattern=self.pattern_svg_file,
+			# self.transform_files, pattern='(?<!\S)(?!http)(\S+\.svg)\??(?!\S)',
 			process_match=process_match, replacement=replacement_function))
 
 
@@ -459,3 +476,41 @@ class SvgToMarkdown(QuestionDecorator):
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern='(\S+)\.svg',
 			process_match=process_match, replacement=r'![](' + r'\1' + '.svg)'))
+
+
+class SvgToInline(QuestionDecorator):
+	"""
+	Decorator to reformat svg files for including them in markdown strings.
+	"""
+
+	# pattern_svg_file = r'<br>\s*(?!<br>)(\S+\.svg)\s*<br>'
+
+	# notice the order is important: each pattern will result in a different post-processing function and they are
+	# applied *sequentially*, each one on the result of the previous one
+	patterns = [r'<br>\s*(?!<br>)(\S+\.svg)\s*<br>', r'(\S+\.svg)']
+
+	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
+
+		super().__init__(decorated)
+
+		def process_match(f):
+
+			pass
+
+		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
+		def replacement_function(m) -> str:
+
+			file = pathlib.Path(m.group(1))
+
+			return image.svg_to_html(file)
+
+		for p in self.patterns:
+
+			# a new pre-processing function is attached to the corresponding list
+			self.post_processing_functions.append(functools.partial(
+				self.transform_files, pattern=p, process_match=process_match, replacement=replacement_function))
+
+		# # a new pre-processing function is attached to the corresponding list
+		# self.post_processing_functions.append(functools.partial(
+		# 	self.transform_files, pattern=self.pattern_svg_file,
+		# 	process_match=process_match, replacement=replacement_function))

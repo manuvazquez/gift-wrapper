@@ -48,7 +48,7 @@ class Connection:
 			print(
 				f'{colors.error}the provided public key {colors.reset}({public_key}){colors.error}'
 				f' is not valid or has not been decrypted{colors.reset} '
-				f'(you can try running the program in local mode by passing "-l")')
+				f'(you can try running the program in local mode, by passing "-l", or embedding the images, with "-e")')
 
 			sys.exit(1)
 
