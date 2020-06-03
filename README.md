@@ -70,7 +70,7 @@ Questions are specified through another *YAML* file. The first parameter, `pictu
 
 ### Example
 
-If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line, or try and embed every image in its corresponding question with `-e` (right now sort of experimental).
+If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line, or try and embed every image in its corresponding question with `-e`.
 
 ## Including images
 
@@ -81,7 +81,7 @@ If you run the program inside the `gift-wrapper` directory as is, it will proces
 
 In any case, you just need to write the path to the file inside the text of the question (whether in the `statement`, the `answer` or the `feedbak`). If in the second scenario, i.e., you are including a *TeX* file, this will be compiled into a pdf with *pdflatex*, and then converted to an svg with *pdf2svg*. Hence, a *svg* file will be, in the end, available for every image.
 
-Images (*svg*s) are either copied to a remote host (and properly linked in the output GIFT file), or directly embedded in their corresponding questions.
+Images (*svg*s) are either copied to a remote host (and properly linked in the output GIFT file), or directly embedded into their corresponding questions.
 
 ### Browser compatibility
 

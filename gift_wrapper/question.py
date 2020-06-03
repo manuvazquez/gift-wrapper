@@ -45,8 +45,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], feedback: Optional[str] = None, time: Optional[int] = None):
+			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
+			latex_auxiliary_file: Union[str, pathlib.Path], images_settings: Optional[dict] = None,
+			feedback: Optional[str] = None, time: Optional[int] = None):
 		"""
 		Initializer.
 
@@ -56,10 +57,18 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			Name of the question.
 		statement : str
 			Statement of the question.
-		images_settings : dict
+		history: dict
+			Variable storing a "context" common to all the questions.
+		check_latex_formulas: bool
+			Whether or not an attempt should be made to compile every latex formula to detect errors.
+		latex_auxiliary_file: str or Pathlib
+			The latex file that will be created to check the formulas.
+		images_settings : dict, optional
 			width and height of *all* the images in the question.
-		feedback : str
+		feedback : str, optional
 			Feedback for the question.
+		time: int, optional
+			The number of minutes deemed necessary to answer the question.
 		"""
 
 		self.name = name
@@ -68,10 +77,16 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.time = time
 		self.history = history
 
-		assert ('width' in images_settings) and ('height' in images_settings),\
-			'"width" and/or "height" missing in "image_settings"'
+		if images_settings is None:
 
-		self.images_width, self.images_height = images_settings['width'], images_settings['height']
+			self.images_width, self.images_height = None, None
+
+		else:
+
+			assert ('width' in images_settings) and ('height' in images_settings), \
+				'"width" and/or "height" missing in "image_settings"'
+
+			self.images_width, self.images_height = images_settings['width'], images_settings['height']
 
 		self.processing_functions = [
 			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_height),
@@ -172,6 +187,17 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
 
+		def replacement(m) -> str:
+			return m.group(0).replace('\n\n', '\n')
+
+		# just like LaTeX, a single "newline" doesn't reflect in the output, and hence every new line is duplicated
+		statement = statement.replace('\n', '\n\n')
+		feedback = feedback.replace('\n', '\n\n')
+
+		# the above "tweak" is reverted inside formulas since it causes issues
+		statement = re.sub(r'\$[^\$]*\$', replacement, statement)
+		feedback = re.sub(r'\$[^\$]*\$', replacement, feedback)
+
 		return f'{markdown_header("Statement")}{statement}\n{feedback}\n'
 
 
@@ -181,12 +207,20 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, feedback: Optional[str] = None,
-			time: Optional[int] = None):
+			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
+			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, images_settings: Optional[dict] = None,
+			feedback: Optional[str] = None, time: Optional[int] = None):
+		"""
+		Initializer.
+
+		Parameters
+		----------
+		solution : dict
+			Value and, optionally, tolerated error of the solution.
+		"""
 
 		super().__init__(
-			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback, time)
+			name, statement, history, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -236,13 +270,23 @@ class MultipleChoice(HtmlQuestion):
 	Class implementing a multiple-choice question.
 	"""
 
+	template_wrong_answers = string.Template(r"**<font color='$color'>$text</font>**")
+
 	def __init__(
-			self, name: str, statement: str, images_settings: dict, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, feedback: Optional[str] = None,
-			time: Optional[int] = None):
+			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
+			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, images_settings: Optional[dict] = None,
+			feedback: Optional[str] = None, time: Optional[int] = None):
+		"""
+		Initializer.
+
+		Parameters
+		----------
+		answers : dict
+			Right answer and a list with the wrong ones.
+		"""
 
 		super().__init__(
-			name, statement, images_settings, history, check_latex_formulas, latex_auxiliary_file, feedback, time)
+			name, statement, history, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time)
 
 		self.answers = answers
 
@@ -296,21 +340,27 @@ class MultipleChoice(HtmlQuestion):
 
 		if 'perfect' in self.answers:
 
-			res += f'---\n'
+			# res += f'---\n'
 
-			res += f'* {self.answers["perfect"]}\n'
+			# res += f'* {self.answers["perfect"]}\n'
+			res += f'* {self.template_wrong_answers.substitute(color="green", text=self.answers["perfect"])}\n'
 
-			res += f'---\n'
+			# res += f'---\n'
 
 		for a in self.answers['wrong']:
 
 			if isinstance(a, list):
 
-				res += f'* {a[0]} (**{a[1]}%**)\n'
+				formatted_grade = self.template_wrong_answers.substitute(
+					color='green' if float(a[1]) > 0 else 'red', text=f'{a[1]}%')
+
+				res += f'* {a[0]} (**{formatted_grade}**)\n'
+				# res += f'* {a[0]} (**{a[1]}%**)\n'
 
 			else:
 
-				res += f'* {a}\n'
+				# res += f'* {a}\n'
+				res += f'* {self.template_wrong_answers.substitute(color="red", text=a)}\n'
 
 		return res
 
@@ -480,7 +530,7 @@ class SvgToMarkdown(QuestionDecorator):
 
 class SvgToInline(QuestionDecorator):
 	"""
-	Decorator to reformat svg files for including them in markdown strings.
+	Decorator to directly include svg files into a question.
 	"""
 
 	# notice the order is important: each pattern will result in a different post-processing function and they are

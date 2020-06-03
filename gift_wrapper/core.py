@@ -102,7 +102,7 @@ def wrap(
 
 	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
 
-	# if overwriting files was not requested and latex checks are enabled and the given auxiliary file already exists...
+	# if overwriting files was not requested AND latex checks are enabled AND the given auxiliary file already exists...
 	if (not overwrite_existing_latex_files) and (not no_checks) and latex_auxiliary_file.exists():
 
 		print(
@@ -140,17 +140,9 @@ def wrap(
 			# for every question in the category...
 			for q in tqdm(cat['questions'], desc='question', leave=True):
 
-				# the class that will be instantiated for this particular question
-				question_class = getattr(question, q['class'])
-
-				# if field `images_settings` is not present...
-				if 'images_settings' not in q:
-
-					# `None` values for width and height are assumed (meaning automatic size adjustment)
-					q['images_settings'] = {'width': None, 'height': None}
-
-				# the class is removed from the dictionary so that it doesn't get passed to the initializer
-				del q['class']
+				# the class that will be instantiated for this particular question; notice the class is removed
+				# (popped) from the dictionary so that it doesn't get passed to the initializer
+				question_class = getattr(question, q.pop('class'))
 
 				# whether or not latex formulas should be checked...
 				q['check_latex_formulas'] = not no_checks
@@ -196,7 +188,7 @@ def wrap(
 						f'{source}{colors.info} to '
 						f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
 
-	# if latex checks are enabled *and* some formula was processed...
+	# if latex checks are enabled AND some formula was processed...
 	if (not no_checks) and latex_auxiliary_file.exists():
 
 		# latex auxiliary files are deleted
