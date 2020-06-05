@@ -10,6 +10,7 @@ from . import gift
 from . import image
 from . import remote
 from . import colors
+from . import latex
 
 # regular expression to extract a percentage
 re_percentage = re.compile(r'(\d*\.\d+|\d+)\s*%')
@@ -43,6 +44,14 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
 	Abstract class implementing an html-based question.
 	"""
+
+	# "\" is duplicated because it is assumed it has been escaped previously by `gift.process_latex`
+	latex_in_text_substitutions = [
+		# \textbf
+		[r'\\textbf{([^}]+)}', r'<b>\1</b>', r'<b>([^<]*)</b>', r'\\textbf{\1}'],
+		# \textit
+		[r'\\textit{([^}]+)}', r'<i>\1</i>', r'<i>([^<]*)</i>', r'\\textit{\1}']
+	]
 
 	def __init__(
 			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
@@ -93,6 +102,13 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			gift.process_new_lines, functools.partial(
 				gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas)
 		]
+
+		# functions to process LaTeX commands *in text* (ignoring occurrences in formulas)...
+		latex_text_processing_functions = [
+			functools.partial(latex.replace_and_replace_only_in_formulas, *l) for l in self.latex_in_text_substitutions]
+
+		# ...are added to the pool
+		self.processing_functions += latex_text_processing_functions
 
 		# these might be tampered with by subclasses/decorators
 		self.pre_processing_functions = []
@@ -187,16 +203,33 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
 
-		def replacement(m) -> str:
-			return m.group(0).replace('\n\n', '\n')
+		# a copy of each list is made so that the class attribute is not modified
+		latex_in_text_substitutions = [e.copy() for e in self.latex_in_text_substitutions[:2]]
 
-		# just like LaTeX, a single "newline" doesn't reflect in the output, and hence every new line is duplicated
-		statement = statement.replace('\n', '\n\n')
-		feedback = feedback.replace('\n', '\n\n')
+		# \textbf-related substitutions are tweaked
+		latex_in_text_substitutions[0][1] = r'**\1**'
+		latex_in_text_substitutions[0][2] = r'\*\*([^\*]+)\*\*'
 
-		# the above "tweak" is reverted inside formulas since it causes issues
-		statement = re.sub(r'\$[^\$]*\$', replacement, statement)
-		feedback = re.sub(r'\$[^\$]*\$', replacement, feedback)
+		# \textit-related substitutions are tweaked
+		latex_in_text_substitutions[1][1] = r'*\1*'
+		latex_in_text_substitutions[1][2] = r'\*([^\*]+)\*'
+
+		# just like LaTeX, in markdown a single "newline" doesn't reflect in the output, and hence every new line
+		# is duplicated
+		latex_in_text_substitutions += [['\n', '\n\n', '\n\n', '\n']]
+
+		def apply_substitutions(text: str, substitutions: list):
+
+			res = text
+
+			for s in substitutions:
+
+				res = latex.replace_and_replace_only_in_formulas(*s, res)
+
+			return res
+
+		statement = apply_substitutions(statement, latex_in_text_substitutions)
+		feedback = apply_substitutions(feedback, latex_in_text_substitutions)
 
 		return f'{markdown_header("Statement")}{statement}\n{feedback}\n'
 

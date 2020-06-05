@@ -2,6 +2,7 @@ import pathlib
 import shutil
 import subprocess
 import string
+import re
 from typing import Union, List, Optional
 
 
@@ -81,3 +82,41 @@ def formula_can_be_compiled(formula: str, auxiliary_file: Union[str, pathlib.Pat
 	exit_status = compile_tex(auxiliary_file, timeout=10, options=['halt-on-error', 'draftmode'])
 
 	return exit_status == 0
+
+
+def replace_and_replace_only_in_formulas(
+		pattern: str, replacement: str, formula_pattern: str, formula_replacement: str, text: str) -> str:
+	"""
+	Replaces a matched expression but only if the match occurs *outside* a LaTeX formula.
+
+	Notice that arguments `pattern` and `replacement`, on one hand, and `formula_pattern` and `formula_replacement`,
+	on the other, are to be passed to Python's `re.sub`.
+
+	Parameters
+	----------
+	pattern : str
+		Regular expression to be matched globally.
+	replacement : str
+		Replacement string for `pattern`
+	formula_pattern : str
+		Regular expression to be matched in formulas.
+	formula_replacement : str
+		Replacement string for `formula_pattern`
+	text : str
+		String to be processed
+
+	Returns
+	-------
+	out: str
+		String with replacements.
+
+	"""
+
+	def process_formula(m) -> str:
+
+		return re.sub(formula_pattern, formula_replacement, m.group(0))
+
+	res = re.sub(pattern, replacement, text)
+	res = re.sub(r'\$[^\$]*\$', process_formula, res)
+
+	return res

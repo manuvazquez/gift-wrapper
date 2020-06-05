@@ -105,7 +105,7 @@ You can run the program locally, i.e., omitting the transferring of the images t
 
 ## Latex support
 
-Only formulas inside `$`s are processed (no, e.g., `\textit` or `\textbf` inside the text), and within them, these are the commands/symbols that have been tested so far
+Formulas inside `$`s are processed and, within them, these are the commands/symbols that have been tested so far
 
 - greek letters
 - subindexes
@@ -118,6 +118,8 @@ Only formulas inside `$`s are processed (no, e.g., `\textit` or `\textbf` inside
 - symbols `\sim`, `\approx`
 
 More things are probably OK, but I have not tried them yet.
+
+Inside text, only commands `\textit` and `\textbf` are supported for the time being.
 
 ### Safety checks
 

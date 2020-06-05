@@ -15,11 +15,12 @@ categories:
       # it must be one of: Numerical, MultipleChoice
       class: Numerical
       # vertical bar, "|", signals a *multiline* string; when embedding a file name or URL in the text, it should be
-      # surrounded by spaces (meaning that, e.g., "foo.svg?" would not be correctly parsed)
+      # surrounded by spaces (meaning that, e.g., "foo.svg?" would not be correctly parsed); \textit and \textbf are
+      # processed *inside text* but ignored in formulas
       statement: |
-        Compute the mean energy of the constellation
+        Compute the \textbf{mean} energy of the constellation
         sample_images/1D_3_elements.svg
-        ,i.e., what is $E_s$?
+        ,i.e., what is $E_\textit{s}$?
       # if the section below is absent, size of the images is automatically adjusted (that is probably what you
       # want most of the time)
       images_settings:
