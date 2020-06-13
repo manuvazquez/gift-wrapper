@@ -131,4 +131,4 @@ By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s
 
 - the latex support is very basic
 
-- embedded paths to images are only parsed correctly when surrounded by things usually recognized as whitespace (" ", new line)
+- parsing of paths to images embedded in the questions is fragile: it is only reliable when the path is surrounded by things usually recognized as whitespace (" ", new line)

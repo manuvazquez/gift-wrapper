@@ -99,7 +99,7 @@ def svg_to_html(input_file: Union[str, pathlib.Path]) -> str:
 
 		file_content = f.read()
 
-	for to_be_escaped in [':', '~', '=', '#']:
+	for to_be_escaped in [':', '~', '=', '#', '{', '}']:
 
 		file_content = file_content.replace(to_be_escaped, '\\' + to_be_escaped)
 
