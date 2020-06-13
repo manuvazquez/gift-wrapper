@@ -2,6 +2,7 @@ import argparse
 import pathlib
 import collections
 import sys
+from typing import Union
 
 import yaml
 from tqdm.autonotebook import tqdm
@@ -40,7 +41,7 @@ def main():
 	command_line_arguments = parser.parse_args()
 
 	wrap(
-		parameters_file=command_line_arguments.parameters_file.name,
+		parameters=command_line_arguments.parameters_file.name,
 		questions_file=command_line_arguments.input_file.name, local_run=command_line_arguments.local,
 		no_checks=command_line_arguments.no_checks,
 		overwrite_existing_latex_files=command_line_arguments.overwrite_existing_latex_files,
@@ -48,15 +49,24 @@ def main():
 
 
 def wrap(
-		parameters_file: str, questions_file: str, local_run: bool, no_checks: bool,
+		parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 		overwrite_existing_latex_files: bool, embed_images: bool):
 
 	# ================================= parameters' reading
 
-	# the file with the parameters is read
-	with open(parameters_file) as yaml_data:
+	# if a file name was passed, either as a string or wrapped in a `Pathlib`,...
+	if (type(parameters) == str) or (type(parameters) == pathlib.Path):
 
-		parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
+		# ...it is read
+		with open(parameters) as yaml_data:
+
+			parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
+
+	# if a file name was *not* passed...
+	else:
+
+		# ...then it should be a dictionary
+		assert type(parameters) == dict
 
 	input_file = pathlib.Path(questions_file)
 

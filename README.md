@@ -56,7 +56,7 @@ python wrap.py -h
 ```
 if you did a manual installation and `wrap.py` doesn't have execution permissions. 
 
-If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file wheras the latter is the actual *input file* in which you must write the questions.
+If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file whereas the latter is the actual *input file* in which you must write the questions.
 
 The output will be a text file in GIFT format with the same name as the input one (the file with the questions) but `.gift.txt` extension (by default, `bank.gift.txt` then). It seems that *sometimes* Moodle has troubles importing (recognizing) a text file if the extension is not `.txt`. 
 

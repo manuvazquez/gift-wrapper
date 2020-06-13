@@ -9,18 +9,33 @@ from . import colors
 
 class Connection:
 
+	connection_not_available_help = (
+		r'(you can try running the program in local mode, by passing "-l", or embedding the images, with "-e")')
+
 	def __init__(self, host: str, user: str, password: str, public_key: Union[str, pathlib.Path]):
 
-		# useful in `__del__` if the assertion below fails
+		self.host = host
+		self.user = user
+		self.password = password
+		self.public_key = public_key
+
+		# to be set in `connect`
+		self.sftp = None
+
+		# useful in `__del__` in the case the connection never gets established
 		self.connection = None
 
-		assert (password is not None) ^ (public_key is not None),\
+		# self.connect()
+
+	def connect(self):
+
+		assert (self.password is not None) ^ (self.public_key is not None),\
 			f'either "password" or "public_key" must be passed, but not both'
 
-		if public_key is not None:
+		if self.public_key is not None:
 
 			# just in case "~" is in the given path
-			public_key = pathlib.Path(public_key).expanduser()
+			public_key = pathlib.Path(self.public_key).expanduser()
 
 			assert public_key.exists(), f'public key file, {public_key}, does not exist'
 
@@ -35,20 +50,23 @@ class Connection:
 		try:
 
 			# connection is established
-			self.connection.connect(host, username=user, password=password, key_filename=public_key)
+			self.connection.connect(self.host, username=self.user, password=self.password, key_filename=public_key)
 
 		except paramiko.ssh_exception.AuthenticationException:
 
-			print(f'{colors.error}provided username {colors.reset}({user}){colors.error} and/or password are not valid')
+			# first character is not visible due to tqdm
+			print(
+				f'\n{colors.error}provided username {colors.reset}({self.user}){colors.error}'
+				f' and/or password are not valid {self.connection_not_available_help}')
 
 			sys.exit(1)
 
 		except paramiko.ssh_exception.SSHException:
 
+			# first character is not visible due to tqdm
 			print(
-				f'{colors.error}the provided public key {colors.reset}({public_key}){colors.error}'
-				f' is not valid or has not been decrypted{colors.reset} '
-				f'(you can try running the program in local mode, by passing "-l", or embedding the images, with "-e")')
+				f'\n{colors.error}the provided public key {colors.reset}({self.public_key}){colors.error}'
+				f' is not valid or has not been decrypted {self.connection_not_available_help}')
 
 			sys.exit(1)
 
@@ -63,9 +81,19 @@ class Connection:
 
 	def is_active(self):
 
-		return self.connection.get_transport().is_active()
+		if self.connection is None:
+
+			return False
+
+		else:
+
+			return self.connection.get_transport().is_active()
 
 	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
+
+		if self.connection is None:
+
+			self.connect()
 
 		local = pathlib.Path(source)
 		remote_directory = pathlib.Path(remote_directory)
@@ -79,6 +107,10 @@ class Connection:
 		self.sftp.put(local.as_posix(), self.sftp.normalize(remote.as_posix()))
 
 	def make_directory_at(self, new: Union[str, pathlib.Path], at: str):
+
+		if self.connection is None:
+
+			self.connect()
 
 		self.sftp.chdir(at)
 
@@ -120,10 +152,6 @@ class FakeConnection:
 
 		if source.as_posix() not in self.already_copied:
 
-			# print(
-			# 	f'{colors.info}you *should* copy {colors.reset}{source}{colors.info} to'
-			# 	f' {colors.reset}{remote_directory}{colors.info} in {colors.reset}{self.host}')
-
 			self.already_copied.add(source.as_posix())
 			self.files_to_copy.append((source, remote_directory))
 
@@ -131,4 +159,3 @@ class FakeConnection:
 	def make_directory_at(new: str, at: str):
 
 		pass
-		# print(f'{colors.info}you *should* make directory {colors.reset}{new}{colors.info} at {colors.reset}{at}')

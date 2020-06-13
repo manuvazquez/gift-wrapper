@@ -512,9 +512,6 @@ class SvgToHttp(QuestionDecorator):
 
 		super().__init__(decorated)
 
-		# make a new directory if necessary
-		connection.make_directory_at(pictures_base_directory, public_filesystem_root)
-
 		# assembled remote path
 		remote_subdirectory = pathlib.Path(public_filesystem_root).joinpath(pictures_base_directory)
 
