@@ -54,7 +54,7 @@ categories:
     - name: Quixote
       class: MultipleChoice
       statement: |
-        What is the main character in sample_images/quixote.tex ?
+        What is the main character in sample_images/quixote.tex?
       answers:
         # the correct answer
         perfect: Don Quixote

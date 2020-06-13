@@ -3,6 +3,7 @@ import pathlib
 from typing import Union
 
 from . import latex
+from . import parsing
 
 
 class NotCompliantLatexFormula(Exception):
@@ -160,7 +161,7 @@ def process_latex(text: str, latex_auxiliary_file: Union[str, pathlib.Path], che
 		return r'\\(' + latex_source + r'\\)'
 
 	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
-	return re.sub(r'\$([^\$]*)\$', replacement, text)
+	return re.sub(parsing.latex_formula, replacement, text)
 
 
 def process_url_images(text: str, width: int, height: int) -> str:
@@ -184,7 +185,7 @@ def process_url_images(text: str, width: int, height: int) -> str:
 	"""
 
 	return re.sub(
-		'http(\S+)(?!\S)',
+		parsing.url,
 		lambda m: '<p>' + from_image_url(m.group(0), width=width, height=height) + '<br></p>',
 		text)
 

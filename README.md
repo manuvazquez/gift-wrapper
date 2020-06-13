@@ -83,6 +83,11 @@ In any case, you just need to write the path to the file inside the text of the 
 
 Images (*svg*s) are either copied to a remote host (and properly linked in the output GIFT file), or directly embedded into their corresponding questions.
 
+Characters allowed in a path (to either a `.tex` or a `.svg`) are:
+* alphanumeric (A-Z, a-z, 0-9)
+* underscore, '_', and dash, '-'
+* '/' and '\\' (path separators).
+
 ### Browser compatibility
 
 It seems (it has been reported) not every browser properly handles svg images (maybe other types too) embedded in a question as an URL. My experience so far is both [Firefox](https://www.mozilla.org/en-US/firefox) and [Chromium](https://www.chromium.org/Home) (at the time of writing this) work just fine. 
@@ -131,4 +136,4 @@ By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s
 
 - the latex support is very basic
 
-- parsing of paths to images embedded in the questions is fragile: it is only reliable when the path is surrounded by things usually recognized as whitespace (" ", new line)
+- one is in for troubles if embedding URLs pointing to `.svg` or `.tex` files since the file part will, most likely, be parsed and replaced

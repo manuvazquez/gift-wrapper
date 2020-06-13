@@ -11,9 +11,9 @@ from . import image
 from . import remote
 from . import colors
 from . import latex
+from . import parsing
 
-# regular expression to extract a percentage
-re_percentage = re.compile(r'(\d*\.\d+|\d+)\s*%')
+regex_filename_valid_character = r'[\\/\w_\-]'
 
 
 def markdown_header(
@@ -264,7 +264,7 @@ class Numerical(HtmlQuestion):
 			self.solution_error = ':'
 
 			# try to match a percentage
-			m = re_percentage.match(str(solution['error']))
+			m = parsing.re_percentage.match(str(solution['error']))
 
 			# if so...
 			if m:
@@ -496,15 +496,13 @@ class TexToSvg(QuestionDecorator):
 		# (the "\1" in `replacement` refers to matches in `pattern`)
 		# NOTE: an extra space is added in the replacement for `SvgToInline` --- not anymore
 		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern='(\S+)\.tex', process_match=process_match, replacement=r'\1.svg'))
+			self.transform_files, pattern=parsing.tex_file_name, process_match=process_match, replacement=r'\1.svg'))
 
 
 class SvgToHttp(QuestionDecorator):
 	"""
 	Decorator to transfer svg files to a remote location.
 	"""
-
-	pattern_svg_file = r'(?<!\S)(?!http)(\S+\.svg)(?!\S)'
 
 	def __init__(
 			self, decorated: Union[HtmlQuestion, QuestionDecorator], connection: remote.Connection,
@@ -535,7 +533,7 @@ class SvgToHttp(QuestionDecorator):
 
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern=self.pattern_svg_file,
+			self.transform_files, pattern=parsing.url_less_svg_file,
 			process_match=process_match, replacement=replacement_function))
 
 
@@ -554,8 +552,7 @@ class SvgToMarkdown(QuestionDecorator):
 
 		# a new pre-processing function is attached to the corresponding list
 		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern='(\S+)\.svg',
-			process_match=process_match, replacement=r'![](' + r'\1' + '.svg)'))
+			self.transform_files, pattern=parsing.svg_file, process_match=process_match, replacement=r'![](' + r'\1)'))
 
 
 class SvgToInline(QuestionDecorator):
@@ -565,7 +562,8 @@ class SvgToInline(QuestionDecorator):
 
 	# notice the order is important: each pattern will result in a different post-processing function and they are
 	# applied *sequentially*, each one on the result of the previous one
-	patterns = [r'([\\/\w_\-]+\.svg)']
+	# patterns = [r'([\\/\w_\-]+\.svg)']
+	patterns = [parsing.svg_file]
 
 	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
 
