@@ -13,8 +13,6 @@ from . import colors
 from . import latex
 from . import parsing
 
-regex_filename_valid_character = r'[\\/\w_\-]'
-
 
 def markdown_header(
 		text: str,
@@ -32,7 +30,7 @@ def markdown_header(
 
 	Returns
 	-------
-	str:
+	out : str
 		Markdown-compatible text.
 
 	"""
@@ -40,18 +38,75 @@ def markdown_header(
 	return f'\n{template.substitute(text=text)}\n\n'
 
 
+def user_settings_to_class_init(
+		settings: dict, name: Optional[str] = None, check_latex_formulas: bool = False,
+		latex_auxiliary_file: str = '__latex__.tex') -> str:
+	"""
+	Turns a user settings dictionary into one that can be passed to a question's  `__init__`.
+
+	Parameters
+	----------
+	settings : dict
+		User settings.
+	name : str, optional
+		The name of the question.
+	check_latex_formulas : bool
+		If True latex formulas will be checked.
+	latex_auxiliary_file : str
+		The name of the auxiliary latex file to be used for checks.
+
+	Returns
+	-------
+	out: str
+		The name of the class to be instantiated.
+
+	"""
+
+	# the input dictionary is modified in-place
+	settings['check_latex_formulas'] = check_latex_formulas
+	settings['history'] = {'already compiled': set(), 'already transferred': set()}
+	settings['latex_auxiliary_file'] = latex_auxiliary_file
+
+	if name:
+		settings['name'] = name
+
+	return settings.pop('class')
+
+
+def settings_to_markdown(settings: dict) -> str:
+	"""
+	Returns a markdown representation of the question given the corresponding settings.
+
+	Parameters
+	----------
+	settings : dict
+		User settings (usually read from a YAML file).
+
+	Returns
+	-------
+	markdown: str
+		Markdown representation
+
+	"""
+
+	class_name = user_settings_to_class_init(settings, 'unnamed')
+	cls = getattr(sys.modules[__name__], class_name)
+
+	question = SvgToMarkdown(TexToSvg(cls(**settings)))
+
+	markdown = question.to_markdown()
+
+	for f in question.pre_processing_functions:
+
+		markdown = f(markdown)
+
+	return markdown
+
+
 class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
 	Abstract class implementing an html-based question.
 	"""
-
-	# "\" is duplicated because it is assumed it has been escaped previously by `gift.process_latex`
-	latex_in_text_substitutions = [
-		# \textbf
-		[r'\\textbf{([^}]+)}', r'<b>\1</b>', r'<b>([^<]*)</b>', r'\\textbf{\1}'],
-		# \textit
-		[r'\\textit{([^}]+)}', r'<i>\1</i>', r'<i>([^<]*)</i>', r'\\textit{\1}']
-	]
 
 	def __init__(
 			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
@@ -104,8 +159,8 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		]
 
 		# functions to process LaTeX commands *in text* (ignoring occurrences in formulas)...
-		latex_text_processing_functions = [
-			functools.partial(latex.replace_and_replace_only_in_formulas, *l) for l in self.latex_in_text_substitutions]
+		latex_text_processing_functions = [functools.partial(
+			latex.replace_and_replace_only_in_formulas, *l) for l in parsing.latex_in_text_substitutions]
 
 		# ...are added to the pool
 		self.processing_functions += latex_text_processing_functions
@@ -191,7 +246,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		pass
 
-	def to_jupyter(self):
+	def to_markdown(self):
 
 		statement = self.statement
 
@@ -204,7 +259,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
 
 		# a copy of each list is made so that the class attribute is not modified
-		latex_in_text_substitutions = [e.copy() for e in self.latex_in_text_substitutions[:2]]
+		latex_in_text_substitutions = [e.copy() for e in parsing.latex_in_text_substitutions[:2]]
 
 		# \textbf-related substitutions are tweaked
 		latex_in_text_substitutions[0][1] = r'**\1**'
@@ -291,9 +346,9 @@ class Numerical(HtmlQuestion):
 
 		return '#\t=%100%' + self.solution_value + self.solution_error + '#'
 
-	def to_jupyter(self):
+	def to_markdown(self):
 
-		res = super().to_jupyter()
+		res = super().to_markdown()
 
 		return res + f'{markdown_header("Solution")} {self.solution_value} (error: {self.solution_error[1:]})\n'
 
@@ -365,9 +420,9 @@ class MultipleChoice(HtmlQuestion):
 
 		return '\t' + '\n\t'.join(processed_answers)
 
-	def to_jupyter(self):
+	def to_markdown(self):
 
-		res = super().to_jupyter()
+		res = super().to_markdown()
 
 		res += markdown_header('Choices')
 

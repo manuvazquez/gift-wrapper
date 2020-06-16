@@ -2,7 +2,6 @@ import argparse
 import pathlib
 import collections
 import sys
-from typing import Union
 
 import yaml
 from tqdm.autonotebook import tqdm
@@ -150,18 +149,13 @@ def wrap(
 			# for every question in the category...
 			for q in tqdm(cat['questions'], desc='question', leave=True):
 
-				# the class that will be instantiated for this particular question; notice the class is removed
-				# (popped) from the dictionary so that it doesn't get passed to the initializer
-				question_class = getattr(question, q.pop('class'))
+				# user settings are tidied up (`q` is modified) to serve as `__init__` parameters for the returned
+				# class name...
+				class_name = question.user_settings_to_class_init(
+					q, check_latex_formulas=not no_checks, latex_auxiliary_file=latex_auxiliary_file)
 
-				# whether or not latex formulas should be checked...
-				q['check_latex_formulas'] = not no_checks
-
-				# ...if so, this auxiliary file will be used (created)
-				q['latex_auxiliary_file'] = latex_auxiliary_file
-
-				# "history" is passed
-				q['history'] = history
+				# ...which should be available in the `question` module
+				question_class = getattr(question, class_name)
 
 				if embed_images:
 
