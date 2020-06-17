@@ -14,30 +14,6 @@ from . import latex
 from . import parsing
 
 
-def markdown_header(
-		text: str,
-		template: string.Template = string.Template('<span style="font-family:Papyrus; font-size:2em;">$text</span>')
-) -> str:
-	"""
-	Returns a markdown header for a given text.
-
-	Parameters
-	----------
-	text : str
-		Text for the header.
-	template : string template
-		The template that defines the appearance of the header, and in which `text` will be embedded.
-
-	Returns
-	-------
-	out : str
-		Markdown-compatible text.
-
-	"""
-
-	return f'\n{template.substitute(text=text)}\n\n'
-
-
 def user_settings_to_class_init(
 		settings: dict, name: Optional[str] = None, check_latex_formulas: bool = False,
 		latex_auxiliary_file: str = '__latex__.tex') -> str:
@@ -71,36 +47,6 @@ def user_settings_to_class_init(
 		settings['name'] = name
 
 	return settings.pop('class')
-
-
-def settings_to_markdown(settings: dict) -> str:
-	"""
-	Returns a markdown representation of the question given the corresponding settings.
-
-	Parameters
-	----------
-	settings : dict
-		User settings (usually read from a YAML file).
-
-	Returns
-	-------
-	markdown: str
-		Markdown representation
-
-	"""
-
-	class_name = user_settings_to_class_init(settings, 'unnamed')
-	cls = getattr(sys.modules[__name__], class_name)
-
-	question = SvgToMarkdown(TexToSvg(cls(**settings)))
-
-	markdown = question.to_markdown()
-
-	for f in question.pre_processing_functions:
-
-		markdown = f(markdown)
-
-	return markdown
 
 
 class HtmlQuestion(metaclass=abc.ABCMeta):
@@ -246,48 +192,6 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		pass
 
-	def to_markdown(self):
-
-		statement = self.statement
-
-		# if a `time` estimate was passed...
-		if self.time:
-
-			# ...it is appended at the end of the statement
-			statement += f'\n\n\n*Estimated time: {self.time} minutes*\n'
-
-		feedback = (f'{markdown_header("Feedback")}' + self.feedback.rstrip()) if self.feedback else ''
-
-		# a copy of each list is made so that the class attribute is not modified
-		latex_in_text_substitutions = [e.copy() for e in parsing.latex_in_text_substitutions[:2]]
-
-		# \textbf-related substitutions are tweaked
-		latex_in_text_substitutions[0][1] = r'**\1**'
-		latex_in_text_substitutions[0][2] = r'\*\*([^\*]+)\*\*'
-
-		# \textit-related substitutions are tweaked
-		latex_in_text_substitutions[1][1] = r'*\1*'
-		latex_in_text_substitutions[1][2] = r'\*([^\*]+)\*'
-
-		# just like LaTeX, in markdown a single "newline" doesn't reflect in the output, and hence every new line
-		# is duplicated
-		latex_in_text_substitutions += [['\n', '\n\n', '\n\n', '\n']]
-
-		def apply_substitutions(text: str, substitutions: list):
-
-			res = text
-
-			for s in substitutions:
-
-				res = latex.replace_and_replace_only_in_formulas(*s, res)
-
-			return res
-
-		statement = apply_substitutions(statement, latex_in_text_substitutions)
-		feedback = apply_substitutions(feedback, latex_in_text_substitutions)
-
-		return f'{markdown_header("Statement")}{statement}\n{feedback}\n'
-
 
 class Numerical(HtmlQuestion):
 	"""
@@ -345,12 +249,6 @@ class Numerical(HtmlQuestion):
 	def answer(self):
 
 		return '#\t=%100%' + self.solution_value + self.solution_error + '#'
-
-	def to_markdown(self):
-
-		res = super().to_markdown()
-
-		return res + f'{markdown_header("Solution")} {self.solution_value} (error: {self.solution_error[1:]})\n'
 
 
 class MultipleChoice(HtmlQuestion):
@@ -419,38 +317,6 @@ class MultipleChoice(HtmlQuestion):
 					f"full credit {colors.reset}{max_grade}")
 
 		return '\t' + '\n\t'.join(processed_answers)
-
-	def to_markdown(self):
-
-		res = super().to_markdown()
-
-		res += markdown_header('Choices')
-
-		if 'perfect' in self.answers:
-
-			# res += f'---\n'
-
-			# res += f'* {self.answers["perfect"]}\n'
-			res += f'* {self.template_wrong_answers.substitute(color="green", text=self.answers["perfect"])}\n'
-
-			# res += f'---\n'
-
-		for a in self.answers['wrong']:
-
-			if isinstance(a, list):
-
-				formatted_grade = self.template_wrong_answers.substitute(
-					color='green' if float(a[1]) > 0 else 'red', text=f'{a[1]}%')
-
-				res += f'* {a[0]} (**{formatted_grade}**)\n'
-				# res += f'* {a[0]} (**{a[1]}%**)\n'
-
-			else:
-
-				# res += f'* {a}\n'
-				res += f'* {self.template_wrong_answers.substitute(color="red", text=a)}\n'
-
-		return res
 
 
 # ========================================== Decorators
@@ -590,24 +456,6 @@ class SvgToHttp(QuestionDecorator):
 		self.pre_processing_functions.append(functools.partial(
 			self.transform_files, pattern=parsing.url_less_svg_file,
 			process_match=process_match, replacement=replacement_function))
-
-
-class SvgToMarkdown(QuestionDecorator):
-	"""
-	Decorator to reformat svg files for including them in markdown strings.
-	"""
-
-	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
-
-		super().__init__(decorated)
-
-		def process_match(f):
-
-			pass
-
-		# a new pre-processing function is attached to the corresponding list
-		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern=parsing.svg_file, process_match=process_match, replacement=r'![](' + r'\1)'))
 
 
 class SvgToInline(QuestionDecorator):
