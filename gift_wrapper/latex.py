@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import string
 import re
+import sys
 from typing import Union, List, Optional
 
 
@@ -31,7 +32,11 @@ def compile_tex(
 
 	path_to_compiler = shutil.which('pdflatex')
 
-	assert path_to_compiler, 'cannot find pdflatex'
+	if path_to_compiler is None:
+
+		print('cannot find pdflatex')
+
+		sys.exit(1)
 
 	command = [path_to_compiler] + [f'-{o}' for o in options] + [source_file.name]
 

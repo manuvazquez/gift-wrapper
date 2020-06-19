@@ -159,6 +159,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		"""
 
+		# so that the original statement is not modified
+		statement = self.statement
+
 		# feedback part of the answer if any
 		feedback = ("\n\t" + gift.from_feedback(self.process_text(self.feedback.rstrip()))) if self.feedback else ""
 
@@ -169,9 +172,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		if self.time:
 
 			# ...it is appended at the end of the statement
-			self.statement += '\n\n\n' + r'<i>Estimated time\: ' + str(self.time) + r' minutes</i>' + '\n'
+			statement += '\n\n\n' + r'<i>Estimated time\: ' + str(self.time) + r' minutes</i>' + '\n'
 
-		return gift.from_question_name(self.name) + gift.html + self.process_text(self.statement) + answer
+		return gift.from_question_name(self.name) + gift.html + self.process_text(statement) + answer
 
 	def __repr__(self):
 
@@ -324,6 +327,9 @@ class MultipleChoice(HtmlQuestion):
 class QuestionDecorator:
 	"""
 	Abstract class to implement a question decorator.
+
+	Decorators are allowed to modify the state, mainly (pre/post) processing functions. That means an object that has
+	been at some point decorated will not be the same even after stripping it of the decorator.
 	"""
 
 	def __init__(self, decorated: Union[HtmlQuestion, 'QuestionDecorator']):
@@ -409,10 +415,6 @@ class TexToSvg(QuestionDecorator):
 				# ...and a note is made of it
 				self.history['already compiled'].add(f)
 
-			# else:
-			#
-			# 	print(f'{f} already compiled-converted...')
-
 		# a new pre-processing function is attached to the corresponding list
 		# (the "\1" in `replacement` refers to matches in `pattern`)
 		# NOTE: an extra space is added in the replacement for `SvgToInline` --- not anymore
@@ -449,7 +451,7 @@ class SvgToHttp(QuestionDecorator):
 				# ...it is...
 				connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent)
 
-				# ...and a note is made of it
+				# ...and a note is made of the fact
 				self.history['already transferred'].add(f)
 
 		# a new pre-processing function is attached to the corresponding list
@@ -472,10 +474,6 @@ class SvgToInline(QuestionDecorator):
 
 		super().__init__(decorated)
 
-		def process_match(f):
-
-			pass
-
 		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
 		def replacement_function(m) -> str:
 
@@ -487,4 +485,4 @@ class SvgToInline(QuestionDecorator):
 
 			# a new pre-processing function is attached to the corresponding list
 			self.post_processing_functions.append(functools.partial(
-				self.transform_files, pattern=p, process_match=process_match, replacement=replacement_function))
+				self.transform_files, pattern=p, process_match=lambda x: None, replacement=replacement_function))
