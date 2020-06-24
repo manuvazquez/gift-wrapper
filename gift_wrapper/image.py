@@ -2,10 +2,12 @@ import sys
 import pathlib
 import shutil
 import subprocess
+import uuid
 from typing import Union
 
 from . import colors
 from . import latex
+from . import parsing
 
 
 def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pathlib.Path:
@@ -92,12 +94,15 @@ def svg_to_html(input_file: Union[str, pathlib.Path]) -> str:
 
 	"""
 
-	# <!--?xml version\="1.0" encoding\="UTF-8"?-->
-
 	# input file is read
 	with open(input_file) as f:
 
 		file_content = f.read()
+
+	# since all the svg's are going to be put together, a unique "uuid" is appended to every id in the file
+	for svg_id in parsing.re_svg_id.findall(file_content):
+
+		file_content = file_content.replace(svg_id, f'{uuid.uuid1()}-{svg_id}')
 
 	for to_be_escaped in [':', '~', '=', '#', '{', '}']:
 

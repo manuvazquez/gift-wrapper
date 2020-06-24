@@ -48,7 +48,7 @@ def compile_tex(
 latex_template = string.Template(r'''
 \documentclass{standalone}
 
-\usepackage{amsmath}
+\usepackage{amsmath, amsfonts}
 
 \begin{document}
 

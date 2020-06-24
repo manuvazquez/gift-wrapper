@@ -206,4 +206,6 @@ def process_new_lines(text: str) -> str:
 
 	"""
 
-	return text.replace('\n', '<br>')
+	# new lines are replaced everywhere *except* inside latex formulas
+	return latex.replace_and_replace_only_in_formulas('\n', r'<br>', r'<br>', ' ', text)
+	# return text.replace('\n', '<br>')

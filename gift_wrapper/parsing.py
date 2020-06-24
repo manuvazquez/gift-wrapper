@@ -19,6 +19,8 @@ url_less_svg_file = (
 		f'(?<!{regex_filename_valid_character})(?!http)'
 		f'({regex_filename_valid_character}+\.svg)(?!{regex_filename_valid_character})')
 
+re_svg_id = re.compile(r'id="([\w-]+)"')
+
 # ---------- URLs
 
 # url = r'http(\S+)(?!\S)'
