@@ -137,3 +137,7 @@ By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s
 - the latex support is very basic
 
 - one is in for troubles if embedding URLs pointing to `.svg` or `.tex` files since the file part will, most likely, be parsed and replaced
+
+## See also
+
+If you are comfortable with Python and [Jupyter](https://jupyter.org/) notebooks, you might also be interested in [py2gift](https://github.com/manuvazquez/py2gift).

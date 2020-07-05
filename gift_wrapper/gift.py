@@ -1,6 +1,6 @@
 import re
 import pathlib
-from typing import Union
+from typing import Union, Optional
 
 from . import latex
 from . import parsing
@@ -209,3 +209,26 @@ def process_new_lines(text: str) -> str:
 	# new lines are replaced everywhere *except* inside latex formulas
 	return latex.replace_and_replace_only_in_formulas('\n', r'<br>', r'<br>', ' ', text)
 	# return text.replace('\n', '<br>')
+
+
+def from_numerical_solution(solution: [float, int], error: Optional[Union[float, int, str]] = None) -> str:
+	"""
+	Generates GIFT-ready text from the solution and, optionally, error of a numerical question.
+
+	Parameters
+	----------
+	solution : int or float
+		Value of the solution.
+	error : int or float or str, optional
+		Value of the error.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	error = ':' + str(error) if error else ''
+
+	return f'#\t=%100%{solution}{error}#'

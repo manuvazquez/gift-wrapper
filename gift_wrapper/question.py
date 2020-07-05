@@ -219,11 +219,9 @@ class Numerical(HtmlQuestion):
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
-		self.solution_value = str(solution['value'])
+		self.solution_value = solution['value']
 
 		if 'error' in solution:
-
-			self.solution_error = ':'
 
 			# try to match a percentage
 			m = parsing.re_percentage.match(str(solution['error']))
@@ -231,16 +229,16 @@ class Numerical(HtmlQuestion):
 			# if so...
 			if m:
 
-				self.solution_error += str(solution['value'] * float(m.group(1)) / 100.)
+				self.solution_error = str(solution['value'] * float(m.group(1)) / 100.)
 
 			else:
 
-				self.solution_error += str(solution['error'])
+				self.solution_error = str(solution['error'])
 
 		# an error was NOT provided
 		else:
 
-			self.solution_error = ''
+			self.solution_error = None
 
 	def __repr__(self):
 
@@ -251,7 +249,7 @@ class Numerical(HtmlQuestion):
 	@property
 	def answer(self):
 
-		return '#\t=%100%' + self.solution_value + self.solution_error + '#'
+		return gift.from_numerical_solution(self.solution_value, self.solution_error)
 
 
 class MultipleChoice(HtmlQuestion):

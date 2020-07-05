@@ -31,11 +31,11 @@ def main():
 
 	parser.add_argument(
 		'-o', '--overwrite-existing-latex-files', default=False, action='store_true',
-		help="overwrite existing latex files if necessary instead of exiting")
+		help='overwrite existing latex files if necessary instead of exiting')
 
 	parser.add_argument(
 		'-e', '--embed-images', default=False, action='store_true',
-		help="embed the images rather than link to them (experimental)")
+		help='embed the images rather than link to them')
 
 	command_line_arguments = parser.parse_args()
 
