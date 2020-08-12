@@ -29,18 +29,37 @@ class Connection:
 
 	def connect(self):
 
-		assert (self.password is not None) ^ (self.public_key is not None),\
-			f'either "password" or "public_key" must be passed, but not both'
+		# assert (self.password is not None) ^ (self.public_key is not None),\
+		# 	f'either "password" or "public_key" must be passed, but not both'
+
+		if (self.password is not None) and (self.public_key is not None):
+
+			print(f'\n{colors.error}either "password" or "public_key" must be passed, but not both')
+
+			sys.exit(1)
 
 		if self.public_key is not None:
 
 			# just in case "~" is in the given path
 			public_key = pathlib.Path(self.public_key).expanduser()
 
-			assert public_key.exists(), f'public key file, {public_key}, does not exist'
+			# assert public_key.exists(),\
+			# 	f'{colors.error}public key file,{colors.reset} {public_key}, {colors.error}does not exist'
+
+			if not public_key.exists():
+
+				print(f'\n{colors.error}public key file, {colors.reset}{public_key}{colors.error}, does not exist')
+
+				sys.exit(1)
 
 			# below, an actual string is needed
 			public_key = public_key.as_posix()
+
+		else:
+
+			# local variable `public_key` (rather than attribute `self.public_key`) is used below, so it must be
+			# initialized anyway (even though it is to `None`)
+			public_key = None
 
 		self.connection = paramiko.SSHClient()
 
@@ -48,6 +67,8 @@ class Connection:
 		self.connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 		try:
+
+			# print(f'{self.user=}, {self.password=}, {self.public_key=}')
 
 			# connection is established
 			self.connection.connect(self.host, username=self.user, password=self.password, key_filename=public_key)
@@ -98,7 +119,14 @@ class Connection:
 		local = pathlib.Path(source)
 		remote_directory = pathlib.Path(remote_directory)
 
-		assert local.exists(), f'file {local} does not exist'
+		# assert local.exists(), f'file {local} does not exist'
+
+		if not local.exists():
+
+			# first character is not visible due to tqdm
+			print(f'\n{colors.reset}file {colors.reset}{local}{colors.error} does not exist')
+
+			sys.exit(1)
 
 		self.make_directory_at(remote_directory.relative_to(remote_directory.parts[0]), remote_directory.parts[0])
 

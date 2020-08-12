@@ -28,7 +28,14 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 
 	"""
 
-	source_file = pathlib.Path(source_file)
+	source_file = pathlib.Path(source_file).with_suffix('.tex')
+
+	if not source_file.exists():
+
+		# first character is not visible due to tqdm
+		print(f'\n{source_file} {colors.error}does not exist')
+
+		sys.exit(1)
 
 	try:
 
@@ -37,13 +44,20 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 	except subprocess.TimeoutExpired:
 
 		print(
-			f'{colors.error}could not compile {colors.reset}{source_file + ".tex"}'
+			f'{colors.error}could not compile {colors.reset}{source_file}'
 			f' {colors.error}in {colors.reset}{timeout}{colors.error} seconds'
 		)
 
 		sys.exit(1)
 
-	assert exit_status == 0, f'{colors.error}errors were found while compiling {colors.reset}{source_file}'
+	# assert exit_status == 0, f'{colors.error}errors were found while compiling {colors.reset}{source_file}'
+
+	if exit_status != 0:
+
+		# first character is not visible due to tqdm
+		print(f'\n{colors.error}errors were found while compiling {colors.reset}{source_file}')
+
+		sys.exit(1)
 
 	return source_file.with_suffix('.pdf')
 
@@ -69,7 +83,14 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 
 	path_to_pdf2svg = shutil.which('pdf2svg')
 
-	assert path_to_pdf2svg, "couldn't find pdf2svg"
+	# assert path_to_pdf2svg, "couldn't find pdf2svg"
+
+	if path_to_pdf2svg is None:
+
+		# first character is not visible due to tqdm
+		print(f"\n{colors.error}couldn't find pdf2svg")
+
+		sys.exit(1)
 
 	command = [path_to_pdf2svg, input_file.name, output_file.name]
 

@@ -14,9 +14,8 @@ categories:
     - name: Numerical passing an URL
       # it must be one of: Numerical, MultipleChoice
       class: Numerical
-      # vertical bar, "|", signals a *multiline* string; when embedding a file name or URL in the text, it should be
-      # surrounded by spaces (meaning that, e.g., "foo.svg?" would not be correctly parsed); \textit and \textbf are
-      # processed *inside text* but ignored in formulas
+      # vertical bar, "|", signals a *multiline* string; \textit and \textbf are processed *inside text* but ignored
+      # inside formulas (left as they are)
       statement: |
         Compute the \textbf{mean} energy of the constellation
         sample_images/1D_3_elements.svg
