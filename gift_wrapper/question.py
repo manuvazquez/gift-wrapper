@@ -465,7 +465,6 @@ class SvgToInline(QuestionDecorator):
 
 	# notice the order is important: each pattern will result in a different post-processing function and they are
 	# applied *sequentially*, each one on the result of the previous one
-	# patterns = [r'([\\/\w_\-]+\.svg)']
 	patterns = [parsing.svg_file]
 
 	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):

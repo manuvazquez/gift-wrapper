@@ -50,8 +50,6 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 
 		sys.exit(1)
 
-	# assert exit_status == 0, f'{colors.error}errors were found while compiling {colors.reset}{source_file}'
-
 	if exit_status != 0:
 
 		# first character is not visible due to tqdm
@@ -82,8 +80,6 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 	output_file = input_file.with_suffix('.svg')
 
 	path_to_pdf2svg = shutil.which('pdf2svg')
-
-	# assert path_to_pdf2svg, "couldn't find pdf2svg"
 
 	if path_to_pdf2svg is None:
 

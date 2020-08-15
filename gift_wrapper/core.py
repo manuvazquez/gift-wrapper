@@ -122,7 +122,7 @@ def wrap(
 	with open(output_file, 'w') as f:
 
 		# for every category...
-		for cat in tqdm(categories, desc='category'):
+		for cat in tqdm(categories, desc='category', leave=False):
 
 			# if "something" was actually provided...
 			if cat['name']:
@@ -147,7 +147,7 @@ def wrap(
 			assert not duplicates, f'{colors.error}duplicates in category {colors.reset}{cat["name"]}: {duplicates}'
 
 			# for every question in the category...
-			for q in tqdm(cat['questions'], desc='question', leave=True):
+			for q in tqdm(cat['questions'], desc='question', leave=False):
 
 				# user settings are tidied up (`q` is modified) to serve as `__init__` parameters for the returned
 				# class name...

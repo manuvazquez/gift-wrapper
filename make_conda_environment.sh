@@ -8,7 +8,7 @@ NAME=gift
 # only required if "anaconda" is not in the path
 source $HOME/anaconda3/etc/profile.d/conda.sh
 
-conda create --yes -n $NAME python=3 ipdb pyyaml paramiko tqdm colorama -c defaults -c conda-forge
+conda create --yes -n $NAME python=3 ipdb pyyaml paramiko tqdm colorama twine -c defaults -c conda-forge
 
 echo -e new environment is \"$COLOR$NAME$UNCOLOR\"
 

@@ -29,9 +29,6 @@ class Connection:
 
 	def connect(self):
 
-		# assert (self.password is not None) ^ (self.public_key is not None),\
-		# 	f'either "password" or "public_key" must be passed, but not both'
-
 		if (self.password is not None) and (self.public_key is not None):
 
 			print(f'\n{colors.error}either "password" or "public_key" must be passed, but not both')
@@ -42,9 +39,6 @@ class Connection:
 
 			# just in case "~" is in the given path
 			public_key = pathlib.Path(self.public_key).expanduser()
-
-			# assert public_key.exists(),\
-			# 	f'{colors.error}public key file,{colors.reset} {public_key}, {colors.error}does not exist'
 
 			if not public_key.exists():
 
@@ -118,8 +112,6 @@ class Connection:
 
 		local = pathlib.Path(source)
 		remote_directory = pathlib.Path(remote_directory)
-
-		# assert local.exists(), f'file {local} does not exist'
 
 		if not local.exists():
 
