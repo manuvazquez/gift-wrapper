@@ -1,14 +1,11 @@
 import sys
 import abc
 import functools
-import re
 import pathlib
 import string
-from typing import Union, Callable, Optional
+from typing import Union, Optional
 
 from . import gift
-from . import image
-from . import remote
 from . import colors
 from . import latex
 from . import parsing
@@ -40,7 +37,6 @@ def user_settings_to_class_init(
 
 	# the input dictionary is modified in-place
 	settings['check_latex_formulas'] = check_latex_formulas
-	settings['history'] = {'already compiled': set(), 'already transferred': set()}
 	settings['latex_auxiliary_file'] = latex_auxiliary_file
 
 	if name:
@@ -55,9 +51,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], images_settings: Optional[dict] = None,
-			feedback: Optional[str] = None, time: Optional[int] = None):
+			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
+			images_settings: Optional[dict] = None, feedback: Optional[str] = None, time: Optional[int] = None,
+			pre_processors: list = [], post_processors: list = []):
 		"""
 		Initializer.
 
@@ -67,8 +63,6 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			Name of the question.
 		statement : str
 			Statement of the question.
-		history: dict
-			Variable storing a "context" common to all the questions.
 		check_latex_formulas: bool
 			Whether or not an attempt should be made to compile every latex formula to detect errors.
 		latex_auxiliary_file: str or Pathlib
@@ -79,13 +73,18 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			Feedback for the question.
 		time: int, optional
 			The number of minutes deemed necessary to answer the question.
+		pre_processors: list
+			Processors to apply before everything else.
+		post_processors: list
+			Processors to apply in the end.
 		"""
 
 		self.name = name
 		self.statement = statement.rstrip()
 		self.feedback = feedback
 		self.time = time
-		self.history = history
+		self.pre_processors = pre_processors
+		self.post_processors = post_processors
 
 		if images_settings is None:
 
@@ -131,7 +130,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		"""
 
-		for function in (self.pre_processing_functions + self.processing_functions + self.post_processing_functions):
+		for function in (self.pre_processors + self.processing_functions + self.post_processors):
 
 			try:
 
@@ -202,9 +201,9 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], solution: dict, images_settings: Optional[dict] = None,
-			feedback: Optional[str] = None, time: Optional[int] = None):
+			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
+			solution: dict, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
+			time: Optional[int] = None, pre_processors: list = [], post_processors: list = []):
 		"""
 		Initializer.
 
@@ -215,7 +214,8 @@ class Numerical(HtmlQuestion):
 		"""
 
 		super().__init__(
-			name, statement, history, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time)
+			name, statement, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time,
+			pre_processors, post_processors)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -260,9 +260,9 @@ class MultipleChoice(HtmlQuestion):
 	template_wrong_answers = string.Template(r"**<font color='$color'>$text</font>**")
 
 	def __init__(
-			self, name: str, statement: str, history: dict, check_latex_formulas: bool,
-			latex_auxiliary_file: Union[str, pathlib.Path], answers: dict, images_settings: Optional[dict] = None,
-			feedback: Optional[str] = None, time: Optional[int] = None):
+			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
+			answers: dict, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
+			time: Optional[int] = None, pre_processors: list = [], post_processors: list = []):
 		"""
 		Initializer.
 
@@ -273,7 +273,8 @@ class MultipleChoice(HtmlQuestion):
 		"""
 
 		super().__init__(
-			name, statement, history, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time)
+			name, statement, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time,
+			pre_processors, post_processors)
 
 		self.answers = answers
 
@@ -318,168 +319,3 @@ class MultipleChoice(HtmlQuestion):
 					f"full credit {colors.reset}{max_grade}")
 
 		return '\t' + '\n\t'.join(processed_answers)
-
-
-# ========================================== Decorators
-
-class QuestionDecorator:
-	"""
-	Abstract class to implement a question decorator.
-
-	Decorators are allowed to modify the state, mainly (pre/post) processing functions. That means an object that has
-	been at some point decorated will not be the same even after stripping it of the decorator.
-	"""
-
-	def __init__(self, decorated: Union[HtmlQuestion, 'QuestionDecorator']):
-
-		self._decorated = decorated
-
-	# any method/attribute not implemented here...
-	def __getattr__(self, item):
-
-		# ...is relayed to the *decorated* object
-		return getattr(self._decorated, item)
-
-	def __setattr__(self, key, value):
-
-		# except for the `_decorated` attribute...
-		if key == '_decorated':
-			object.__setattr__(self, key, value)
-		# ...everything else...
-		else:
-			# ...is relayed to the decorated object
-			setattr(self._decorated, key, value)
-
-	# TODO: when minimum Python version is forwarded to 3.8, `[re.Match]` should replace `...` as the the signature
-	#  of the `Callable` in the type hinting for `replacement`
-	@staticmethod
-	def transform_files(
-			text: str, pattern: str, process_match: Callable[[str], None],
-			replacement: Union[str, Callable[..., str]]):
-		"""
-		It searches in a text for strings corresponding to files (maybe including a path), replaces them by another
-		string according to some function and, additionally, processes each file according to another function.
-
-		Parameters
-		----------
-		text : str
-			Input text.
-		pattern : str
-			Regular expression including a capturing group that yields the file.
-		process_match : Callable[[str], None]
-			Function that will *process* each file.
-		replacement : str or Callable[[re.Match], str]
-			Regular expression making use of the capturing group or function processing the match delivered by `pattern`
-
-		Returns
-		-------
-		out: str
-			Output text with the replacements performed, after having processed all the files.
-
-		"""
-
-		# all the matching files in the given text
-		files = re.findall(pattern, text)
-
-		# breakpoint()
-
-		# every one of them...
-		for file in files:
-
-			# ...is processed
-			process_match(file)
-
-		# replacement of matches
-		return re.sub(pattern, replacement, text)
-
-
-class TexToSvg(QuestionDecorator):
-	"""
-	Decorator to convert TeX files into svg files.
-	"""
-
-	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
-
-		super().__init__(decorated)
-
-		def process_match(f):
-
-			# if this file has not been already compiled-converted...
-			if f not in self.history['already compiled']:
-
-				# ...it is...
-				image.pdf_to_svg(image.tex_to_pdf(f))
-
-				# ...and a note is made of it
-				self.history['already compiled'].add(f)
-
-		# a new pre-processing function is attached to the corresponding list
-		# (the "\1" in `replacement` refers to matches in `pattern`)
-		# NOTE: an extra space is added in the replacement for `SvgToInline` --- not anymore
-		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern=parsing.tex_file_name, process_match=process_match, replacement=r'\1.svg'))
-
-
-class SvgToHttp(QuestionDecorator):
-	"""
-	Decorator to transfer svg files to a remote location.
-	"""
-
-	def __init__(
-			self, decorated: Union[HtmlQuestion, QuestionDecorator], connection: remote.Connection,
-			public_filesystem_root: str, pictures_base_directory: str, public_url: str):
-
-		super().__init__(decorated)
-
-		# assembled remote path
-		remote_subdirectory = pathlib.Path(public_filesystem_root).joinpath(pictures_base_directory)
-
-		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
-		def replacement_function(m) -> str:
-
-			file = pathlib.Path(m.group(0))
-
-			return public_url + pictures_base_directory + '/' + file.as_posix()
-
-		def process_match(f):
-
-			# if this file has not been already transferred...
-			if f not in self.history['already transferred']:
-
-				# ...it is...
-				connection.copy(f, remote_directory=remote_subdirectory / pathlib.Path(f).parent)
-
-				# ...and a note is made of the fact
-				self.history['already transferred'].add(f)
-
-		# a new pre-processing function is attached to the corresponding list
-		self.pre_processing_functions.append(functools.partial(
-			self.transform_files, pattern=parsing.url_less_svg_file,
-			process_match=process_match, replacement=replacement_function))
-
-
-class SvgToInline(QuestionDecorator):
-	"""
-	Decorator to directly include svg files into a question.
-	"""
-
-	# notice the order is important: each pattern will result in a different post-processing function and they are
-	# applied *sequentially*, each one on the result of the previous one
-	patterns = [parsing.svg_file]
-
-	def __init__(self, decorated: Union[HtmlQuestion, QuestionDecorator]):
-
-		super().__init__(decorated)
-
-		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
-		def replacement_function(m) -> str:
-
-			file = pathlib.Path(m.group(1))
-
-			return image.svg_to_html(file)
-
-		for p in self.patterns:
-
-			# a new pre-processing function is attached to the corresponding list
-			self.post_processing_functions.append(functools.partial(
-				self.transform_files, pattern=p, process_match=lambda x: None, replacement=replacement_function))

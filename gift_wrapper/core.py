@@ -10,6 +10,7 @@ from . import question
 from . import remote
 from . import gift
 from . import colors
+from . import process
 
 
 def main():
@@ -79,13 +80,25 @@ def wrap(
 	categories = input_data['categories']
 	pictures_base_directory = input_data['pictures base directory']
 
-	# =================================
+	# ================================= behaviour
+
+	# to keep track of files already compiled/transferred
+	history = {'already compiled': set(), 'already transferred': set()}
+
+	# lists of processing objects to be applied at the very beginning...
+	pre_processors = [process.TexToSvg(history)]
+
+	# ...and at the end
+	post_processors = []
 
 	# if images embedding was requested...
 	if embed_images:
 
 		# ...a connection is not needed
 		connection = None
+
+		# an object to embed svg files in the output file is added to the list of *post* processors
+		post_processors.append(process.SvgToInline())
 
 	# if images are *not* to be embedded...
 	else:
@@ -103,11 +116,13 @@ def wrap(
 			connection = remote.Connection(
 				parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
+		# an object to copy svg files to a remote location is added to the list of *pre* processors
+		pre_processors.append(process.SvgToHttp(
+			history, connection, parameters['images hosting']['copy']['public filesystem root'],
+			pictures_base_directory, parameters['images hosting']['public URL']))
+
 	# output file has the same name as the input with the ".gift.txt" suffix
 	output_file = input_file.with_suffix('.gift.txt')
-
-	# to keep track of files already compiled/transferred
-	history = {'already compiled': set(), 'already transferred': set()}
 
 	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
 
@@ -118,6 +133,8 @@ def wrap(
 			f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists'
 			f' and would be overwritten (pass "-o" to skip this check)')
 		sys.exit(1)
+
+	# ================================= processing
 
 	with open(output_file, 'w') as f:
 
@@ -157,19 +174,7 @@ def wrap(
 				# ...which should be available in the `question` module
 				question_class = getattr(question, class_name)
 
-				if embed_images:
-
-					# question is instantiated and "decorated"
-					q = question.SvgToInline(question.TexToSvg(question_class(**q)))
-
-				else:
-
-					# question is instantiated and "decorated"
-					q = question.SvgToHttp(
-						question.TexToSvg(
-							question_class(**q)
-						), connection, parameters['images hosting']['copy']['public filesystem root'],
-						pictures_base_directory, parameters['images hosting']['public URL'])
+				q = question_class(**q, pre_processors=pre_processors, post_processors=post_processors)
 
 				f.write(f'{q.gift}\n\n')
 
