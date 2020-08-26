@@ -1,6 +1,6 @@
 # gift-wrapper
 
-This is Python software to easily build [GIFT](https://docs.moodle.org/38/en/GIFT_format) -based [question banks](https://docs.moodle.org/38/en/Question_bank) in [Moodle](https://moodle.org/). Other similar tools are available (you can search for *Tools that create or process GIFTs* in [Moodle's GIFT page](https://docs.moodle.org/38/en/GIFT_format)) but none of them fitted well my workflow. What I need is (the goals of `gift-wrapper` are):
+This is Python software to easily build [GIFT](https://docs.moodle.org/en/GIFT_format) -based [question banks](https://docs.moodle.org/en/Question_bank) in [Moodle](https://moodle.org/). Other similar tools are available (you can search for *Tools that create or process GIFTs* in [Moodle's GIFT page](https://docs.moodle.org/en/GIFT_format)) but none of them fitted well my workflow. What I need is (the goals of `gift-wrapper` are):
 
 * to write questions in plain text, and as many as I like in a single file
 * to write latex formulas directly
