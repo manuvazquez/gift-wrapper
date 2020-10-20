@@ -6,6 +6,8 @@ from typing import Union, Callable, Optional
 from . import image
 from . import parsing
 from . import remote
+from . import gift
+from . import latex
 
 
 def process_paths(
@@ -56,7 +58,7 @@ class Processor:
 
 	def __call__(self, text: str):
 
-		assert self.function is not None, 'method "f" was not defined'
+		assert self.function is not None, 'method "function" was not defined'
 
 		return self.function(text)
 
@@ -145,3 +147,88 @@ class SvgToInline(Processor):
 
 		self.function = functools.partial(
 			process_paths, pattern=parsing.svg_file, process_match=lambda x: None, replacement=replacement_function)
+
+
+class URLs(Processor):
+	"""
+	Processor to arrange URLs into a GIFT-appropriate format.
+	"""
+
+	url = f'http({parsing.regex_url_valid_character}+)(?!{parsing.regex_url_valid_character})'
+
+	def __init__(self, images_settings: Optional[dict] = None):
+
+		super().__init__()
+
+		if images_settings is None:
+
+			self.images_width, self.images_height = None, None
+
+		else:
+
+			assert ('width' in images_settings) and ('height' in images_settings), \
+				'"width" and/or "height" missing in "image_settings"'
+
+			self.images_width, self.images_height = images_settings['width'], images_settings['height']
+
+		self.function = lambda text: re.sub(self.url, self.replacement, text)
+
+	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
+	def replacement(self, m) -> str:
+
+		return '<p>' + gift.from_image_url(m.group(0), width=self.images_width, height=self.images_height) + '<br></p>'
+
+
+class LatexCommandsWithinText(Processor):
+
+	# in every list, the first pair of elements are the search pattern and replacement to be applied *globally* whereas
+	# the second one will only be applied inside LaTeX formulas
+	# NOTE: "\" is duplicated because it is assumed it has been escaped previously by `gift.process_latex`
+	patterns = [
+		# \textbf
+		[r'\\textbf{([^}]+)}', r'<b>\1</b>', r'<b>([^<]*)</b>', r'\\textbf{\1}'],
+		# \textit
+		[r'\\textit{([^}]+)}', r'<i>\1</i>', r'<i>([^<]*)</i>', r'\\textit{\1}']
+	]
+
+	def __init__(self) -> None:
+
+		super().__init__()
+
+		def f(text: str) -> str:
+
+			res = text
+
+			for pat in self.patterns:
+
+				res = latex.replace_and_replace_only_in_formulas(*pat, res)
+
+			return res
+
+		self.function = f
+
+
+class LatexFormulas(Processor):
+
+	latex_formula = r'\$([^\$]*)\$'
+
+	def __init__(self, latex_auxiliary_file: Union[str, pathlib.Path], check_compliance: bool) -> None:
+
+		super().__init__()
+
+		self.latex_auxiliary_file = latex_auxiliary_file
+		self.check_compliance = check_compliance
+
+		self.function = lambda text: re.sub(self.latex_formula, self.replacement, text)
+
+	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
+	def replacement(self, m) -> str:
+
+		latex_source = m.group(1)
+
+		if self.check_compliance:
+
+			if not latex.formula_can_be_compiled(latex_source, auxiliary_file=self.latex_auxiliary_file):
+				raise gift.NotCompliantLatexFormula(latex_source)
+
+		return gift.from_latex_formula(latex_source)

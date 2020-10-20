@@ -1,9 +1,6 @@
-import re
-import pathlib
 from typing import Union, Optional
 
 from . import latex
-from . import parsing
 
 
 class NotCompliantLatexFormula(Exception):
@@ -121,73 +118,31 @@ def from_feedback(text: str) -> str:
 	return '#'*4 + text
 
 
-def process_latex(text: str, latex_auxiliary_file: Union[str, pathlib.Path], check_compliance: bool = True) -> str:
+def from_latex_formula(text: str) -> str:
 	"""
-	Adapts every occurrence of $$ to GIFT.
+	Adapts a LaTeX formula to GIFT.
 
 	Parameters
 	----------
-	text : str
-		Input text.
-	latex_auxiliary_file: str or pathlib.Path
-		(Auxiliary) TeX file that is created to check the formula.
-	check_compliance: bool
-		Whether or not to check if the formula can be compiled.
+	text: str
+		Naked (no $'s) LaTeX formula.
 
 	Returns
 	-------
-	out: str
+	res: str
 		GIFT-ready text.
 
 	"""
 
-	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
-	def replacement(m) -> str:
+	res = text
 
-		latex_source = m.group(1)
+	for to_be_escaped in ['\\', '{', '}', '=']:
 
-		if check_compliance:
+		res = res.replace(to_be_escaped, '\\' + to_be_escaped)
 
-			if not latex.formula_can_be_compiled(latex_source, auxiliary_file=latex_auxiliary_file):
+	res = res.replace('&', '&amp;')
 
-				raise NotCompliantLatexFormula(latex_source)
-
-		for to_be_escaped in ['\\', '{', '}', '=']:
-
-			latex_source = latex_source.replace(to_be_escaped, '\\' + to_be_escaped)
-
-		latex_source = latex_source.replace('&', '&amp;')
-
-		return r'\\(' + latex_source + r'\\)'
-
-	# it looks for strings between $'s (that do not include $ itself) and wraps them in \( and \)
-	return re.sub(parsing.latex_formula, replacement, text)
-
-
-def process_url_images(text: str, width: int, height: int) -> str:
-	"""
-	Adapts to GIFT every URL in a given text.
-
-	Parameters
-	----------
-	text : str
-		Input text.
-	width : int
-		Desired width of the image.
-	height : int
-		Desired height of the image.
-
-	Returns
-	-------
-	out: str
-		GIFT-ready text.
-
-	"""
-
-	return re.sub(
-		parsing.url,
-		lambda m: '<p>' + from_image_url(m.group(0), width=width, height=height) + '<br></p>',
-		text)
+	return r'\\(' + res + r'\\)'
 
 
 def process_new_lines(text: str) -> str:
@@ -208,7 +163,6 @@ def process_new_lines(text: str) -> str:
 
 	# new lines are replaced everywhere *except* inside latex formulas
 	return latex.replace_and_replace_only_in_formulas('\n', r'<br>', r'<br>', ' ', text)
-	# return text.replace('\n', '<br>')
 
 
 def from_numerical_solution(solution: [float, int], error: Optional[Union[float, int, str]] = None) -> str:

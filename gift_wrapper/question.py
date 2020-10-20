@@ -7,8 +7,8 @@ from typing import Union, Optional
 
 from . import gift
 from . import colors
-from . import latex
 from . import parsing
+from . import process
 
 
 def user_settings_to_class_init(
@@ -50,6 +50,9 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	Abstract class implementing an html-based question.
 	"""
 
+	# in order to process LaTeX commands *in text* (ignoring occurrences in formulas)
+	latex_commands_within_text_processor = process.LatexCommandsWithinText()
+
 	def __init__(
 			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
 			images_settings: Optional[dict] = None, feedback: Optional[str] = None, time: Optional[int] = None,
@@ -86,33 +89,13 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.pre_processors = pre_processors
 		self.post_processors = post_processors
 
-		if images_settings is None:
-
-			self.images_width, self.images_height = None, None
-
-		else:
-
-			assert ('width' in images_settings) and ('height' in images_settings), \
-				'"width" and/or "height" missing in "image_settings"'
-
-			self.images_width, self.images_height = images_settings['width'], images_settings['height']
-
 		self.processing_functions = [
-			functools.partial(gift.process_url_images, width=self.images_width, height=self.images_height),
-			gift.process_new_lines, functools.partial(
-				gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas)
+			process.URLs(images_settings), gift.process_new_lines,
+			process.LatexFormulas(latex_auxiliary_file, check_latex_formulas),
+			# functools.partial(
+			# 	gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas),
+			self.latex_commands_within_text_processor
 		]
-
-		# functions to process LaTeX commands *in text* (ignoring occurrences in formulas)...
-		latex_text_processing_functions = [functools.partial(
-			latex.replace_and_replace_only_in_formulas, *l) for l in parsing.latex_in_text_substitutions]
-
-		# ...are added to the pool
-		self.processing_functions += latex_text_processing_functions
-
-		# these might be tampered with by subclasses/decorators
-		self.pre_processing_functions = []
-		self.post_processing_functions = []
 
 	def process_text(self, text: str) -> str:
 		"""

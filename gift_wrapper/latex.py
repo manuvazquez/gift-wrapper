@@ -6,6 +6,8 @@ import re
 import sys
 from typing import Union, List, Optional
 
+from . import parsing
+
 
 def compile_tex(
 		source_file: Union[str, pathlib.Path], timeout: Optional[int], options: List[str] = ['halt-on-error']) -> int:
@@ -122,6 +124,6 @@ def replace_and_replace_only_in_formulas(
 		return re.sub(formula_pattern, formula_replacement, m.group(0))
 
 	res = re.sub(pattern, replacement, text)
-	res = re.sub(r'\$[^\$]*\$', process_formula, res)
+	res = re.sub(parsing.latex_formula_with_no_capturing, process_formula, res)
 
 	return res
