@@ -11,8 +11,7 @@ from . import latex
 
 
 def process_paths(
-		text: str, pattern: str, process_match: Callable[[str], None],
-		replacement: Union[str, Callable[..., str]]):
+		text: str, pattern: str, process_match: Callable[[str], None], replacement: Union[str, Callable[..., str]]):
 	"""
 	It searches in a text for strings corresponding to files (maybe including a path), replaces them by another
 	string according to some function and, additionally, processes each file according to another function.
@@ -49,7 +48,7 @@ def process_paths(
 	return re.sub(pattern, replacement, text)
 
 
-class Processor:
+class Transformer:
 
 	def __init__(self) -> None:
 
@@ -63,7 +62,7 @@ class Processor:
 		return self.function(text)
 
 
-class TexToSvg(Processor):
+class TexToSvg(Transformer):
 	"""
 	Processor to convert TeX files into svg files.
 	"""
@@ -90,7 +89,7 @@ class TexToSvg(Processor):
 			process_paths, pattern=parsing.tex_file_name, process_match=process_match, replacement=r'\1.svg')
 
 
-class SvgToHttp(Processor):
+class SvgToHttp(Transformer):
 	"""
 	Processor to transfer svg files to a remote location.
 	"""
@@ -129,7 +128,7 @@ class SvgToHttp(Processor):
 			replacement=replacement_function)
 
 
-class SvgToInline(Processor):
+class SvgToInline(Transformer):
 	"""
 	Processor to directly include svg files into a question.
 	"""
@@ -149,7 +148,7 @@ class SvgToInline(Processor):
 			process_paths, pattern=parsing.svg_file, process_match=lambda x: None, replacement=replacement_function)
 
 
-class URLs(Processor):
+class URLs(Transformer):
 	"""
 	Processor to arrange URLs into a GIFT-appropriate format.
 	"""
@@ -179,7 +178,7 @@ class URLs(Processor):
 		return '<p>' + gift.from_image_url(m.group(0), width=self.images_width, height=self.images_height) + '<br></p>'
 
 
-class LatexCommandsWithinText(Processor):
+class LatexCommandsWithinText(Transformer):
 
 	# in every list, the first pair of elements are the search pattern and replacement to be applied *globally* whereas
 	# the second one will only be applied inside LaTeX formulas
@@ -208,7 +207,7 @@ class LatexCommandsWithinText(Processor):
 		self.function = f
 
 
-class LatexFormulas(Processor):
+class LatexFormulas(Transformer):
 
 	latex_formula = r'\$([^\$]*)\$'
 

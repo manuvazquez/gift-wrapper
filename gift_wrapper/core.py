@@ -10,7 +10,7 @@ from . import question
 from . import remote
 from . import gift
 from . import colors
-from . import process
+from . import transformer
 
 
 def main():
@@ -82,14 +82,19 @@ def wrap(
 
 	# ================================= behaviour
 
+	# temporary file to try and compile latex files
+	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
+
 	# to keep track of files already compiled/transferred
 	history = {'already compiled': set(), 'already transferred': set()}
 
 	# lists of processing objects to be applied at the very beginning...
-	pre_processors = [process.TexToSvg(history)]
+	pre_transforms = [transformer.TexToSvg(history)]
 
 	# ...and at the end
-	post_processors = []
+	post_transforms = [
+		gift.process_new_lines, transformer.LatexFormulas(latex_auxiliary_file, not no_checks),
+		transformer.LatexCommandsWithinText()]
 
 	# if images embedding was requested...
 	if embed_images:
@@ -98,7 +103,7 @@ def wrap(
 		connection = None
 
 		# an object to embed svg files in the output file is added to the list of *post* processors
-		post_processors.append(process.SvgToInline())
+		post_transforms.append(transformer.SvgToInline())
 
 	# if images are *not* to be embedded...
 	else:
@@ -117,14 +122,12 @@ def wrap(
 				parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 		# an object to copy svg files to a remote location is added to the list of *pre* processors
-		pre_processors.append(process.SvgToHttp(
+		pre_transforms.append(transformer.SvgToHttp(
 			history, connection, parameters['images hosting']['copy']['public filesystem root'],
 			pictures_base_directory, parameters['images hosting']['public URL']))
 
 	# output file has the same name as the input with the ".gift.txt" suffix
 	output_file = input_file.with_suffix('.gift.txt')
-
-	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
 
 	# if overwriting files was not requested AND latex checks are enabled AND the given auxiliary file already exists...
 	if (not overwrite_existing_latex_files) and (not no_checks) and latex_auxiliary_file.exists():
@@ -168,13 +171,12 @@ def wrap(
 
 				# user settings are tidied up (`q` is modified) to serve as `__init__` parameters for the returned
 				# class name...
-				class_name = question.user_settings_to_class_init(
-					q, check_latex_formulas=not no_checks, latex_auxiliary_file=latex_auxiliary_file)
+				class_name = question.user_settings_to_class_init(q)
 
 				# ...which should be available in the `question` module
 				question_class = getattr(question, class_name)
 
-				q = question_class(**q, pre_processors=pre_processors, post_processors=post_processors)
+				q = question_class(**q, pre_transforms=pre_transforms, post_transforms=post_transforms)
 
 				f.write(f'{q.gift}\n\n')
 

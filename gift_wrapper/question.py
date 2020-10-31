@@ -8,12 +8,10 @@ from typing import Union, Optional
 from . import gift
 from . import colors
 from . import parsing
-from . import process
+from . import transformer
 
 
-def user_settings_to_class_init(
-		settings: dict, name: Optional[str] = None, check_latex_formulas: bool = False,
-		latex_auxiliary_file: str = '__latex__.tex') -> str:
+def user_settings_to_class_init(settings: dict, name: Optional[str] = None) -> str:
 	"""
 	Turns a user settings dictionary into one that can be passed to a question's  `__init__`.
 
@@ -23,10 +21,6 @@ def user_settings_to_class_init(
 		User settings.
 	name : str, optional
 		The name of the question.
-	check_latex_formulas : bool
-		If True latex formulas will be checked.
-	latex_auxiliary_file : str
-		The name of the auxiliary latex file to be used for checks.
 
 	Returns
 	-------
@@ -34,10 +28,6 @@ def user_settings_to_class_init(
 		The name of the class to be instantiated.
 
 	"""
-
-	# the input dictionary is modified in-place
-	settings['check_latex_formulas'] = check_latex_formulas
-	settings['latex_auxiliary_file'] = latex_auxiliary_file
 
 	if name:
 		settings['name'] = name
@@ -51,12 +41,11 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	"""
 
 	# in order to process LaTeX commands *in text* (ignoring occurrences in formulas)
-	latex_commands_within_text_processor = process.LatexCommandsWithinText()
+	latex_commands_within_text_processor = transformer.LatexCommandsWithinText()
 
 	def __init__(
-			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
-			images_settings: Optional[dict] = None, feedback: Optional[str] = None, time: Optional[int] = None,
-			pre_processors: list = [], post_processors: list = []):
+			self, name: str, statement: str, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
+			time: Optional[int] = None, pre_transforms: list = [], post_transforms: list = []):
 		"""
 		Initializer.
 
@@ -66,19 +55,15 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 			Name of the question.
 		statement : str
 			Statement of the question.
-		check_latex_formulas: bool
-			Whether or not an attempt should be made to compile every latex formula to detect errors.
-		latex_auxiliary_file: str or Pathlib
-			The latex file that will be created to check the formulas.
 		images_settings : dict, optional
 			width and height of *all* the images in the question.
 		feedback : str, optional
 			Feedback for the question.
 		time: int, optional
 			The number of minutes deemed necessary to answer the question.
-		pre_processors: list
+		pre_transforms: list
 			Processors to apply before everything else.
-		post_processors: list
+		post_transforms: list
 			Processors to apply in the end.
 		"""
 
@@ -86,16 +71,11 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 		self.statement = statement.rstrip()
 		self.feedback = feedback
 		self.time = time
-		self.pre_processors = pre_processors
-		self.post_processors = post_processors
+		self.pre_transforms = pre_transforms
+		self.post_transforms = post_transforms
 
-		self.processing_functions = [
-			process.URLs(images_settings), gift.process_new_lines,
-			process.LatexFormulas(latex_auxiliary_file, check_latex_formulas),
-			# functools.partial(
-			# 	gift.process_latex, latex_auxiliary_file=latex_auxiliary_file, check_compliance=check_latex_formulas),
-			self.latex_commands_within_text_processor
-		]
+		# transformations that depend on particular settings of this class
+		self.custom_transforms = [transformer.URLs(images_settings)]
 
 	def process_text(self, text: str) -> str:
 		"""
@@ -113,7 +93,7 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 
 		"""
 
-		for function in (self.pre_processors + self.processing_functions + self.post_processors):
+		for function in (self.pre_transforms + self.custom_transforms + self.post_transforms):
 
 			try:
 
@@ -184,9 +164,9 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
-			solution: dict, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
-			time: Optional[int] = None, pre_processors: list = [], post_processors: list = []):
+			self, name: str, statement: str, solution: dict, images_settings: Optional[dict] = None,
+			feedback: Optional[str] = None, time: Optional[int] = None, pre_transforms: list = [],
+			post_transforms: list = []):
 		"""
 		Initializer.
 
@@ -196,9 +176,7 @@ class Numerical(HtmlQuestion):
 			Value and, optionally, tolerated error of the solution.
 		"""
 
-		super().__init__(
-			name, statement, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time,
-			pre_processors, post_processors)
+		super().__init__(name, statement, images_settings, feedback, time, pre_transforms, post_transforms)
 
 		assert ('value' in solution), '"value" missing in "solution"'
 
@@ -243,9 +221,9 @@ class MultipleChoice(HtmlQuestion):
 	template_wrong_answers = string.Template(r"**<font color='$color'>$text</font>**")
 
 	def __init__(
-			self, name: str, statement: str, check_latex_formulas: bool, latex_auxiliary_file: Union[str, pathlib.Path],
-			answers: dict, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
-			time: Optional[int] = None, pre_processors: list = [], post_processors: list = []):
+			self, name: str, statement: str, answers: dict, images_settings: Optional[dict] = None,
+			feedback: Optional[str] = None, time: Optional[int] = None, pre_transforms: list = [],
+			post_transforms: list = []):
 		"""
 		Initializer.
 
@@ -255,9 +233,7 @@ class MultipleChoice(HtmlQuestion):
 			Right answer and a list with the wrong ones.
 		"""
 
-		super().__init__(
-			name, statement, check_latex_formulas, latex_auxiliary_file, images_settings, feedback, time,
-			pre_processors, post_processors)
+		super().__init__(name, statement, images_settings, feedback, time, pre_transforms, post_transforms)
 
 		self.answers = answers
 
