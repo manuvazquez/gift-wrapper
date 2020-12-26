@@ -76,8 +76,8 @@ categories:
       statement: |
         Check stuff from DFW's Infinite Jest
       answers:
-        # no perfect answer is given
-        wrong:
+        # no perfect unique answer, only partial ones
+        partial:
           - [Y.D.A.U., 50]
           - [Incandenza, 50]
           - [Woland, -50]

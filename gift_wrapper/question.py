@@ -245,7 +245,16 @@ class MultipleChoice(HtmlQuestion):
 		# the maximum grade allowed by partially correct answers
 		max_grade = 0.
 
-		for a in self.answers['wrong']:
+		# if both "partial" and "wrong" keys are present, the former takes precedence
+		if 'partial' in self.answers:
+
+			answers_field = 'partial'
+
+		else:
+
+			answers_field = 'wrong'
+
+		for a in self.answers[answers_field]:
 
 			# if it is a list
 			if isinstance(a, list):
