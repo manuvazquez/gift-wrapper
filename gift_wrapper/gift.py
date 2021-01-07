@@ -186,3 +186,49 @@ def from_numerical_solution(solution: [float, int], error: Optional[Union[float,
 	error = ':' + str(error) if error else ''
 
 	return f'#\t=%100%{solution}{error}#'
+
+
+def from_wrong_answer(text: str, grade: Optional[int] = None) -> str:
+	"""
+	Generates GIFT-ready text from a (single) wrong answer and, optionally, its grade.
+
+	Parameters
+	----------
+	text : str
+		The phrasing of the answer.
+	grade : int, optional
+		The worth or grade.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	if grade:
+
+		return f'~%{grade}%{text}'
+
+	else:
+
+		return f'~{text}'
+
+
+def from_perfect_answer(text: str) -> str:
+	"""
+	Generates GIFT-ready text from a perfect answer.
+
+	Parameters
+	----------
+	text : str
+		The phrasing of the answer.
+
+	Returns
+	-------
+	out: str
+		GIFT-ready text.
+
+	"""
+
+	return f'={text}'

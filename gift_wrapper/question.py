@@ -259,7 +259,7 @@ class MultipleChoice(HtmlQuestion):
 			# if it is a list
 			if isinstance(a, list):
 
-				processed_answers.append(f'~%{a[1]}%{self.process_text(a[0])}')
+				processed_answers.append(gift.from_wrong_answer(self.process_text(a[0]), a[1]))
 
 				# if the grade is positive...
 				if a[1] > 0:
@@ -270,13 +270,13 @@ class MultipleChoice(HtmlQuestion):
 			# if it is a scalar
 			else:
 
-				processed_answers.append(f'~{self.process_text(a)}')
+				processed_answers.append(gift.from_wrong_answer(self.process_text(a)))
 
 		# if a "perfect" (100% credit) was provided...
 		if 'perfect' in self.answers:
 
 			# ...it is added in a special way
-			processed_answers.insert(0, '=' + self.process_text(self.answers['perfect']))
+			processed_answers.insert(0, gift.from_perfect_answer(self.process_text(self.answers['perfect'])))
 
 		else:
 
