@@ -20,8 +20,3 @@ images hosting:
 
   # public address from which the images will hang
   public URL: http://www.tsc.uc3m.es/~mvazquez/
-
-latex:
-
-  # auxiliary TeX file that will be created to check that formulas can be compiled
-  auxiliary file: __latex_check.tex

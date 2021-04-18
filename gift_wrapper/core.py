@@ -1,7 +1,6 @@
 import argparse
 import pathlib
 import collections
-import sys
 
 import yaml
 from tqdm.autonotebook import tqdm
@@ -31,10 +30,6 @@ def main():
 		'-n', '--no-checks', default=False, action='store_true', help="don't check latex formulas (much faster)")
 
 	parser.add_argument(
-		'-o', '--overwrite-existing-latex-files', default=False, action='store_true',
-		help='overwrite existing latex files if necessary instead of exiting')
-
-	parser.add_argument(
 		'-e', '--embed-images', default=False, action='store_true',
 		help='embed the images rather than link to them')
 
@@ -44,13 +39,10 @@ def main():
 		parameters=command_line_arguments.parameters_file.name,
 		questions_file=command_line_arguments.input_file.name, local_run=command_line_arguments.local,
 		no_checks=command_line_arguments.no_checks,
-		overwrite_existing_latex_files=command_line_arguments.overwrite_existing_latex_files,
 		embed_images=command_line_arguments.embed_images)
 
 
-def wrap(
-		parameters: str, questions_file: str, local_run: bool, no_checks: bool,
-		overwrite_existing_latex_files: bool, embed_images: bool):
+def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool, embed_images: bool):
 
 	# ================================= parameters' reading
 
@@ -82,9 +74,6 @@ def wrap(
 
 	# ================================= behaviour
 
-	# temporary file to try and compile latex files
-	latex_auxiliary_file = pathlib.Path(parameters['latex']['auxiliary file'])
-
 	# to keep track of files already compiled/transferred
 	history = {'already compiled': set(), 'already transferred': set()}
 
@@ -93,7 +82,7 @@ def wrap(
 
 	# ...and at the end
 	post_transforms = [
-		gift.process_new_lines, transformer.LatexFormulas(latex_auxiliary_file, not no_checks),
+		gift.process_new_lines, transformer.LatexFormulas(not no_checks),
 		transformer.LatexCommandsWithinText()]
 
 	# if images embedding was requested...
@@ -114,7 +103,7 @@ def wrap(
 			# ...a "fake" connections is instantiated
 			connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
 
-		# if NO local running was requested...
+		# if *no* local running was requested...
 		else:
 
 			# ...an actual connection with the requested host is opened
@@ -128,14 +117,6 @@ def wrap(
 
 	# output file has the same name as the input with the ".gift.txt" suffix
 	output_file = input_file.with_suffix('.gift.txt')
-
-	# if overwriting files was not requested AND latex checks are enabled AND the given auxiliary file already exists...
-	if (not overwrite_existing_latex_files) and (not no_checks) and latex_auxiliary_file.exists():
-
-		print(
-			f'{colors.error}latex auxiliary file {colors.reset}"{latex_auxiliary_file}"{colors.error} exists'
-			f' and would be overwritten (pass "-o" to skip this check)')
-		sys.exit(1)
 
 	# ================================= processing
 
@@ -198,11 +179,3 @@ def wrap(
 					print(
 						f'{source}{colors.info} to '
 						f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
-
-	# if latex checks are enabled AND some formula was processed...
-	if (not no_checks) and latex_auxiliary_file.exists():
-
-		# latex auxiliary files are deleted
-		for suffix in ['.tex', '.aux', '.log']:
-
-			latex_auxiliary_file.with_suffix(suffix).unlink()

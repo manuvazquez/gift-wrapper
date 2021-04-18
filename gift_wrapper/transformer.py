@@ -211,11 +211,10 @@ class LatexFormulas(Transformer):
 
 	latex_formula = r'\$([^\$]*)\$'
 
-	def __init__(self, latex_auxiliary_file: Union[str, pathlib.Path], check_compliance: bool) -> None:
+	def __init__(self, check_compliance: bool) -> None:
 
 		super().__init__()
 
-		self.latex_auxiliary_file = latex_auxiliary_file
 		self.check_compliance = check_compliance
 
 		self.function = lambda text: re.sub(self.latex_formula, self.replacement, text)
@@ -227,7 +226,7 @@ class LatexFormulas(Transformer):
 
 		if self.check_compliance:
 
-			if not latex.formula_can_be_compiled(latex_source, auxiliary_file=self.latex_auxiliary_file):
+			if not latex.formula_can_be_compiled(latex_source):
 				raise gift.NotCompliantLatexFormula(latex_source)
 
 		return gift.from_latex_formula(latex_source)

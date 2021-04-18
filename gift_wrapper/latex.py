@@ -4,6 +4,7 @@ import subprocess
 import string
 import re
 import sys
+import tempfile
 from typing import Union, List, Optional
 
 from . import parsing
@@ -62,7 +63,7 @@ $$
 ''')
 
 
-def formula_can_be_compiled(formula: str, auxiliary_file: Union[str, pathlib.Path]) -> bool:
+def formula_can_be_compiled(formula: str) -> bool:
 	"""
 	Checks whether a latex formula can be compiled with the above template, `latex_template`.
 
@@ -70,8 +71,6 @@ def formula_can_be_compiled(formula: str, auxiliary_file: Union[str, pathlib.Pat
 	----------
 	formula : str
 		Latex formula.
-	auxiliary_file : str or pathlib.Path
-		(Auxiliary) TeX file that is created to check the formula.
 
 	Returns
 	-------
@@ -82,11 +81,12 @@ def formula_can_be_compiled(formula: str, auxiliary_file: Union[str, pathlib.Pat
 
 	tex_source_code = latex_template.substitute(formula=formula)
 
-	with open(auxiliary_file, 'w') as f:
+	with tempfile.NamedTemporaryFile(mode='w+t', suffix='.tex') as temp:
 
-		f.write(tex_source_code)
+		temp.write(tex_source_code)
+		temp.flush()
 
-	exit_status = compile_tex(auxiliary_file, timeout=10, options=['halt-on-error', 'draftmode'])
+		exit_status = compile_tex(temp.name, timeout=10, options=['halt-on-error', 'draftmode'])
 
 	return exit_status == 0
 
