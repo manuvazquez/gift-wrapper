@@ -122,7 +122,7 @@ Formulas inside `$`s are processed and, within them, these are the commands/symb
 - `\begin{bmatrix}` and `\end{bmatrix}`
 - symbols `\sim`, `\approx`
 
-More things are probably OK, but I have not tried them yet.
+More things are probably OK, but I have not tested them yet.
 
 Inside text, only commands `\textit` and `\textbf` are supported for the time being.
 
@@ -136,7 +136,7 @@ By default, `wrap.py` checks whether or not the formulas you wrote between `$`'s
 
 - the latex support is very basic
 
-- one is in for troubles if embedding URLs pointing to `.svg` or `.tex` files since the file part will, most likely, be parsed and replaced
+- one is in for troubles if embedding remote URLs pointing to `.svg` or `.tex` files since the file part will, most likely, be parsed and replaced
 
 ## See also
 

@@ -64,7 +64,7 @@ class Transformer:
 
 class TexToSvg(Transformer):
 	"""
-	Processor to convert TeX files into svg files.
+	Transformer to convert TeX files into svg files.
 	"""
 
 	def __init__(self, history: dict) -> None:
@@ -91,7 +91,7 @@ class TexToSvg(Transformer):
 
 class SvgToHttp(Transformer):
 	"""
-	Processor to transfer svg files to a remote location.
+	Transformer to transfer svg files to a remote location.
 	"""
 
 	def __init__(
@@ -130,7 +130,7 @@ class SvgToHttp(Transformer):
 
 class SvgToInline(Transformer):
 	"""
-	Processor to directly include svg files into a question.
+	Transformer to directly include svg files into a question.
 	"""
 
 	def __init__(self):
@@ -150,7 +150,7 @@ class SvgToInline(Transformer):
 
 class URLs(Transformer):
 	"""
-	Processor to arrange URLs into a GIFT-appropriate format.
+	Transformer to arrange URLs into a GIFT-appropriate format.
 	"""
 
 	url = f'http({parsing.regex_url_valid_character}+)(?!{parsing.regex_url_valid_character})'

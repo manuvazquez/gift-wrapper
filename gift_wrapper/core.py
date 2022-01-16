@@ -163,19 +163,13 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 
 	print(f'{colors.info}file "{colors.reset}{output_file}{colors.info}" created')
 
-	# if images are *not* to be embedded...
-	if not embed_images:
+	# if images are *not* to be embedded, this is a "local" run (fake connection), and there are files to be copied...
+	if (not embed_images) and local_run and connection.files_to_copy:
 
-		# if this is a "fake" connection
-		if type(connection) == remote.FakeConnection:
+		print(f'{colors.info}you *should* copy:')
 
-			# if there is any file to be copied...
-			if connection.files_to_copy:
+		for source, remote_directory in connection.files_to_copy:
 
-				print(f'{colors.info}you *should* copy:')
-
-				for source, remote_directory in connection.files_to_copy:
-
-					print(
-						f'{source}{colors.info} to '
-						f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')
+			print(
+				f'{source}{colors.info} to '
+				f'{colors.reset}{remote_directory}{colors.info} in {colors.reset}{connection.host}')

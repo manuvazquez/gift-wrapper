@@ -8,6 +8,7 @@ import tempfile
 from typing import Union, List, Optional
 
 from . import parsing
+from . import colors
 
 
 def compile_tex(
@@ -37,7 +38,7 @@ def compile_tex(
 
 	if path_to_compiler is None:
 
-		print('cannot find pdflatex')
+		print(f'{colors.error}cannot find pdflatex')
 
 		sys.exit(1)
 
