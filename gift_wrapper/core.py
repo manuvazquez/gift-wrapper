@@ -13,6 +13,8 @@ from . import transformer
 
 
 def main():
+	"""Processes command-line arguments and feeds them to `wrap`.
+	"""
 
 	parser = argparse.ArgumentParser(description='Build GIFT files (Moodle) from a simple specification')
 
@@ -27,7 +29,7 @@ def main():
 		'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
 
 	parser.add_argument(
-		'-n', '--no-checks', default=False, action='store_true', help="don't check latex formulas (much faster)")
+		'-n', '--no-checks', default=False, action='store_true', help="don't check LaTeX formulas (much faster)")
 
 	parser.add_argument(
 		'-e', '--embed-images', default=False, action='store_true',
@@ -43,11 +45,26 @@ def main():
 
 
 def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool, embed_images: bool):
+	"""Builds a gift file.
+
+	Parameters
+	----------
+	parameters : str
+		Parameters
+	questions_file : str
+		Input file encompassing the questions
+	local_run : bool
+		If `True`, images are not copied over to a server
+	no_checks : bool
+		If `True`, LaTeX formulas are not checked
+	embed_images : bool
+		If `True`, images are embedded
+	"""
 
 	# ================================= parameters' reading
 
 	# if a file name was passed, either as a string or wrapped in a `Pathlib`,...
-	if (type(parameters) == str) or (type(parameters) == pathlib.Path):
+	if isinstance(parameters, (str, pathlib.Path)):
 
 		# ...it is read
 		with open(parameters) as yaml_data:
@@ -58,7 +75,7 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 	else:
 
 		# ...then it should be a dictionary
-		assert type(parameters) == dict
+		assert isinstance(parameters, dict), 'passed `parameters` is not a file nor a dictionary'
 
 	input_file = pathlib.Path(questions_file)
 
@@ -72,7 +89,7 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 	categories = input_data['categories']
 	pictures_base_directory = input_data['pictures base directory']
 
-	# ================================= behaviour
+	# ================================= behavior
 
 	# to keep track of files already compiled/transferred
 	history = {'already compiled': set(), 'already transferred': set()}

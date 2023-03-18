@@ -1,0 +1,1000 @@
+pictures base directory: tatsc/midterm
+categories:
+  - name: Extended Kalman Filter
+    questions:
+      - class: MultipleChoice
+        statement: "Consider a dynamic system in state-space form. The state of the\
+          \ system is modeled as a $2\\times 1$ vector, $\\mathbf{x}$, which evolves\
+          \ according to\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000 \\\\ 1.000\
+          \ & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\nwhere $\\mathbf{v}\
+          \ \\sim {\\mathcal N}\\left(\\mathbf{0},\\mathbf{I}_2\\right)$ is Gaussian\
+          \ noise (with $\\mathbf{I}_2$ being the identity matrix of order $2$). The\
+          \ state is to be estimated using (at time $t$) using the observation\n$y_t\
+          \ = 2x_t^2(1) + e^{x_t(2)} + w_t$\nwhere $x_t(i)$ is the $i$-th component\
+          \ in the state vector at time $t$, and $w_t$ is Gaussian noise with $0$\
+          \ mean and variance $1$.\nIf at time $t-1$, the filtered mean is given by\
+          \ $\\mathbf{x}_{t-1|t-1} = \\begin{bmatrix}0.100 \\\\ 0.200\\end{bmatrix}$,\
+          \ what is the approximation to the dynamic system built by the Extended\
+          \ Kalman Filter (EKF) at time $t$ if the latter is constructed (as usual)\
+          \ around the predictive mean?\n"
+        feedback: "The state equation stays the same, and for the observation equation\
+          \ EKF makes a Taylor-based approximation of the observation non-linear function\
+          \ around a given point. The appropriate choice of the latter is the preditive\
+          \ mean, which is obtained from the filtered mean at the previous time instant\
+          \ as $\\begin{bmatrix}1.000 & 0.000 \\\\ 1.000 & 0.100\\end{bmatrix}\\begin{bmatrix}0.100\
+          \ \\\\ 0.200\\end{bmatrix}=\\begin{bmatrix}0.100 \\\\ 0.120\\end{bmatrix}$.\n\
+          Then we just need to compute the derivative of the function with respect\
+          \ to both $x_t(1)$ and $x_t(2)$ and evaluate it at exactly that point to\
+          \ get the approximate observation matrix\n"
+        answers:
+          perfect: "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000\
+            \ & 0.000 \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+            and the approximate observation equation\n$y_t = \\begin{bmatrix}0.400\
+            \ & 1.127\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+          wrong:
+            - EKF cannot be applied here, only UKF
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000\
+              \ \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = \\begin{bmatrix}-1.600\
+              \ & -0.873\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000\
+              \ \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = 1.53\\mathbf{x}_t +\
+              \ w_t$\n"
+        name: EKF I
+      - class: MultipleChoice
+        statement: "Consider a dynamic system in state-space form. The state of the\
+          \ system is modeled as a $2\\times 1$ vector, $\\mathbf{x}$, which evolves\
+          \ according to\n$\\mathbf{x}_t = \\begin{bmatrix}0.500 & 0.000 \\\\ 1.000\
+          \ & 0.510\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\nwhere $\\mathbf{v}\
+          \ \\sim {\\mathcal N}\\left(\\mathbf{0},\\mathbf{I}_2\\right)$ is Gaussian\
+          \ noise (with $\\mathbf{I}_2$ being the identity matrix of order $2$). The\
+          \ state is to be estimated using (at time $t$) using the observation\n$y_t\
+          \ = 2x_t^2(1) + e^{x_t(2)} + w_t$\nwhere $x_t(i)$ is the $i$-th component\
+          \ in the state vector at time $t$, and $w_t$ is Gaussian noise with $0$\
+          \ mean and variance $1$.\nIf at time $t-1$, the filtered mean is given by\
+          \ $\\mathbf{x}_{t-1|t-1} = \\begin{bmatrix}0.250 \\\\ 0.500\\end{bmatrix}$,\
+          \ what is the approximation to the dynamic system built by the Extended\
+          \ Kalman Filter (EKF) at time $t$ if the latter is constructed (as usual)\
+          \ around the predictive mean?\n"
+        feedback: "The state equation stays the same, and for the observation equation\
+          \ EKF makes a Taylor-based approximation of the observation non-linear function\
+          \ around a given point. The appropriate choice of the latter is the preditive\
+          \ mean, which is obtained from the filtered mean at the previous time instant\
+          \ as $\\begin{bmatrix}0.500 & 0.000 \\\\ 1.000 & 0.510\\end{bmatrix}\\begin{bmatrix}0.250\
+          \ \\\\ 0.500\\end{bmatrix}=\\begin{bmatrix}0.125 \\\\ 0.505\\end{bmatrix}$.\n\
+          Then we just need to compute the derivative of the function with respect\
+          \ to both $x_t(1)$ and $x_t(2)$ and evaluate it at exactly that point to\
+          \ get the approximate observation matrix\n"
+        answers:
+          perfect: "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}0.500\
+            \ & 0.000 \\\\ 1.000 & 0.510\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+            and the approximate observation equation\n$y_t = \\begin{bmatrix}0.500\
+            \ & 1.657\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+          wrong:
+            - EKF cannot be applied here, only UKF
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}0.500 & 0.000\
+              \ \\\\ 1.000 & 0.510\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = \\begin{bmatrix}-1.500\
+              \ & -0.343\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}0.500 & 0.000\
+              \ \\\\ 1.000 & 0.510\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = 2.16\\mathbf{x}_t +\
+              \ w_t$\n"
+        name: EKF II
+      - class: MultipleChoice
+        statement: "Consider a dynamic system in state-space form. The state of the\
+          \ system is modeled as a $2\\times 1$ vector, $\\mathbf{x}$, which evolves\
+          \ according to\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000 \\\\ 1.000\
+          \ & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\nwhere $\\mathbf{v}\
+          \ \\sim {\\mathcal N}\\left(\\mathbf{0},\\mathbf{I}_2\\right)$ is Gaussian\
+          \ noise (with $\\mathbf{I}_2$ being the identity matrix of order $2$). The\
+          \ state is to be estimated using (at time $t$) using the observation\n$y_t\
+          \ = 2x_t^2(1)x_t(2) + x_t^3(2) + w_t$\nwhere $x_t(i)$ is the $i$-th component\
+          \ in the state vector at time $t$, and $w_t$ is Gaussian noise with $0$\
+          \ mean and variance $1$.\nIf at time $t-1$, the filtered mean is given by\
+          \ $\\mathbf{x}_{t-1|t-1} = \\begin{bmatrix}0.100 \\\\ 0.200\\end{bmatrix}$,\
+          \ what is the approximation to the dynamic system built by the Extended\
+          \ Kalman Filter (EKF) at time $t$ if the latter is constructed (as usual)\
+          \ around the predictive mean?\n"
+        feedback: "The state equation stays the same, and for the observation equation\
+          \ EKF makes a Taylor-based approximation of the observation non-linear function\
+          \ around a given point. The appropriate choice of the latter is the preditive\
+          \ mean, which is obtained from the filtered mean at the previous time instant\
+          \ as $\\begin{bmatrix}1.000 & 0.000 \\\\ 1.000 & 0.100\\end{bmatrix}\\begin{bmatrix}0.100\
+          \ \\\\ 0.200\\end{bmatrix}=\\begin{bmatrix}0.100 \\\\ 0.120\\end{bmatrix}$.\n\
+          Then we just need to compute the derivative of the function with respect\
+          \ to both $x_t(1)$ and $x_t(2)$ and evaluate it at exactly that point to\
+          \ get the approximate observation matrix\n"
+        answers:
+          perfect: "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000\
+            \ & 0.000 \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+            and the approximate observation equation\n$y_t = \\begin{bmatrix}0.048\
+            \ & 0.063\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+          wrong:
+            - EKF cannot be applied here, only UKF
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000\
+              \ \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = \\begin{bmatrix}-1.952\
+              \ & -1.937\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.000\
+              \ \\\\ 1.000 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = 0.11\\mathbf{x}_t +\
+              \ w_t$\n"
+        name: EKF III
+      - class: MultipleChoice
+        statement: "Consider a dynamic system in state-space form. The state of the\
+          \ system is modeled as a $2\\times 1$ vector, $\\mathbf{x}$, which evolves\
+          \ according to\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.100 \\\\ 0.100\
+          \ & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\nwhere $\\mathbf{v}\
+          \ \\sim {\\mathcal N}\\left(\\mathbf{0},\\mathbf{I}_2\\right)$ is Gaussian\
+          \ noise (with $\\mathbf{I}_2$ being the identity matrix of order $2$). The\
+          \ state is to be estimated using (at time $t$) using the observation\n$y_t\
+          \ = 2x_t(1)x_t(2) + x_t^2(2) + w_t$\nwhere $x_t(i)$ is the $i$-th component\
+          \ in the state vector at time $t$, and $w_t$ is Gaussian noise with $0$\
+          \ mean and variance $1$.\nIf at time $t-1$, the filtered mean is given by\
+          \ $\\mathbf{x}_{t-1|t-1} = \\begin{bmatrix}0.100 \\\\ 0.200\\end{bmatrix}$,\
+          \ what is the approximation to the dynamic system built by the Extended\
+          \ Kalman Filter (EKF) at time $t$ if the latter is constructed (as usual)\
+          \ around the predictive mean?\n"
+        feedback: "The state equation stays the same, and for the observation equation\
+          \ EKF makes a Taylor-based approximation of the observation non-linear function\
+          \ around a given point. The appropriate choice of the latter is the preditive\
+          \ mean, which is obtained from the filtered mean at the previous time instant\
+          \ as $\\begin{bmatrix}1.000 & 0.100 \\\\ 0.100 & 0.100\\end{bmatrix}\\begin{bmatrix}0.100\
+          \ \\\\ 0.200\\end{bmatrix}=\\begin{bmatrix}0.120 \\\\ 0.030\\end{bmatrix}$.\n\
+          Then we just need to compute the derivative of the function with respect\
+          \ to both $x_t(1)$ and $x_t(2)$ and evaluate it at exactly that point to\
+          \ get the approximate observation matrix\n"
+        answers:
+          perfect: "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000\
+            \ & 0.100 \\\\ 0.100 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+            and the approximate observation equation\n$y_t = \\begin{bmatrix}0.060\
+            \ & 0.300\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+          wrong:
+            - EKF cannot be applied here, only UKF
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.100\
+              \ \\\\ 0.100 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = \\begin{bmatrix}-1.940\
+              \ & -1.700\\end{bmatrix}\\mathbf{x}_t + w_t$\n"
+            - "The state equation is\n$\\mathbf{x}_t = \\begin{bmatrix}1.000 & 0.100\
+              \ \\\\ 0.100 & 0.100\\end{bmatrix}\\mathbf{x}_{t-1} + \\mathbf{v}$\n\
+              and the approximate observation equation\n$y_t = 0.36\\mathbf{x}_t +\
+              \ w_t$\n"
+        name: EKF IV
+  - name: Global decision in sensors networks
+    questions:
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.2$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.9$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision I
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.01$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.1$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.6$, $\\gamma_2 = 0.6$ and $\\gamma_3 =\
+          \ 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=0$"
+        name: Global decision II
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.05$, $\\\
+          alpha_2 = 0.05$ and $\\alpha_3 = 0.2$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.9$, $\\gamma_2 = 0.5$ and $\\gamma_3 =\
+          \ 0.8$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision III
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.05$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.05$ and $\\alpha_3 = 0.2$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.95$, $\\gamma_2 = 0.45$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision IV
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.01$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.1$ and $\\alpha_3 = 0.2$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.95$, $\\gamma_2 = 0.45$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=0$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=0$"
+        name: Global decision V
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.05$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.05$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.99$, $\\gamma_2 = 0.85$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=0$"
+        name: Global decision VI
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.01$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.1$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.9$, $\\gamma_2 = 0.9$ and $\\gamma_3 =\
+          \ 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=0$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=0$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision VII
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.2$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.02$, $\\\
+          alpha_2 = 0.02$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.9$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=0$"
+        name: Global decision VIII
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.2$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.02$, $\\\
+          alpha_2 = 0.02$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.9$ and $\\gamma_3\
+          \ = 0.9$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision IX
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.02$, $\\\
+          alpha_2 = 0.02$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.65$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=0$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision X
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.02$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.85$, $\\gamma_2 = 0.85$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=1$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XI
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.01$, $\\\
+          alpha_2 = 0.01$ and $\\alpha_3 = 0.001$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.99$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XII
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.001$, $\\\
+          alpha_2 = 0.001$ and $\\alpha_3 = 0.001$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.75$ and $\\gamma_3\
+          \ = 0.75$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=1$\n$\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=1$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=1$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=1$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XIII
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.02$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.01$, $\\\
+          alpha_2 = 0.001$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.75$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=1$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XIV
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.05$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.001$ and $\\alpha_3 = 0.01$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.75$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.95$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=0$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=1$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=0$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XV
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.1$, $\\\
+          alpha_2 = 0.005$ and $\\alpha_3 = 0.005$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.99$, $\\gamma_2 = 0.9$ and $\\gamma_3\
+          \ = 0.9$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=1$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=0$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=1$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XVI
+      - class: MultipleChoice
+        statement: "Consider a sensors network with 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ deployed to decide whether a phenomenon of interest has happened. Every\
+          \ sensor collects data and performs a hypothesis test in order to decide\
+          \ between the null hypothesis, $H_0$ (the phenomenon of interest has not\
+          \ happened), and the alternative one, $H_1$ (the phenomenon has indeed happened).\
+          \ The prior probability of the alternative hypothesis is $P(H_1) = 0.1$.\n\
+          The individual probabilities of false alarm are: $\\alpha_1 = 0.05$, $\\\
+          alpha_2 = 0.2$ and $\\alpha_3 = 0.005$. On the other hand,  the probabilities\
+          \ of detection are $\\gamma_1 = 0.99$, $\\gamma_2 = 0.99$ and $\\gamma_3\
+          \ = 0.6$.\nChoose the appropriate mapping from individual decisions (left-hand\
+          \ side of the arrow) to global decision (right-hand side of the arrow)\n"
+        feedback: You need to construct the table the way we did in the lectures
+        answers:
+          perfect: "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\\
+            to u_0=0$\n$\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\\
+            to u_0=0$\n$\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\\
+            to u_0=1$\n$\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\\
+            to u_0=1$"
+          wrong:
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=0$\n\
+              $\\left[1,1,0\\right] \\to u_0=1$\n$\\left[1,1,1\\right] \\to u_0=1$"
+            - "\n$\\left[0,0,0\\right] \\to u_0=0$\n$\\left[0,0,1\\right] \\to u_0=0$\n\
+              $\\left[0,1,0\\right] \\to u_0=0$\n$\\left[0,1,1\\right] \\to u_0=0$\n\
+              $\\left[1,0,0\\right] \\to u_0=0$\n$\\left[1,0,1\\right] \\to u_0=1$\n\
+              $\\left[1,1,0\\right] \\to u_0=0$\n$\\left[1,1,1\\right] \\to u_0=1$"
+        name: Global decision XVII
+  - name: Dijkstra
+    questions:
+      - class: Numerical
+        statement: "Consider the following mesh-topology sensors network.\ngraph_dijkstra_56.svg\n\
+          Find the smallest (accumulated) cost between nodes S1 and S4.\n"
+        feedback: "We just need to apply Dijkstra algorithm. In this case, the shortest\
+          \ path is S1-S5-S6-S4\n"
+        solution:
+          value: 12
+          error: 0
+        name: Minimum cost I
+      - class: Numerical
+        statement: "Consider the following mesh-topology sensors network.\ngraph_dijkstra_56.svg\n\
+          Find the smallest (accumulated) cost between nodes S1 and S7.\n"
+        feedback: "We just need to apply Dijkstra algorithm. In this case, the shortest\
+          \ path is S1-S5-S3-S7\n"
+        solution:
+          value: 16
+          error: 0
+        name: Minimum cost II
+      - class: Numerical
+        statement: "Consider the following mesh-topology sensors network.\ngraph_dijkstra_56.svg\n\
+          Find the smallest (accumulated) cost between nodes S2 and S7.\n"
+        feedback: "We just need to apply Dijkstra algorithm. In this case, the shortest\
+          \ path is S2-S6-S4-S7\n"
+        solution:
+          value: 16
+          error: 0
+        name: Minimum cost III
+      - class: Numerical
+        statement: "Consider the following mesh-topology sensors network.\ngraph_dijkstra_56.svg\n\
+          Find the smallest (accumulated) cost between nodes S4 and S1.\n"
+        feedback: "We just need to apply Dijkstra algorithm. In this case, the shortest\
+          \ path is S4-S6-S5-S1\n"
+        solution:
+          value: 12
+          error: 0
+        name: Minimum cost IV
+      - class: Numerical
+        statement: "Consider the following mesh-topology sensors network.\ngraph_dijkstra_56.svg\n\
+          Find the smallest (accumulated) cost between nodes S7 and S1.\n"
+        feedback: "We just need to apply Dijkstra algorithm. In this case, the shortest\
+          \ path is S7-S3-S5-S1\n"
+        solution:
+          value: 16
+          error: 0
+        name: Minimum cost V
+  - name: Linear block codes
+    questions:
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_42.svg\nEncode the sequence of bits 001 and, independently,\
+          \ decode (optimally) the sequence 11011101 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\\\ 1 & 0 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 1 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 1 & 1 & 1 & 1 & 0\
+          \ \\\\ 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\\\ 0 & 0 & 1 & 0 & 1 & 1 & 1 & 0\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 001 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 00101110, and that of the
+            decoding process is 110
+          wrong:
+            - The result of the encoding process is 10101110, and that of the decoding
+              process is 100
+            - The result of the encoding process is 00101010, and that of the decoding
+              process is 111
+            - The result of the encoding process is 00001110, and that of the decoding
+              process is 010
+        name: Encode and decode I
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_52.svg\nEncode the sequence of bits 001 and, independently,\
+          \ decode (optimally) the sequence 10000001 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\\\ 0 & 0 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 1 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 1 & 0 & 1 & 1 & 0\
+          \ \\\\ 0 & 1 & 0 & 1 & 0 & 1 & 1 & 1 \\\\ 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 001 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 00111111, and that of the
+            decoding process is 110
+          wrong:
+            - The result of the encoding process is 00111101, and that of the decoding
+              process is 111
+            - The result of the encoding process is 01111111, and that of the decoding
+              process is 100
+            - The result of the encoding process is 00101111, and that of the decoding
+              process is 010
+        name: Encode and decode II
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_55.svg\nEncode the sequence of bits 011 and, independently,\
+          \ decode (optimally) the sequence 11011110 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\\\ 1 & 1 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 0 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 1 & 1 & 1 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 0 & 1 & 1 & 1 & 1\
+          \ \\\\ 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 \\\\ 0 & 0 & 1 & 0 & 1 & 0 & 1 & 1\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 011 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 01110010, and that of the
+            decoding process is 110
+          wrong:
+            - The result of the encoding process is 01111010, and that of the decoding
+              process is 100
+            - The result of the encoding process is 11110010, and that of the decoding
+              process is 010
+            - The result of the encoding process is 00110010, and that of the decoding
+              process is 111
+        name: Encode and decode III
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_60.svg\nEncode the sequence of bits 001 and, independently,\
+          \ decode (optimally) the sequence 10000000 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\\\ 0 & 1 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 0 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 1 & 0 & 1 & 1 & 1\
+          \ \\\\ 0 & 1 & 0 & 1 & 1 & 0 & 0 & 0 \\\\ 0 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 001 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 00111110, and that of the
+            decoding process is 000
+          wrong:
+            - The result of the encoding process is 00110110, and that of the decoding
+              process is 001
+            - The result of the encoding process is 00101110, and that of the decoding
+              process is 010
+            - The result of the encoding process is 00101110, and that of the decoding
+              process is 010
+        name: Encode and decode IV
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_66.svg\nEncode the sequence of bits 100 and, independently,\
+          \ decode (optimally) the sequence 00101001 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\\\ 0 & 1 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 1 & 0 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 0 & 0 & 1 & 1 & 0\
+          \ \\\\ 0 & 1 & 0 & 1 & 1 & 1 & 1 & 1 \\\\ 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 100 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 10000110, and that of the
+            decoding process is 001
+          wrong:
+            - The result of the encoding process is 10000010, and that of the decoding
+              process is 101
+            - The result of the encoding process is 10000010, and that of the decoding
+              process is 101
+            - The result of the encoding process is 10010110, and that of the decoding
+              process is 011
+        name: Encode and decode V
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_88.svg\nEncode the sequence of bits 100 and, independently,\
+          \ decode (optimally) the sequence 00001000 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\\\ 1 & 1 & 0 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\\\ 1 & 0 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 1 & 1 & 1 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 1 & 1 & 1 & 1 & 1\
+          \ \\\\ 0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\\\ 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 100 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 10011111, and that of the
+            decoding process is 000
+          wrong:
+            - The result of the encoding process is 00011111, and that of the decoding
+              process is 100
+            - The result of the encoding process is 10011101, and that of the decoding
+              process is 001
+            - The result of the encoding process is 11011111, and that of the decoding
+              process is 100
+        name: Encode and decode VI
+      - class: MultipleChoice
+        statement: "Consider the Tanner graph of a systematic linear block code. Variable\
+          \ nodes, $v_i$ are at the top, whereas check nodes, $c_j$ are at the bottom.\n\
+          tanner_graph_99.svg\nEncode the sequence of bits 111 and, independently,\
+          \ decode (optimally) the sequence 10000010 assuming you know for a fact\
+          \ that, at most, only 1 bit was flipped during transmission.\n"
+        feedback: "From the Tanner graph, it is easy to get the parity-check matrix\
+          \ of the code: the connections in every parity-check node yield the positions\
+          \ of the corresponding row in which there is a 1. Hence, in this case we\
+          \ have $\\begin{bmatrix}1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\\\ 1 & 1 & 1 & 0\
+          \ & 1 & 0 & 0 & 0 \\\\ 1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\\\ 0 & 1 & 1 & 0\
+          \ & 0 & 0 & 1 & 0 \\\\ 1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\end{bmatrix}$. Now\
+          \ since, we know the code is systematic, it is easy to get the generator\
+          \ matrix from the latter: $\\begin{bmatrix}1 & 0 & 0 & 1 & 1 & 1 & 0 & 1\
+          \ \\\\ 0 & 1 & 0 & 1 & 1 & 0 & 1 & 0 \\\\ 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\\
+          end{bmatrix}$. The solution to the encoding is obtained by pre-multiplying\
+          \ 111 by $G$. For decoding, one can build the syndrome table, or just compare\
+          \ the given codeword with every possible codeword in the codebook. This\
+          \ is probably easier here.  Also notice that, if know know that at most\
+          \ one bit was flipped, then we know we are on the safe side and the code\
+          \ will be able to correct it because here $d_{min}=3$\n"
+        answers:
+          perfect: The result of the encoding process is 11111000, and that of the
+            decoding process is 101
+          wrong:
+            - The result of the encoding process is 11110000, and that of the decoding
+              process is 001
+            - The result of the encoding process is 11011000, and that of the decoding
+              process is 001
+            - The result of the encoding process is 11011000, and that of the decoding
+              process is 100
+        name: Encode and decode VII

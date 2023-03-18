@@ -105,8 +105,7 @@ class SvgToHttp(Transformer):
 		# assembled remote path
 		remote_subdirectory = pathlib.Path(public_filesystem_root).joinpath(pictures_base_directory)
 
-		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
-		def replacement_function(m) -> str:
+		def replacement_function(m: re.Match) -> str:
 
 			file = pathlib.Path(m.group(0))
 
@@ -137,8 +136,7 @@ class SvgToInline(Transformer):
 
 		super().__init__()
 
-		# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for `m`
-		def replacement_function(m) -> str:
+		def replacement_function(m: re.Match) -> str:
 
 			file = pathlib.Path(m.group(1))
 
@@ -172,8 +170,7 @@ class URLs(Transformer):
 
 		self.function = lambda text: re.sub(self.url, self.replacement, text)
 
-	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
-	def replacement(self, m) -> str:
+	def replacement(self, m: re.Match) -> str:
 
 		return '<p>' + gift.from_image_url(m.group(0), width=self.images_width, height=self.images_height) + '<br></p>'
 
@@ -219,8 +216,7 @@ class LatexFormulas(Transformer):
 
 		self.function = lambda text: re.sub(self.latex_formula, self.replacement, text)
 
-	# TODO: when minimum Python version is forwarded to 3.8, `re.Match` should be the type hinting for "m"
-	def replacement(self, m) -> str:
+	def replacement(self, m: re.Match) -> str:
 
 		latex_source = m.group(1)
 

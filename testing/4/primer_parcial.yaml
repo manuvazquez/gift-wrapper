@@ -1,0 +1,986 @@
+pictures base directory: tatsc/parcial
+categories:
+  - name: Theoretical
+    questions:
+      - class: MultipleChoice
+        statement: ¿Cuál es la principal caracterísica del filtro de partículas bootstrap,
+          que lo diferencia de un filtro de partículas genérico?
+        feedback: La función tentativa no tiene por qué ser gaussiana sino que el
+          único requisito es que su soporte tiene que abarcar el de la función tentativa.
+          No es un filtro de partículas especial para "arrancar" otro FP. Cualquier
+          filtro de partículas permite estimar la varianza de la variable de interés.
+          En cualquier FP hay que normalizar los pesos cuando uno quiere obtener una
+          estimación.
+        answers:
+          perfect: Los pesos sin normalizar coinciden con la verosimilitud
+          wrong:
+            - La función tentativa es siempre gaussiana para facilitar el muestreo
+            - Es un filtro de partículas especial que se utiliza para obtener los
+              parámetros que permiten "arrancar" el filtro de partículas de interés
+            - Es el único que permite estimar la varianza de la variable aleatoria
+              de interés
+            - Normaliza los pesos de una manera especial para sacar una estimación
+              más precisa de la variable de interés.
+        name: Bootstrap I
+      - class: MultipleChoice
+        statement: ¿Cuál de las siguientes afirmaciones referidas a códigos circulares
+          es cierta?
+        feedback: Los códigos circulares son un tipo particular de código bloque lineal,
+          por lo que también tiene la propiedad de que la secuencia todo 0s siempre
+          forma parte del código.
+        answers:
+          perfect: La secuencia de bits todo 0's es siempre una palabra código
+          wrong:
+            - La decodificación requiere la construcción de una tabla de síndromes
+            - La decodificación es más rápida que en un código bloque lineal
+            - Trabajan con secuencias en lugar de bloques
+            - No permiten decodificiar utilizar el criterio de máxima verosimilitud
+        name: Códigos circulares I
+      - class: MultipleChoice
+        statement: ¿Cuál de las siguientes afirmaciones referidas a filtros de partículas
+          es cierta?
+        feedback: Por favor, consulta la sección correspondiente de las transparencias.
+        answers:
+          perfect: Aproximan recursivamente distribuciones de probabilidad
+          wrong:
+            - El peso de cada partícula siempre coincide con la verosimilitud
+            - Si el sistema es lineal y gaussiano, proporcionan la solución óptima
+              al problema de estimación
+            - Esta garantizado que al incrementar el número de partículas el rendimiento
+              mejora
+            - Solo se pueden aplicar sobre sistemas lineales y gaussianos
+        name: Filtros de partículas I
+  - name: Dijkstra - Medium size
+    questions:
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S1 y S4.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S1-S5-S9-S6-S4\n"
+        solution:
+          value: 10
+          error: 0
+        name: Minimum cost - Graph 1 I
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S1 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S1-S5-S9-S6-S8\n"
+        solution:
+          value: 11
+          error: 0
+        name: Minimum cost - Graph 1 II
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S2 y S7.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S2-S6-S9-S5-S7\n"
+        solution:
+          value: 9
+          error: 0
+        name: Minimum cost - Graph 1 III
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S3 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S3-S5-S9-S6-S8\n"
+        solution:
+          value: 11
+          error: 0
+        name: Minimum cost - Graph 1 IV
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S4 y S1.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S4-S6-S9-S5-S1\n"
+        solution:
+          value: 10
+          error: 0
+        name: Minimum cost - Graph 1 V
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S4 y S7.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S4-S6-S9-S5-S7\n"
+        solution:
+          value: 7
+          error: 0
+        name: Minimum cost - Graph 1 VI
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S2.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S2\n"
+        solution:
+          value: 9
+          error: 0
+        name: Minimum cost - Graph 1 VII
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S4.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S4\n"
+        solution:
+          value: 7
+          error: 0
+        name: Minimum cost - Graph 1 VIII
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_1_236.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S8\n"
+        solution:
+          value: 8
+          error: 0
+        name: Minimum cost - Graph 1 IX
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S1 y S4.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S1-S5-S9-S6-S4\n"
+        solution:
+          value: 12
+          error: 0
+        name: Minimum cost - Graph 2 I
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S1 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S1-S5-S9-S6-S8\n"
+        solution:
+          value: 13
+          error: 0
+        name: Minimum cost - Graph 2 II
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S2 y S7.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S2-S6-S9-S5-S7\n"
+        solution:
+          value: 9
+          error: 0
+        name: Minimum cost - Graph 2 III
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S3 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S3-S5-S9-S6-S8\n"
+        solution:
+          value: 10
+          error: 0
+        name: Minimum cost - Graph 2 IV
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S4 y S1.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S4-S6-S9-S5-S1\n"
+        solution:
+          value: 12
+          error: 0
+        name: Minimum cost - Graph 2 V
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S4 y S7.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S4-S6-S9-S5-S7\n"
+        solution:
+          value: 7
+          error: 0
+        name: Minimum cost - Graph 2 VI
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S2.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S2\n"
+        solution:
+          value: 9
+          error: 0
+        name: Minimum cost - Graph 2 VII
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S4.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S4\n"
+        solution:
+          value: 7
+          error: 0
+        name: Minimum cost - Graph 2 VIII
+      - class: Numerical
+        statement: "Considere la siguiente red de sensores con topología de malla.\n\
+          graph_dijkstra_2_36.svg\nEncuentre el menor coste (acumulado) entre los\
+          \ nodos S7 y S8.\n"
+        feedback: "Hay que aplicar el algoritmo de Dijkstra. En este caso, el camino\
+          \ más corto es S7-S5-S9-S6-S8\n"
+        solution:
+          value: 8
+          error: 0
+        name: Minimum cost - Graph 2 IX
+  - name: Particle filtering
+    questions:
+      - class: MultipleChoice
+        statement: "Un sistema dinámico en formato de espacio de estados viene dado\
+          \ por las ecuaciones\n$\\mathbf{x}_t = f(\\mathbf{x}_{t-1}) + \\mathbf{v}_t$\n\
+          y\n$y_t = h(\\mathbf{x}_t) + \\mathbf{w}_t$\ndonde $\\mathbf{x}_t$ es un\
+          \ vector de dimensiones $3 \\times 1$ que representa el estado del sistema\
+          \ en el instante $t$, $f(\\mathbf{x}_t)=x_t(1)\\mathbf{x}_t$ es la función\
+          \ de transición de estado, $\\mathbf{v}_t$ es ruido gaussiano de media $\\\
+          mathbf{0}$ y covarianza $\\begin{bmatrix}0.375 & 0.775 & 0.395 \\\\ 0.775\
+          \ & 0.156 & 0.511 \\\\ 0.395 & 0.511 & 0.601\\end{bmatrix}$, $y_t$ es la\
+          \ observación (escalar) en el instante $t$, $h(\\mathbf{x}_t)=(x_t(1) +\
+          \ x_t(2) + x_t(3))^2$ es la función de observación, y  $w_t$ es ruido gaussiano\
+          \ de media $0$ y varianza $20$.\nSe quiere utilizar el filtro bootstrap\
+          \ para estimar $g(\\mathbf{x}_t)$ con $g(\\mathbf{x}_t)=\\sqrt{x_t(1)^2\
+          \ + x_t(2)^2 + x_t(3)^2}$. Para ello, en el instante de tiempo $t$, se obtienen\
+          \ las siguiente muestras de una cierta función tentativa: $\\mathbf{x}_t^{(0)}\
+          \ = \\begin{bmatrix}-0.581 \\\\ -2.613 \\\\ -0.428\\end{bmatrix}$, $\\mathbf{x}_t^{(1)}\
+          \ = \\begin{bmatrix}-0.525 \\\\ 0.950 \\\\ -0.742\\end{bmatrix}$, $\\mathbf{x}_t^{(2)}\
+          \ = \\begin{bmatrix}-0.571 \\\\ 0.816 \\\\ -0.703\\end{bmatrix}$ y $\\mathbf{x}_t^{(3)}\
+          \ = \\begin{bmatrix}-0.924 \\\\ -1.524 \\\\ -2.140\\end{bmatrix}$. Suponiendo\
+          \ que la observación es $y_t = 8.555$, obtenga una estimación de la esperanza\
+          \ de $g(\\mathbf{x}_t)$. Debe hacerlo sin llevar a cabo un paso de remuestreo\
+          \ (de hacerlo el procedimiento dejaría de ser determinista y, además, necesitaría\
+          \ un generador de números aleatorios) del mismo modo que lo haría al utilizar\
+          \ un procedimiento de Importance Sampling.\nNota: la función de densidad\
+          \ de probabilidad de una gaussian de media $\\mu$ y varianza $\\sigma^2$\
+          \ es $p(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\\
+          sigma^2}}$; si $\\mathbf{x}$ es un vector, $x(i)$ es su $i$-ésimo elemento.\n\
+          En los cálculos, utilice al menos 4 decimales.\n"
+        feedback: "Para cada partícula tenemos que calcular su observación correspondiente\
+          \ utilizando la función de observación $h$. Las observaciones que resultan\
+          \ son $y_t^{(1)} = 13.115$, $y_t^{(2)} = 0.101$, $y_t^{(3)} = 0.210$ y $y_t^{(4)}\
+          \ = 21.046$. Puesto que estamos utilizando el filtro bootstrap, el peso\
+          \ sin normalizar de cada muestra es simplemente la verosimilitud. Ésta se\
+          \ calcula evaluando (en la verdadera observación) la fdp de una gaussiana\
+          \ de media la observación a que da lugar la muestra y varianza la de la\
+          \ ecuación de observación. Se obtiene $\\tilde w_t^{(1)} = 0.053$, $\\tilde\
+          \ w_t^{(2)} = 0.015$, $\\tilde w_t^{(3)} = 0.016$ y $\\tilde w_t^{(4)} =\
+          \ 0.002$, y tras la normalización $w_t^{(1)} = 0.621$, $w_t^{(2)} = 0.175$,\
+          \ $w_t^{(3)} = 0.183$ y $w_t^{(4)} = 0.021$. Después se evalúa la función\
+          \ de interés en cada muestra, $g(x_t^{(1)}) = 2.710$, $g(x_t^{(2)}) = 1.315$,\
+          \ $g(x_t^{(3)}) = 1.220$ y $g(x_t^{(4)}) = 2.785$, y la estimación pedida\
+          \ es su media ponderada por los pesos $\\hat g(x_t) = 2.195$.\n"
+        answers:
+          perfect: '2.195'
+          wrong:
+            - '1.376'
+            - '1.991'
+            - '1.375'
+        name: Bootrstrap estimate from particles I
+      - class: MultipleChoice
+        statement: "Un sistema dinámico en formato de espacio de estados viene dado\
+          \ por las ecuaciones\n$\\mathbf{x}_t = f(\\mathbf{x}_{t-1}) + \\mathbf{v}_t$\n\
+          y\n$y_t = h(\\mathbf{x}_t) + \\mathbf{w}_t$\ndonde $\\mathbf{x}_t$ es un\
+          \ vector de dimensiones $3 \\times 1$ que representa el estado del sistema\
+          \ en el instante $t$, $f(\\mathbf{x}_t)=x_t(1)\\mathbf{x}_t$ es la función\
+          \ de transición de estado, $\\mathbf{v}_t$ es ruido gaussiano de media $\\\
+          mathbf{0}$ y covarianza $\\begin{bmatrix}0.325 & 0.808 & 0.675 \\\\ 0.808\
+          \ & 0.472 & 0.440 \\\\ 0.675 & 0.440 & 0.561\\end{bmatrix}$, $y_t$ es la\
+          \ observación (escalar) en el instante $t$, $h(\\mathbf{x}_t)=x_t(1)^2 +\
+          \ x_t(2)^2 + x_t(3)$ es la función de observación, y  $w_t$ es ruido gaussiano\
+          \ de media $0$ y varianza $25$.\nSe quiere utilizar el filtro bootstrap\
+          \ para estimar $g(\\mathbf{x}_t)$ con $g(\\mathbf{x}_t)=\\sqrt{x_t(1)^2\
+          \ + x_t(2)^2 + x_t(3)^2}$. Para ello, en el instante de tiempo $t$, se obtienen\
+          \ las siguiente muestras de una cierta función tentativa: $\\mathbf{x}_t^{(0)}\
+          \ = \\begin{bmatrix}-0.036 \\\\ 0.087 \\\\ -0.220\\end{bmatrix}$, $\\mathbf{x}_t^{(1)}\
+          \ = \\begin{bmatrix}1.565 \\\\ -0.299 \\\\ 0.357\\end{bmatrix}$, $\\mathbf{x}_t^{(2)}\
+          \ = \\begin{bmatrix}-2.620 \\\\ 0.092 \\\\ 1.478\\end{bmatrix}$ y $\\mathbf{x}_t^{(3)}\
+          \ = \\begin{bmatrix}0.822 \\\\ -1.988 \\\\ -0.518\\end{bmatrix}$. Suponiendo\
+          \ que la observación es $y_t = 3.704$, obtenga una estimación de la esperanza\
+          \ de $g(\\mathbf{x}_t)$. Debe hacerlo sin llevar a cabo un paso de remuestreo\
+          \ (de hacerlo el procedimiento dejaría de ser determinista y, además, necesitaría\
+          \ un generador de números aleatorios) del mismo modo que lo haría al utilizar\
+          \ un procedimiento de Importance Sampling.\nNota: la función de densidad\
+          \ de probabilidad de una gaussian de media $\\mu$ y varianza $\\sigma^2$\
+          \ es $p(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\\
+          sigma^2}}$; si $\\mathbf{x}$ es un vector, $x(i)$ es su $i$-ésimo elemento.\n\
+          En los cálculos, utilice al menos 4 decimales.\n"
+        feedback: "Para cada partícula tenemos que calcular su observación correspondiente\
+          \ utilizando la función de observación $h$. Las observaciones que resultan\
+          \ son $y_t^{(1)} = -0.211$, $y_t^{(2)} = 2.895$, $y_t^{(3)} = 8.349$ y $y_t^{(4)}\
+          \ = 4.108$. Puesto que estamos utilizando el filtro bootstrap, el peso sin\
+          \ normalizar de cada muestra es simplemente la verosimilitud. Ésta se calcula\
+          \ evaluando (en la verdadera observación) la fdp de una gaussiana de media\
+          \ la observación a que da lugar la muestra y varianza la de la ecuación\
+          \ de observación. Se obtiene $\\tilde w_t^{(1)} = 0.059$, $\\tilde w_t^{(2)}\
+          \ = 0.079$, $\\tilde w_t^{(3)} = 0.052$ y $\\tilde w_t^{(4)} = 0.080$, y\
+          \ tras la normalización $w_t^{(1)} = 0.218$, $w_t^{(2)} = 0.293$, $w_t^{(3)}\
+          \ = 0.193$ y $w_t^{(4)} = 0.296$. Después se evalúa la función de interés\
+          \ en cada muestra, $g(x_t^{(1)}) = 0.239$, $g(x_t^{(2)}) = 1.632$, $g(x_t^{(3)})\
+          \ = 3.009$ y $g(x_t^{(4)}) = 2.212$, y la estimación pedida es su media\
+          \ ponderada por los pesos $\\hat g(x_t) = 1.765$.\n"
+        answers:
+          perfect: '1.765'
+          wrong:
+            - '1.124'
+            - '1.200'
+            - '1.505'
+        name: Bootrstrap estimate from particles II
+      - class: MultipleChoice
+        statement: "Un sistema dinámico en formato de espacio de estados viene dado\
+          \ por las ecuaciones\n$\\mathbf{x}_t = f(\\mathbf{x}_{t-1}) + \\mathbf{v}_t$\n\
+          y\n$y_t = h(\\mathbf{x}_t) + \\mathbf{w}_t$\ndonde $\\mathbf{x}_t$ es un\
+          \ vector de dimensiones $3 \\times 1$ que representa el estado del sistema\
+          \ en el instante $t$, $f(\\mathbf{x}_t)=x_t(1)\\mathbf{x}_t$ es la función\
+          \ de transición de estado, $\\mathbf{v}_t$ es ruido gaussiano de media $\\\
+          mathbf{0}$ y covarianza $\\begin{bmatrix}0.634 & 0.686 & 0.066 \\\\ 0.686\
+          \ & 0.321 & 0.389 \\\\ 0.066 & 0.389 & 0.678\\end{bmatrix}$, $y_t$ es la\
+          \ observación (escalar) en el instante $t$, $h(\\mathbf{x}_t)=x_t(1)^2 +\
+          \ x_t(2) + x_t(3)^2$ es la función de observación, y  $w_t$ es ruido gaussiano\
+          \ de media $0$ y varianza $22$.\nSe quiere utilizar el filtro bootstrap\
+          \ para estimar $g(\\mathbf{x}_t)$ con $g(\\mathbf{x}_t)=\\sqrt{x_t(1)^2\
+          \ + x_t(2)^2 + x_t(3)^2}$. Para ello, en el instante de tiempo $t$, se obtienen\
+          \ las siguiente muestras de una cierta función tentativa: $\\mathbf{x}_t^{(0)}\
+          \ = \\begin{bmatrix}0.009 \\\\ 0.536 \\\\ -0.388\\end{bmatrix}$, $\\mathbf{x}_t^{(1)}\
+          \ = \\begin{bmatrix}-0.366 \\\\ -0.915 \\\\ -0.886\\end{bmatrix}$, $\\mathbf{x}_t^{(2)}\
+          \ = \\begin{bmatrix}0.649 \\\\ 0.621 \\\\ -0.357\\end{bmatrix}$ y $\\mathbf{x}_t^{(3)}\
+          \ = \\begin{bmatrix}-1.223 \\\\ -0.161 \\\\ 0.556\\end{bmatrix}$. Suponiendo\
+          \ que la observación es $y_t = 0.980$, obtenga una estimación de la esperanza\
+          \ de $g(\\mathbf{x}_t)$. Debe hacerlo sin llevar a cabo un paso de remuestreo\
+          \ (de hacerlo el procedimiento dejaría de ser determinista y, además, necesitaría\
+          \ un generador de números aleatorios) del mismo modo que lo haría al utilizar\
+          \ un procedimiento de Importance Sampling.\nNota: la función de densidad\
+          \ de probabilidad de una gaussian de media $\\mu$ y varianza $\\sigma^2$\
+          \ es $p(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\\
+          sigma^2}}$; si $\\mathbf{x}$ es un vector, $x(i)$ es su $i$-ésimo elemento.\n\
+          En los cálculos, utilice al menos 4 decimales.\n"
+        feedback: "Para cada partícula tenemos que calcular su observación correspondiente\
+          \ utilizando la función de observación $h$. Las observaciones que resultan\
+          \ son $y_t^{(1)} = 0.687$, $y_t^{(2)} = 0.003$, $y_t^{(3)} = 1.169$ y $y_t^{(4)}\
+          \ = 1.644$. Puesto que estamos utilizando el filtro bootstrap, el peso sin\
+          \ normalizar de cada muestra es simplemente la verosimilitud. Ésta se calcula\
+          \ evaluando (en la verdadera observación) la fdp de una gaussiana de media\
+          \ la observación a que da lugar la muestra y varianza la de la ecuación\
+          \ de observación. Se obtiene $\\tilde w_t^{(1)} = 0.085$, $\\tilde w_t^{(2)}\
+          \ = 0.083$, $\\tilde w_t^{(3)} = 0.085$ y $\\tilde w_t^{(4)} = 0.084$, y\
+          \ tras la normalización $w_t^{(1)} = 0.252$, $w_t^{(2)} = 0.247$, $w_t^{(3)}\
+          \ = 0.252$ y $w_t^{(4)} = 0.250$. Después se evalúa la función de interés\
+          \ en cada muestra, $g(x_t^{(1)}) = 0.662$, $g(x_t^{(2)}) = 1.325$, $g(x_t^{(3)})\
+          \ = 0.966$ y $g(x_t^{(4)}) = 1.353$, y la estimación pedida es su media\
+          \ ponderada por los pesos $\\hat g(x_t) = 1.075$.\n"
+        answers:
+          perfect: '1.075'
+          wrong:
+            - '1.708'
+            - '1.603'
+            - '1.672'
+        name: Bootrstrap estimate from particles III
+      - class: MultipleChoice
+        statement: "Un sistema dinámico en formato de espacio de estados viene dado\
+          \ por las ecuaciones\n$\\mathbf{x}_t = f(\\mathbf{x}_{t-1}) + \\mathbf{v}_t$\n\
+          y\n$y_t = h(\\mathbf{x}_t) + \\mathbf{w}_t$\ndonde $\\mathbf{x}_t$ es un\
+          \ vector de dimensiones $3 \\times 1$ que representa el estado del sistema\
+          \ en el instante $t$, $f(\\mathbf{x}_t)=x_t(1)\\mathbf{x}_t$ es la función\
+          \ de transición de estado, $\\mathbf{v}_t$ es ruido gaussiano de media $\\\
+          mathbf{0}$ y covarianza $\\begin{bmatrix}0.024 & 0.793 & 0.274 \\\\ 0.793\
+          \ & 0.954 & 0.465 \\\\ 0.274 & 0.465 & 0.928\\end{bmatrix}$, $y_t$ es la\
+          \ observación (escalar) en el instante $t$, $h(\\mathbf{x}_t)=x_t(1)^2 +\
+          \ x_t(2) + x_t(3)^2$ es la función de observación, y  $w_t$ es ruido gaussiano\
+          \ de media $0$ y varianza $22$.\nSe quiere utilizar el filtro bootstrap\
+          \ para estimar $g(\\mathbf{x}_t)$ con $g(\\mathbf{x}_t)=\\sqrt{x_t(1)^2\
+          \ + x_t(2)^2}$. Para ello, en el instante de tiempo $t$, se obtienen las\
+          \ siguiente muestras de una cierta función tentativa: $\\mathbf{x}_t^{(0)}\
+          \ = \\begin{bmatrix}0.473 \\\\ -0.447 \\\\ 0.173\\end{bmatrix}$, $\\mathbf{x}_t^{(1)}\
+          \ = \\begin{bmatrix}-0.073 \\\\ 0.856 \\\\ 0.385\\end{bmatrix}$, $\\mathbf{x}_t^{(2)}\
+          \ = \\begin{bmatrix}-0.847 \\\\ 0.214 \\\\ -0.884\\end{bmatrix}$ y $\\mathbf{x}_t^{(3)}\
+          \ = \\begin{bmatrix}-1.515 \\\\ -1.246 \\\\ 0.154\\end{bmatrix}$. Suponiendo\
+          \ que la observación es $y_t = 0.906$, obtenga una estimación de la esperanza\
+          \ de $g(\\mathbf{x}_t)$. Debe hacerlo sin llevar a cabo un paso de remuestreo\
+          \ (de hacerlo el procedimiento dejaría de ser determinista y, además, necesitaría\
+          \ un generador de números aleatorios) del mismo modo que lo haría al utilizar\
+          \ un procedimiento de Importance Sampling.\nNota: la función de densidad\
+          \ de probabilidad de una gaussian de media $\\mu$ y varianza $\\sigma^2$\
+          \ es $p(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\\
+          sigma^2}}$; si $\\mathbf{x}$ es un vector, $x(i)$ es su $i$-ésimo elemento.\n\
+          En los cálculos, utilice al menos 4 decimales.\n"
+        feedback: "Para cada partícula tenemos que calcular su observación correspondiente\
+          \ utilizando la función de observación $h$. Las observaciones que resultan\
+          \ son $y_t^{(1)} = -0.193$, $y_t^{(2)} = 1.010$, $y_t^{(3)} = 1.712$ y $y_t^{(4)}\
+          \ = 1.073$. Puesto que estamos utilizando el filtro bootstrap, el peso sin\
+          \ normalizar de cada muestra es simplemente la verosimilitud. Ésta se calcula\
+          \ evaluando (en la verdadera observación) la fdp de una gaussiana de media\
+          \ la observación a que da lugar la muestra y varianza la de la ecuación\
+          \ de observación. Se obtiene $\\tilde w_t^{(1)} = 0.083$, $\\tilde w_t^{(2)}\
+          \ = 0.085$, $\\tilde w_t^{(3)} = 0.084$ y $\\tilde w_t^{(4)} = 0.085$, y\
+          \ tras la normalización $w_t^{(1)} = 0.246$, $w_t^{(2)} = 0.253$, $w_t^{(3)}\
+          \ = 0.249$ y $w_t^{(4)} = 0.253$. Después se evalúa la función de interés\
+          \ en cada muestra, $g(x_t^{(1)}) = 0.651$, $g(x_t^{(2)}) = 0.859$, $g(x_t^{(3)})\
+          \ = 0.873$ y $g(x_t^{(4)}) = 1.961$, y la estimación pedida es su media\
+          \ ponderada por los pesos $\\hat g(x_t) = 1.090$.\n"
+        answers:
+          perfect: '1.090'
+          wrong:
+            - '1.376'
+            - '0.814'
+            - '0.959'
+        name: Bootrstrap estimate from particles IV
+      - class: MultipleChoice
+        statement: "Un sistema dinámico en formato de espacio de estados viene dado\
+          \ por las ecuaciones\n$\\mathbf{x}_t = f(\\mathbf{x}_{t-1}) + \\mathbf{v}_t$\n\
+          y\n$y_t = h(\\mathbf{x}_t) + \\mathbf{w}_t$\ndonde $\\mathbf{x}_t$ es un\
+          \ vector de dimensiones $3 \\times 1$ que representa el estado del sistema\
+          \ en el instante $t$, $f(\\mathbf{x}_t)=x_t(1)\\mathbf{x}_t$ es la función\
+          \ de transición de estado, $\\mathbf{v}_t$ es ruido gaussiano de media $\\\
+          mathbf{0}$ y covarianza $\\begin{bmatrix}0.795 & 0.175 & 0.637 \\\\ 0.175\
+          \ & 0.025 & 0.829 \\\\ 0.637 & 0.829 & 0.409\\end{bmatrix}$, $y_t$ es la\
+          \ observación (escalar) en el instante $t$, $h(\\mathbf{x}_t)=2x_t(1)^2\
+          \ + 3x_t(2) + x_t(3)$ es la función de observación, y  $w_t$ es ruido gaussiano\
+          \ de media $0$ y varianza $18$.\nSe quiere utilizar el filtro bootstrap\
+          \ para estimar $g(\\mathbf{x}_t)$ con $g(\\mathbf{x}_t)=\\sqrt{x_t(1)^2\
+          \ + x_t(2)^2}$. Para ello, en el instante de tiempo $t$, se obtienen las\
+          \ siguiente muestras de una cierta función tentativa: $\\mathbf{x}_t^{(0)}\
+          \ = \\begin{bmatrix}-0.334 \\\\ 0.945 \\\\ -1.327\\end{bmatrix}$, $\\mathbf{x}_t^{(1)}\
+          \ = \\begin{bmatrix}-0.318 \\\\ 1.266 \\\\ 1.844\\end{bmatrix}$, $\\mathbf{x}_t^{(2)}\
+          \ = \\begin{bmatrix}0.318 \\\\ 0.377 \\\\ -0.731\\end{bmatrix}$ y $\\mathbf{x}_t^{(3)}\
+          \ = \\begin{bmatrix}-1.612 \\\\ 1.651 \\\\ -1.280\\end{bmatrix}$. Suponiendo\
+          \ que la observación es $y_t = 4.240$, obtenga una estimación de la esperanza\
+          \ de $g(\\mathbf{x}_t)$. Debe hacerlo sin llevar a cabo un paso de remuestreo\
+          \ (de hacerlo el procedimiento dejaría de ser determinista y, además, necesitaría\
+          \ un generador de números aleatorios) del mismo modo que lo haría al utilizar\
+          \ un procedimiento de Importance Sampling.\nNota: la función de densidad\
+          \ de probabilidad de una gaussian de media $\\mu$ y varianza $\\sigma^2$\
+          \ es $p(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\\
+          sigma^2}}$; si $\\mathbf{x}$ es un vector, $x(i)$ es su $i$-ésimo elemento.\n\
+          En los cálculos, utilice al menos 4 decimales.\n"
+        feedback: "Para cada partícula tenemos que calcular su observación correspondiente\
+          \ utilizando la función de observación $h$. Las observaciones que resultan\
+          \ son $y_t^{(1)} = 1.733$, $y_t^{(2)} = 5.845$, $y_t^{(3)} = 0.603$ y $y_t^{(4)}\
+          \ = 8.873$. Puesto que estamos utilizando el filtro bootstrap, el peso sin\
+          \ normalizar de cada muestra es simplemente la verosimilitud. Ésta se calcula\
+          \ evaluando (en la verdadera observación) la fdp de una gaussiana de media\
+          \ la observación a que da lugar la muestra y varianza la de la ecuación\
+          \ de observación. Se obtiene $\\tilde w_t^{(1)} = 0.079$, $\\tilde w_t^{(2)}\
+          \ = 0.088$, $\\tilde w_t^{(3)} = 0.065$ y $\\tilde w_t^{(4)} = 0.052$, y\
+          \ tras la normalización $w_t^{(1)} = 0.279$, $w_t^{(2)} = 0.309$, $w_t^{(3)}\
+          \ = 0.230$ y $w_t^{(4)} = 0.183$. Después se evalúa la función de interés\
+          \ en cada muestra, $g(x_t^{(1)}) = 1.003$, $g(x_t^{(2)}) = 1.306$, $g(x_t^{(3)})\
+          \ = 0.493$ y $g(x_t^{(4)}) = 2.308$, y la estimación pedida es su media\
+          \ ponderada por los pesos $\\hat g(x_t) = 1.218$.\n"
+        answers:
+          perfect: '1.218'
+          wrong:
+            - '1.820'
+            - '1.084'
+            - '0.712'
+        name: Bootrstrap estimate from particles V
+  - name: Sensors networks
+    questions:
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.200$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.750$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0028$ and $\gamma_0 = 0.9652$
+          wrong:
+            - $\alpha_0 = 0.0226$ and $\gamma_0 = 0.9720$
+            - $\alpha_0 = 0.0010$ and $\gamma_0 = 0.7425$
+            - $\alpha_0 = 0.0820$ and $\gamma_0 = 0.9660$
+        name: Overall probability of false alarm I
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.01$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.100$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.550$, $\\gamma_2 = 0.600$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0019$ and $\gamma_0 = 0.8118$
+          wrong:
+            - $\alpha_0 = 0.0118$ and $\gamma_0 = 0.8151$
+            - $\alpha_0 = 0.0910$ and $\gamma_0 = 0.8145$
+            - $\alpha_0 = 0.0018$ and $\gamma_0 = 0.4851$
+        name: Overall probability of false alarm II
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.050$, $\\alpha_2 = 0.150$ y $\\alpha_3 = 0.200$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.920$, $\\gamma_2 = 0.500$ y $\\gamma_3 = 0.800$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0160$ and $\gamma_0 = 0.8280$
+          wrong:
+            - $\alpha_0 = 0.0500$ and $\gamma_0 = 0.9200$
+            - $\alpha_0 = 0.0812$ and $\gamma_0 = 0.9200$
+            - $\alpha_0 = 0.1300$ and $\gamma_0 = 0.8360$
+        name: Overall probability of false alarm III
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.15$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.050$ y $\\alpha_3 = 0.200$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.900$, $\\gamma_2 = 0.450$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0200$ and $\gamma_0 = 0.8910$
+          wrong:
+            - $\alpha_0 = 0.0240$ and $\gamma_0 = 0.8951$
+            - $\alpha_0 = 0.0560$ and $\gamma_0 = 0.8915$
+            - $\alpha_0 = 0.2292$ and $\gamma_0 = 0.8915$
+        name: Overall probability of false alarm IV
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.01$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.100$ y $\\alpha_3 = 0.200$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.950$, $\\gamma_2 = 0.450$ y $\\gamma_3 = 0.950$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0020$ and $\gamma_0 = 0.4061$
+          wrong:
+            - $\alpha_0 = 0.0200$ and $\gamma_0 = 0.4275$
+            - $\alpha_0 = 0.0000$ and $\gamma_0 = 0.0000$
+            - $\alpha_0 = 0.1302$ and $\gamma_0 = 0.0000$
+        name: Overall probability of false alarm V
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.200$, $\\alpha_2 = 0.050$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.990$, $\\gamma_2 = 0.850$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0024$ and $\gamma_0 = 0.9885$
+          wrong:
+            - $\alpha_0 = 0.1905$ and $\gamma_0 = 0.9900$
+            - $\alpha_0 = 0.0100$ and $\gamma_0 = 0.9900$
+            - $\alpha_0 = 0.0023$ and $\gamma_0 = 0.1554$
+        name: Overall probability of false alarm VI
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.01$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.100$ y $\\alpha_3 = 0.100$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.900$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0010$ and $\gamma_0 = 0.8019$
+          wrong:
+            - $\alpha_0 = 0.0100$ and $\gamma_0 = 0.8910$
+            - $\alpha_0 = 0.0525$ and $\gamma_0 = 0.8910$
+            - $\alpha_0 = 0.0000$ and $\gamma_0 = 0.0000$
+        name: Overall probability of false alarm VII
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.2$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.020$, $\\alpha_2 = 0.020$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.800$, $\\gamma_2 = 0.990$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0008$ and $\gamma_0 = 0.9959$
+          wrong:
+            - $\alpha_0 = 0.0006$ and $\gamma_0 = 0.7999$
+            - $\alpha_0 = 0.0202$ and $\gamma_0 = 0.9960$
+            - $\alpha_0 = 0.9516$ and $\gamma_0 = 0.9960$
+        name: Overall probability of false alarm VIII
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.2$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.020$, $\\alpha_2 = 0.020$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.850$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.900$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0008$ and $\gamma_0 = 0.9630$
+          wrong:
+            - $\alpha_0 = 0.0006$ and $\gamma_0 = 0.8415$
+            - $\alpha_0 = 0.0104$ and $\gamma_0 = 0.9765$
+            - $\alpha_0 = 0.0006$ and $\gamma_0 = 0.8865$
+        name: Overall probability of false alarm IX
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.020$, $\\alpha_2 = 0.010$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.650$, $\\gamma_2 = 0.990$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0005$ and $\gamma_0 = 0.9930$
+          wrong:
+            - $\alpha_0 = 0.0201$ and $\gamma_0 = 0.9930$
+            - $\alpha_0 = 0.0004$ and $\gamma_0 = 0.6499$
+            - $\alpha_0 = 0.9610$ and $\gamma_0 = 0.9930$
+        name: Overall probability of false alarm X
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.2$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.010$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.800$, $\\gamma_2 = 0.850$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0021$ and $\gamma_0 = 0.9671$
+          wrong:
+            - $\alpha_0 = 0.8842$ and $\gamma_0 = 0.9674$
+            - $\alpha_0 = 0.0110$ and $\gamma_0 = 0.9688$
+            - $\alpha_0 = 0.0910$ and $\gamma_0 = 0.9688$
+        name: Overall probability of false alarm XI
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.010$, $\\alpha_2 = 0.010$ y $\\alpha_3 = 0.001$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.750$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.990$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0011$ and $\gamma_0 = 0.9968$
+          wrong:
+            - $\alpha_0 = 0.0011$ and $\gamma_0 = 0.3285$
+            - $\alpha_0 = 0.0011$ and $\gamma_0 = 0.7740$
+            - $\alpha_0 = 0.0744$ and $\gamma_0 = 0.7740$
+        name: Overall probability of false alarm XII
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.2$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.001$, $\\alpha_2 = 0.001$ y $\\alpha_3 = 0.001$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.750$, $\\gamma_2 = 0.750$ y $\\gamma_3 = 0.750$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0030$ and $\gamma_0 = 0.9844$
+          wrong:
+            - $\alpha_0 = 0.0030$ and $\gamma_0 = 0.8438$
+            - $\alpha_0 = 0.1600$ and $\gamma_0 = 0.8438$
+            - $\alpha_0 = 0.0020$ and $\gamma_0 = 0.9375$
+        name: Overall probability of false alarm XIII
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.02$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.010$, $\\alpha_2 = 0.005$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.750$, $\\gamma_2 = 0.990$ y $\\gamma_3 = 0.750$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0002$ and $\gamma_0 = 0.9337$
+          wrong:
+            - $\alpha_0 = 0.0001$ and $\gamma_0 = 0.7481$
+            - $\alpha_0 = 0.1968$ and $\gamma_0 = 0.7481$
+            - $\alpha_0 = 0.9754$ and $\gamma_0 = 0.9344$
+        name: Overall probability of false alarm XIV
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.05$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.100$, $\\alpha_2 = 0.005$ y $\\alpha_3 = 0.010$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.850$, $\\gamma_2 = 0.990$ y $\\gamma_3 = 0.950$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0005$ and $\gamma_0 = 0.9826$
+          wrong:
+            - $\alpha_0 = 0.0050$ and $\gamma_0 = 0.9900$
+            - $\alpha_0 = 0.0991$ and $\gamma_0 = 0.9830$
+            - $\alpha_0 = 0.1411$ and $\gamma_0 = 0.9900$
+        name: Overall probability of false alarm XV
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.200$, $\\alpha_2 = 0.005$ y $\\alpha_3 = 0.005$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.900$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.900$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0020$ and $\gamma_0 = 0.9720$
+          wrong:
+            - $\alpha_0 = 0.7940$ and $\gamma_0 = 0.9730$
+            - $\alpha_0 = 0.0010$ and $\gamma_0 = 0.8910$
+            - $\alpha_0 = 0.0060$ and $\gamma_0 = 0.9810$
+        name: Overall probability of false alarm XVI
+      - class: MultipleChoice
+        statement: "Considere una red de sensores con 3 nodes, $s_1$, $s_2$ and $s_3$,\
+          \ desplegados para decidir si un determinado fenómenos de interes ha ocurrido\
+          \ o no. Cada sensor, en base a la información de que dispone, lleva a cabo\
+          \ un test de hipótesis para decidir entre la hipótesis nula, $H_0$ (el fenómeno\
+          \ de interés no ha ocurrido), y la alternativa, $H_1$ (el fenómeno sí ha\
+          \ ocurrido). Se asume que la probabilidad a priori de la hipótesis alternativa\
+          \ es $P(H_1) = 0.1$.\nLas probabilidad de falsa alarma de cada sensor son:\
+          \ $\\alpha_1 = 0.050$, $\\alpha_2 = 0.200$ y $\\alpha_3 = 0.005$. Por otro\
+          \ lado, las probabilidades de detección de los diferentes sensores son $\\\
+          gamma_1 = 0.990$, $\\gamma_2 = 0.900$ y $\\gamma_3 = 0.600$.\nCalcule las\
+          \ probabilidades de falsa alarma y detección globales.\n"
+        feedback: "Es necesario construir la tabla tal como hicimos en clase. Una\
+          \ vez la tengamos, la probabilidad de falsa alarma obtiene sumar los valores\
+          \ de $p(\\mathbf{u}|H_0)$ para aquellas combinaciones de decisiones que\
+          \ den lugar a una decisión global $u_0=1$.\n"
+        answers:
+          perfect: $\alpha_0 = 0.0102$ and $\gamma_0 = 0.9504$
+          wrong:
+            - $\alpha_0 = 0.0112$ and $\gamma_0 = 0.9558$
+            - $\alpha_0 = 0.7664$ and $\gamma_0 = 0.9508$
+            - $\alpha_0 = 0.1238$ and $\gamma_0 = 0.9558$
+        name: Overall probability of false alarm XVII
+  - name: Convolutional codes
+    questions:
+      - class: MultipleChoice
+        statement: "Calcule la probabilidad de error aproximada para decodificación\
+          \ blanda del código convolucional especificado por el siguiente diagrama\
+          \ de rejilla.\ntrellis_333321.tex\nAsuma que la energía de símbolo es $E_s\
+          \ = 1$ y $N_0 = 3$. Para evaluar la función Q, considere la aproximación\
+          \ $Q(x) \\approx \\frac{1}{2} e^{-\\frac{x^2}{2}}$.\n"
+        feedback: "Es necesario aplicar la fórmula vista en clase en la sección en\
+          \ la que se habla de las prestaciones de un código convolucional: $P_e =\
+          \ \\kappa_2 Q\\left( \\sqrt{ \\frac{2D_{min}E_s}{N_0} } \\right)$. Tanto\
+          \ $D_{min}$ como $\\kappa_2$ se calculan aplicando el algoritmo de Viterbi\
+          \ para encontrar el camino que se separa de la secuencia todo $0$s y vuelve\
+          \ a ella con el menor coste. En este caso, $D_{min}=2$ es el coste de esa\
+          \ secuencia, y $\\kappa_2=2$ es el número de $1$s en la secuencia decodificada\
+          \ correspondiente (1100). Por favor, consulta la sección \"Determinación\
+          \ de la distancia minima $D_{min}$\" en las transparencias.\n"
+        answers:
+          perfect: '0.513'
+          wrong:
+            - '0.368'
+            - '0.094'
+            - '0.135'
+        name: Probability of error for a convolutional code given the trellis I
+      - class: MultipleChoice
+        statement: "Calcule la probabilidad de error aproximada para decodificación\
+          \ blanda del código convolucional especificado por el siguiente diagrama\
+          \ de rejilla.\ntrellis_133231.tex\nAsuma que la energía de símbolo es $E_s\
+          \ = 1$ y $N_0 = 3$. Para evaluar la función Q, considere la aproximación\
+          \ $Q(x) \\approx \\frac{1}{2} e^{-\\frac{x^2}{2}}$.\n"
+        feedback: "Es necesario aplicar la fórmula vista en clase en la sección en\
+          \ la que se habla de las prestaciones de un código convolucional: $P_e =\
+          \ \\kappa_2 Q\\left( \\sqrt{ \\frac{2D_{min}E_s}{N_0} } \\right)$. Tanto\
+          \ $D_{min}$ como $\\kappa_2$ se calculan aplicando el algoritmo de Viterbi\
+          \ para encontrar el camino que se separa de la secuencia todo $0$s y vuelve\
+          \ a ella con el menor coste. En este caso, $D_{min}=3$ es el coste de esa\
+          \ secuencia, y $\\kappa_2=2$ es el número de $1$s en la secuencia decodificada\
+          \ correspondiente (1100). Por favor, consulta la sección \"Determinación\
+          \ de la distancia minima $D_{min}$\" en las transparencias.\n"
+        answers:
+          perfect: '0.368'
+          wrong:
+            - '0.513'
+            - '0.094'
+            - '0.135'
+        name: Probability of error for a convolutional code given the trellis II
+      - class: MultipleChoice
+        statement: "Calcule la probabilidad de error aproximada para decodificación\
+          \ blanda del código convolucional especificado por el siguiente diagrama\
+          \ de rejilla.\ntrellis_163.tex\nAsuma que la energía de símbolo es $E_s\
+          \ = 1$ y $N_0 = 3$. Para evaluar la función Q, considere la aproximación\
+          \ $Q(x) \\approx \\frac{1}{2} e^{-\\frac{x^2}{2}}$.\n"
+        feedback: "Es necesario aplicar la fórmula vista en clase en la sección en\
+          \ la que se habla de las prestaciones de un código convolucional: $P_e =\
+          \ \\kappa_2 Q\\left( \\sqrt{ \\frac{2D_{min}E_s}{N_0} } \\right)$. Tanto\
+          \ $D_{min}$ como $\\kappa_2$ se calculan aplicando el algoritmo de Viterbi\
+          \ para encontrar el camino que se separa de la secuencia todo $0$s y vuelve\
+          \ a ella con el menor coste. En este caso, $D_{min}=5$ es el coste de esa\
+          \ secuencia, y $\\kappa_2=1$ es el número de $1$s en la secuencia decodificada\
+          \ correspondiente (100). Por favor, consulta la sección \"Determinación\
+          \ de la distancia minima $D_{min}$\" en las transparencias.\n"
+        answers:
+          perfect: '0.094'
+          wrong:
+            - '0.368'
+            - '0.513'
+            - '0.135'
+        name: Probability of error for a convolutional code given the trellis III
+      - class: MultipleChoice
+        statement: "Calcule la probabilidad de error aproximada para decodificación\
+          \ blanda del código convolucional especificado por el siguiente diagrama\
+          \ de rejilla.\ntrellis_767.tex\nAsuma que la energía de símbolo es $E_s\
+          \ = 1$ y $N_0 = 3$. Para evaluar la función Q, considere la aproximación\
+          \ $Q(x) \\approx \\frac{1}{2} e^{-\\frac{x^2}{2}}$.\n"
+        feedback: "Es necesario aplicar la fórmula vista en clase en la sección en\
+          \ la que se habla de las prestaciones de un código convolucional: $P_e =\
+          \ \\kappa_2 Q\\left( \\sqrt{ \\frac{2D_{min}E_s}{N_0} } \\right)$. Tanto\
+          \ $D_{min}$ como $\\kappa_2$ se calculan aplicando el algoritmo de Viterbi\
+          \ para encontrar el camino que se separa de la secuencia todo $0$s y vuelve\
+          \ a ella con el menor coste. En este caso, $D_{min}=6$ es el coste de esa\
+          \ secuencia, y $\\kappa_2=2$ es el número de $1$s en la secuencia decodificada\
+          \ correspondiente (1100). Por favor, consulta la sección \"Determinación\
+          \ de la distancia minima $D_{min}$\" en las transparencias.\n"
+        answers:
+          perfect: '0.135'
+          wrong:
+            - '0.368'
+            - '0.094'
+            - '0.513'
+        name: Probability of error for a convolutional code given the trellis IV
+      - class: MultipleChoice
+        statement: "Calcule la probabilidad de error aproximada para decodificación\
+          \ blanda del código convolucional especificado por el siguiente diagrama\
+          \ de rejilla.\ntrellis_1635.tex\nAsuma que la energía de símbolo es $E_s\
+          \ = 1$ y $N_0 = 3$. Para evaluar la función Q, considere la aproximación\
+          \ $Q(x) \\approx \\frac{1}{2} e^{-\\frac{x^2}{2}}$.\n"
+        feedback: "Es necesario aplicar la fórmula vista en clase en la sección en\
+          \ la que se habla de las prestaciones de un código convolucional: $P_e =\
+          \ \\kappa_2 Q\\left( \\sqrt{ \\frac{2D_{min}E_s}{N_0} } \\right)$. Tanto\
+          \ $D_{min}$ como $\\kappa_2$ se calculan aplicando el algoritmo de Viterbi\
+          \ para encontrar el camino que se separa de la secuencia todo $0$s y vuelve\
+          \ a ella con el menor coste. En este caso, $D_{min}=7$ es el coste de esa\
+          \ secuencia, y $\\kappa_2=1$ es el número de $1$s en la secuencia decodificada\
+          \ correspondiente (100). Por favor, consulta la sección \"Determinación\
+          \ de la distancia minima $D_{min}$\" en las transparencias.\n"
+        answers:
+          perfect: '0.048'
+          wrong:
+            - '0.368'
+            - '0.094'
+            - '0.135'
+        name: Probability of error for a convolutional code given the trellis V

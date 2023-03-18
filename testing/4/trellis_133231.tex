@@ -1,0 +1,54 @@
+
+	\documentclass[]{standalone}
+
+	\usepackage[utf8]{inputenc}
+	\usepackage[spanish]{babel}
+
+	\usepackage{tikz}
+	\usetikzlibrary{matrix,positioning}
+
+	\begin{document}
+		\scalebox{2.5}{
+			\begin{tikzpicture}
+				\matrix[
+	matrix of nodes,
+	ampersand replacement=\&,
+	column sep=120,row sep=40,
+	nodes={
+	draw,
+		shape=circle,
+		inner sep=0,minimum size=4,
+		fill=black
+	}
+] (grid) {
+	{} \& {}\\
+	{} \& {}\\
+	{} \& {}\\
+	{} \& {}\\
+};
+\path 	(grid-1-1)	edge node[pos=0.15,sloped,font=\tiny] {$00|000$} (grid-1-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$01|011$} (grid-2-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$10|111$} (grid-3-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$11|100$} (grid-4-2)
+;\path 	(grid-2-1)	edge node[pos=0.15,sloped,font=\tiny] {$00|110$} (grid-1-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$01|101$} (grid-2-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$10|001$} (grid-3-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$11|010$} (grid-4-2)
+;\path 	(grid-3-1)	edge node[pos=0.15,sloped,font=\tiny] {$00|011$} (grid-1-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$01|000$} (grid-2-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$10|100$} (grid-3-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$11|111$} (grid-4-2)
+;\path 	(grid-4-1)	edge node[pos=0.15,sloped,font=\tiny] {$00|101$} (grid-1-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$01|110$} (grid-2-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$10|010$} (grid-3-2)
+	edge node[pos=0.15,sloped,font=\tiny] {$11|001$} (grid-4-2)
+;
+\foreach \i/\state in {1/{00},2/{01},3/{10},4/{11}}
+{
+	\pgfmathtruncatemacro{\nodeIndex}{\i-1}
+	\node[left=0.1 of grid-\i-1] {$\psi_{\nodeIndex} = \state$};
+}
+			\end{tikzpicture}
+		}
+	\end{document}
+	

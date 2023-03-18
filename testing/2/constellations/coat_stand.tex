@@ -1,0 +1,21 @@
+\documentclass[]{standalone}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\newcommand{\latexDirectory}{/home/manu/latex}
+\newcommand{\picsDirectory}{\latexDirectory/TikZ/communications_theory}
+
+\input{\picsDirectory/constellations.tex}
+
+\begin{document}
+
+\scalebox{1.8}{
+	\tikz \pic {coat stand constellation};
+}
+
+%$p(\underline{a}_1)=p(\underline{a}_2)=0.2$ and $p(\underline{a}_3)=p(\underline{a}_4)=0.2$
+
+\end{document}

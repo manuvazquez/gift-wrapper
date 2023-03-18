@@ -1,0 +1,116 @@
+pictures base directory: tc/midterm2
+categories:
+  - name: Mean energy from bit rate
+    questions:
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.2$ and $p(s_2) = 0.8$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $1000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.2+0.8) = T$,\
+          \ i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 1000$,\
+          \ and $E_s = T = 1/1000 = 0.001$.\n"
+        solution:
+          value: 0.001
+          error: 0.00015
+        name: Mean energy from bit rate in 1D binary constellation I
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.25$ and $p(s_2) = 0.75$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $2000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.25+0.75) =\
+          \ T$, i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 2000$,\
+          \ and $E_s = T = 1/2000 = 0.0005$.\n"
+        solution:
+          value: 0.0005
+          error: 7.5e-05
+        name: Mean energy from bit rate in 1D binary constellation II
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.5$ and $p(s_2) = 0.5$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $1000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.5+0.5) = T$,\
+          \ i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 1000$,\
+          \ and $E_s = T = 1/1000 = 0.001$.\n"
+        solution:
+          value: 0.001
+          error: 0.00015
+        name: Mean energy from bit rate in 1D binary constellation III
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.4$ and $p(s_2) = 0.6$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $5000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.4+0.6) = T$,\
+          \ i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 5000$,\
+          \ and $E_s = T = 1/5000 = 0.0002$.\n"
+        solution:
+          value: 0.0002
+          error: 3e-05
+        name: Mean energy from bit rate in 1D binary constellation IV
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.3$ and $p(s_2) = 0.7$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $10000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.3+0.7) = T$,\
+          \ i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 10000$,\
+          \ and $E_s = T = 1/10000 = 0.0001$.\n"
+        solution:
+          value: 0.0001
+          error: 1.5e-05
+        name: Mean energy from bit rate in 1D binary constellation V
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.35$ and $p(s_2) = 0.65$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $3000$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.35+0.65) =\
+          \ T$, i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 3000$,\
+          \ and $E_s = T = 1/3000 = 0.0003333333333333333$.\n"
+        solution:
+          value: 0.0003333333333333333
+          error: 4.9999999999999996e-05
+        name: Mean energy from bit rate in 1D binary constellation VI
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.45$ and $p(s_2) = 0.55$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $2500$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.45+0.55) =\
+          \ T$, i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 2500$,\
+          \ and $E_s = T = 1/2500 = 0.0004$.\n"
+        solution:
+          value: 0.0004
+          error: 6e-05
+        name: Mean energy from bit rate in 1D binary constellation VII
+      - class: Numerical
+        statement: "Consider the constellation below\nconstellations/1D_2_elements.tex\n\
+          where $p(s_1) = 0.27$ and $p(s_2) = 0.73$, and $T$ is the symbol period.\n\
+          What is the value of the mean energy, $E_s$, that yields a bit rate equal\
+          \ to $5500$ bits per second?\n"
+        feedback: "The mean energy is $E_s = E_1p(s_1)+E_2p(s_2) = T(0.27+0.73) =\
+          \ T$, i.e., the symbol period. Now, this is simply the inverse of the symbol\
+          \ rate which is, in turn, $R_b = R_s m$ with $m=\\log_2 M$, $M$ being the\
+          \ number of elements in the constellation. Then, $R_b = R_s \\cdot 1 = 5500$,\
+          \ and $E_s = T = 1/5500 = 0.0001818181818181818$.\n"
+        solution:
+          value: 0.0001818181818181818
+          error: 2.727272727272727e-05
+        name: Mean energy from bit rate in 1D binary constellation VIII

@@ -12,7 +12,7 @@ The most interesting point is probably the last one.
 
 Python requirements are:
 
-- Python &#8805; 3.6
+- Python &#8805; 3.8
 - [paramiko](http://www.paramiko.org/)
 - [colorama](https://pypi.org/project/colorama/)
 - [pyyaml](https://pypi.org/project/PyYAML/)

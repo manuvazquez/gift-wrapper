@@ -1,0 +1,19 @@
+\documentclass[]{standalone}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\newcommand{\latexDirectory}{/home/manu/latex}
+\newcommand{\picsDirectory}{\latexDirectory/TikZ/communications_theory}
+
+\input{\picsDirectory/constellations.tex}
+
+\begin{document}
+
+\scalebox{1.8}{
+	\tikz \pic {1D constellation with 3 elements};
+}
+
+\end{document}
