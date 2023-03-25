@@ -5,14 +5,13 @@ import string
 import re
 import sys
 import tempfile
-from typing import Union, List, Optional
 
 from . import parsing
 from . import colors
 
 
 def compile_tex(
-		source_file: Union[str, pathlib.Path], timeout: Optional[int], options: List[str] = ['halt-on-error']) -> int:
+		source_file: str | pathlib.Path, timeout: int | None, options: list[str] = ['halt-on-error']) -> int:
 	"""
 	Compiles a TeX file.
 

@@ -1,7 +1,7 @@
 import re
 import pathlib
 import functools
-from typing import Union, Callable, Optional
+from typing import Callable
 
 from . import image
 from . import parsing
@@ -11,7 +11,7 @@ from . import latex
 
 
 def process_paths(
-		text: str, pattern: str, process_match: Callable[[str], None], replacement: Union[str, Callable[..., str]]):
+		text: str, pattern: str, process_match: Callable[[str], None], replacement: str | Callable[..., str]):
 	"""
 	It searches in a text for strings corresponding to files (maybe including a path), replaces them by another
 	string according to some function and, additionally, processes each file according to another function.
@@ -53,7 +53,7 @@ class Transformer:
 	def __init__(self) -> None:
 
 		# subclasses are expected to set this up
-		self.function: Optional[Callable] = None
+		self.function: Callable | None = None
 
 	def __call__(self, text: str):
 
@@ -153,7 +153,7 @@ class URLs(Transformer):
 
 	url = f'http({parsing.regex_url_valid_character}+)(?!{parsing.regex_url_valid_character})'
 
-	def __init__(self, images_settings: Optional[dict] = None):
+	def __init__(self, images_settings: dict | None = None):
 
 		super().__init__()
 

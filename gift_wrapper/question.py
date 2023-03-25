@@ -3,7 +3,6 @@ import abc
 import functools
 import pathlib
 import string
-from typing import Union, Optional
 
 from . import gift
 from . import colors
@@ -11,7 +10,7 @@ from . import parsing
 from . import transformer
 
 
-def user_settings_to_class_init(settings: dict, name: Optional[str] = None) -> str:
+def user_settings_to_class_init(settings: dict, name: str | None = None) -> str:
 	"""
 	Turns a user settings dictionary into one that can be passed to a question's  `__init__`.
 
@@ -44,8 +43,8 @@ class HtmlQuestion(metaclass=abc.ABCMeta):
 	latex_commands_within_text_processor = transformer.LatexCommandsWithinText()
 
 	def __init__(
-			self, name: str, statement: str, images_settings: Optional[dict] = None, feedback: Optional[str] = None,
-			time: Optional[int] = None, pre_transforms: list = [], post_transforms: list = []):
+			self, name: str, statement: str, images_settings: dict | None = None, feedback: str | None = None,
+			time: int | None = None, pre_transforms: list = [], post_transforms: list = []):
 		"""
 		Initializer.
 
@@ -164,8 +163,8 @@ class Numerical(HtmlQuestion):
 	"""
 
 	def __init__(
-			self, name: str, statement: str, solution: dict, images_settings: Optional[dict] = None,
-			feedback: Optional[str] = None, time: Optional[int] = None, pre_transforms: list = [],
+			self, name: str, statement: str, solution: dict, images_settings: dict | None = None,
+			feedback: str | None = None, time: int | None = None, pre_transforms: list = [],
 			post_transforms: list = []):
 		"""
 		Initializer.
@@ -221,8 +220,8 @@ class MultipleChoice(HtmlQuestion):
 	template_wrong_answers = string.Template(r"**<font color='$color'>$text</font>**")
 
 	def __init__(
-			self, name: str, statement: str, answers: dict, images_settings: Optional[dict] = None,
-			feedback: Optional[str] = None, time: Optional[int] = None, pre_transforms: list = [],
+			self, name: str, statement: str, answers: dict, images_settings: dict | None = None,
+			feedback: str | None = None, time: int | None = None, pre_transforms: list = [],
 			post_transforms: list = []):
 		"""
 		Initializer.

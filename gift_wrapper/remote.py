@@ -1,6 +1,5 @@
 import sys
 import pathlib
-from typing import Union
 
 import paramiko
 
@@ -12,7 +11,7 @@ class Connection:
 	connection_not_available_help = (
 		r'(you can try running the program in local mode, by passing "-l", or embedding the images, with "-e")')
 
-	def __init__(self, host: str, user: str, password: str, public_key: Union[str, pathlib.Path]):
+	def __init__(self, host: str, user: str, password: str, public_key: str | pathlib.Path):
 
 		self.host = host
 		self.user = user
@@ -52,7 +51,7 @@ class Connection:
 		else:
 
 			# local variable `public_key` (rather than attribute `self.public_key`) is used below, so it must be
-			# initialized anyway (even though it is to `None`)
+			# initialized anyway (even if to `None`)
 			public_key = None
 
 		self.connection = paramiko.SSHClient()
@@ -61,8 +60,6 @@ class Connection:
 		self.connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 		try:
-
-			# print(f'{self.user=}, {self.password=}, {self.public_key=}')
 
 			# connection is established
 			self.connection.connect(self.host, username=self.user, password=self.password, key_filename=public_key)
@@ -104,7 +101,7 @@ class Connection:
 
 			return self.connection.get_transport().is_active()
 
-	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
+	def copy(self, source: str | pathlib.Path, remote_directory: str):
 
 		if self.connection is None:
 
@@ -126,7 +123,7 @@ class Connection:
 
 		self.sftp.put(local.as_posix(), self.sftp.normalize(remote.as_posix()))
 
-	def make_directory_at(self, new: Union[str, pathlib.Path], at: str):
+	def make_directory_at(self, new: str | pathlib.Path, at: str):
 
 		if self.connection is None:
 
@@ -166,7 +163,7 @@ class FakeConnection:
 
 		return False
 
-	def copy(self, source: Union[str, pathlib.Path], remote_directory: str):
+	def copy(self, source: str | pathlib.Path, remote_directory: str):
 
 		source = pathlib.Path(source)
 

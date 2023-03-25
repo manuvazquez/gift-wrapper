@@ -1,5 +1,3 @@
-from typing import Union, Optional
-
 from . import latex
 
 
@@ -165,7 +163,7 @@ def process_new_lines(text: str) -> str:
 	return latex.replace_and_replace_only_in_formulas('\n', r'<br>', r'<br>', ' ', text)
 
 
-def from_numerical_solution(solution: [float, int], error: Optional[Union[float, int, str]] = None) -> str:
+def from_numerical_solution(solution: [float, int], error:  float | int | str | None = None) -> str:
 	"""
 	Generates GIFT-ready text from the solution and, optionally, error of a numerical question.
 
@@ -188,7 +186,7 @@ def from_numerical_solution(solution: [float, int], error: Optional[Union[float,
 	return f'#\t=%100%{solution}{error}#'
 
 
-def from_wrong_answer(text: str, grade: Optional[int] = None) -> str:
+def from_wrong_answer(text: str, grade: int | None = None) -> str:
 	"""
 	Generates GIFT-ready text from a (single) wrong answer and, optionally, its grade.
 

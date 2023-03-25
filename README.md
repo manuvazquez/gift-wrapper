@@ -12,7 +12,7 @@ The most interesting point is probably the last one.
 
 Python requirements are:
 
-- Python &#8805; 3.8
+- Python &#8805; 3.10
 - [paramiko](http://www.paramiko.org/)
 - [colorama](https://pypi.org/project/colorama/)
 - [pyyaml](https://pypi.org/project/PyYAML/)
@@ -58,19 +58,19 @@ if you did a manual installation and `wrap.py` doesn't have execution permission
 
 If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file whereas the latter is the actual *input file* in which you must write the questions.
 
-The output will be a text file in GIFT format with the same name as the input one (the file with the questions) but `.gift.txt` extension (by default, `bank.gift.txt` then). It seems that *sometimes* Moodle has troubles importing (recognizing) a text file if the extension is not `.txt`. 
+The output will be a text file in GIFT format with the same name as the input (the file with the questions) but `.gift.txt` extension (thus, `bank.gift.txt`, by default). It seems that *sometimes* Moodle has troubles importing (recognizing) a text file if the extension is not `.txt`. 
 
 ### Parameters
 
-`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it mostly contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments. It should be fairly easy to tweak the [included example](parameters.yaml) for your own setup.
+`parameters.yaml` is a [YAML](https://en.wikipedia.org/wiki/YAML) file intended to hold settings that you only need to specify once. Right now, it only contains parameters related to `images hosting` (needed to copy your images to a remote server). All the options are either self-explanatory or explained through comments. It should be fairly easy to tweak the [included example](parameters.yaml) for your own setup.
 
 ### Questions
 
-Questions are specified through another *YAML* file. The first parameter, `pictures base directory`, refers to the base directory that will be created in the remote host for all your embedded images. It is meant to separate different question banks (so that you can have, e.g., directories `quiz 1` and `quiz 2`). The remaining of the file is a **list of categories**, and inside each one there is a **list of questions**. Hopefully, the format is clear from either the name of the settings and/or its companion comments. You are probably better off taking a look at the [provided example](bank.yaml).
+Questions are specified through another *YAML* file. The first parameter, `pictures base directory`, refers to the base directory that will be created in the remote host to accommodate your images (only meaningful if images are **not** embedded in the questions, i.e., if not passing `-e`). It is meant to separate different question banks (so that you can have, e.g., directories `quiz 1` and `quiz 2`). The rest of the file is a **list of categories**, and inside each one there is a **list of questions**. Hopefully, the format is clear from either the name of the settings and/or its companion comments. You are probably better off taking a look at the [provided example](bank.yaml).
 
 ### Example
 
-If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If you have not adapted the settings in `images hosting`  (within `parameters.yaml`) to your needs, you will instead see an error since a remote connection could not be established. Still, you can run the program in *local* mode by passing `-l` through the command line, or try and embed every image in its corresponding question with `-e`.
+If you run the program inside the `gift-wrapper` directory as is, it will process the sample `bank.yaml` which includes a `.tex`, a `.svg` and some mathematical formulas, and will generate a `bank.gift.txt` file which you can import from Moodle (choosing the GIFT format when asked). If the parameters file (by default, `parameters.yaml`) is not found, images are embedded into the corresponding questions (tantamount to passing `-e`).
 
 ## Including images
 
@@ -99,14 +99,14 @@ Also, there is (probably) nothing special about *pdf2svg* and, in principle, you
 
 ## Remote access
 
-By default, images are copied into some remote host (with a publicly visible directory) so that they can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). For this to work, in the `parameters.yaml` file, within `ssh` either
+If a parameters file (e.g., `parameters.yaml`) is found, images are by default copied to the specified remote host (within a publicly visible directory) so that they can be accessed by Moodle. This is done automatically for every embedded image (svg or tex). For this to work, in the `parameters.yaml` file, within `ssh` either
 
 * user and password, or
 * user and path to a public key file
 
 (but **not both**) should be specified.
 
-You can run the program locally, i.e., omitting the transferring of the images to a remote host by using `-l` command line argument. This is especially meaningful if you don't have any embedded image in your questions (and hence nothing needs to be copied to a remote host).
+You can inhibit this behavior and run the program locally (omitting the transferring of the images to a remote host) by using `-l` command line argument. This is especially meaningful if you don't have any embedded image in your questions (and hence nothing needs to be copied to a remote host).
 
 ## Latex support
 

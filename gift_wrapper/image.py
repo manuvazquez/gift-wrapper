@@ -3,14 +3,13 @@ import pathlib
 import shutil
 import subprocess
 import uuid
-from typing import Union
 
 from . import colors
 from . import latex
 from . import parsing
 
 
-def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> pathlib.Path:
+def tex_to_pdf(source_file: str | pathlib.Path, timeout: int = 10) -> pathlib.Path:
 	"""
 	Turns a TeX file into a pdf.
 
@@ -60,7 +59,7 @@ def tex_to_pdf(source_file: Union[str, pathlib.Path], timeout: int = 10) -> path
 	return source_file.with_suffix('.pdf')
 
 
-def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
+def pdf_to_svg(input_file: str | pathlib.Path) -> pathlib.Path:
 	"""
 	Converts a pdf file into an svg.
 
@@ -98,7 +97,7 @@ def pdf_to_svg(input_file: Union[str, pathlib.Path]) -> pathlib.Path:
 	return output_file
 
 
-def svg_to_html(input_file: Union[str, pathlib.Path]) -> str:
+def svg_to_html(input_file: str | pathlib.Path) -> str:
 	"""
 
 	Parameters

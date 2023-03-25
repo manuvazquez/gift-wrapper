@@ -11,7 +11,6 @@ from . import gift
 from . import colors
 from . import transformer
 
-
 def main():
 	"""Processes command-line arguments and feeds them to `wrap`.
 	"""
@@ -19,11 +18,11 @@ def main():
 	parser = argparse.ArgumentParser(description='Build GIFT files (Moodle) from a simple specification')
 
 	parser.add_argument(
-		'-p', '--parameters_file', type=argparse.FileType('r'), default='parameters.yaml', help='parameters file',
+		'-p', '--parameters_file', default='parameters.yaml', help='parameters file',
 		nargs='?')
 
 	parser.add_argument(
-		'-i', '--input_file', type=argparse.FileType('r'), default='bank.yaml', help='questions file', nargs='?')
+		'-i', '--input_file', default='bank.yaml', help='questions file', nargs='?')
 
 	parser.add_argument(
 		'-l', '--local', default=False, action='store_true', help="don't try to copy the images to the server")
@@ -36,10 +35,10 @@ def main():
 		help='embed the images rather than link to them')
 
 	command_line_arguments = parser.parse_args()
-
+	
 	wrap(
-		parameters=command_line_arguments.parameters_file.name,
-		questions_file=command_line_arguments.input_file.name, local_run=command_line_arguments.local,
+		parameters=command_line_arguments.parameters_file,
+		questions_file=command_line_arguments.input_file, local_run=command_line_arguments.local,
 		no_checks=command_line_arguments.no_checks,
 		embed_images=command_line_arguments.embed_images)
 
@@ -66,10 +65,30 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 	# if a file name was passed, either as a string or wrapped in a `Pathlib`,...
 	if isinstance(parameters, (str, pathlib.Path)):
 
-		# ...it is read
-		with open(parameters) as yaml_data:
+		# so that we can assume it is a `pathlib.Path`
+		parameters = pathlib.Path(parameters)
 
-			parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
+		# if a parameters file is NOT present...
+		if not parameters.exists():
+			
+			# ...images are embedded
+			embed_images = True
+
+			print(
+				f'"{parameters}"{colors.info} not found: embedding the images (`-e`). If you\'d like to host your images in a remote server you can download a sample parameters file{colors.reset} '
+				r'https://raw.githubusercontent.com/manuvazquez/gift-wrapper/master/parameters.yaml'
+				)
+
+			# it shouldn't be used anywhere, but just in case...
+			parameters = None
+		
+		# if a parameters file IS present...
+		else:
+
+			# ...it is read
+			with parameters.open() as yaml_data:
+
+				parameters = yaml.load(yaml_data, Loader=yaml.FullLoader)
 
 	# if a file name was *not* passed...
 	else:
@@ -79,6 +98,14 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 
 	input_file = pathlib.Path(questions_file)
 
+	# if the questions file doesn't exist...
+	if not input_file.exists():
+
+		raise SystemExit(
+			f'"{input_file}" {colors.error}cannot be found: you can download a sample from{colors.reset} '
+			r'https://raw.githubusercontent.com/manuvazquez/gift-wrapper/master/bank.yaml'
+			)
+		
 	# ================================= questions' reading
 
 	# the file containing the questions is read
@@ -146,7 +173,7 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 			if cat['name']:
 
 				# ...if it's *not* a list...
-				if type(cat['name']) != list:
+				if not isinstance(cat['name'], list):
 
 					# ...it is turned into one
 					cat['name'] = [cat['name']]
