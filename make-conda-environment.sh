@@ -13,6 +13,7 @@ LIBRARIES=(
     pyyaml
     paramiko
     tqdm
+    jupyter # only for testing
 )
 
 CHANNELS=(

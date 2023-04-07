@@ -75,8 +75,9 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 			embed_images = True
 
 			print(
-				f'"{parameters}"{colors.info} not found: embedding the images (`-e`). If you\'d like to host your images in a remote server you can download a sample parameters file{colors.reset} '
+				f'"{parameters}"{colors.info} not found: embedding the images (`-e`). If you\'d like to host your images in a remote server you can download the sample parameters file{colors.reset} '
 				r'https://raw.githubusercontent.com/manuvazquez/gift-wrapper/master/parameters.yaml'
+				' and tweak it to your needs'
 				)
 
 			# it shouldn't be used anywhere, but just in case...
@@ -105,7 +106,7 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 			f'"{input_file}" {colors.error}cannot be found: you can download a sample from{colors.reset} '
 			r'https://raw.githubusercontent.com/manuvazquez/gift-wrapper/master/bank.yaml'
 			)
-		
+
 	# ================================= questions' reading
 
 	# the file containing the questions is read
@@ -129,6 +130,25 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 		gift.process_new_lines, transformer.LatexFormulas(not no_checks),
 		transformer.LatexCommandsWithinText()]
 
+	# if images are *not* to be embedded, and this is *not* a local run (i.e., if images are supposed to be hosted remotely)...
+	if (not embed_images) and (not local_run):
+
+		# an object to handle the connection with the requested host is instantiated
+		connection = remote.Connection(
+				parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+
+		# an attempt is made...
+		try:
+
+			# ...to connect
+			connection.connect()
+
+		except remote.CannotConnectException:
+		
+			print(f'{colors.info}cannot establish a connection: embedding the images (`-e`){colors.reset}')
+
+			embed_images = True
+
 	# if images embedding was requested...
 	if embed_images:
 
@@ -144,15 +164,15 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 		# if "local" running was requested...
 		if local_run:
 
-			# ...a "fake" connections is instantiated
+			# ...a "fake" connection is instantiated
 			connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
 
-		# if *no* local running was requested...
-		else:
+		# # if *no* local running was requested...
+		# else:
 
-			# ...an actual connection with the requested host is opened
-			connection = remote.Connection(
-				parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
+		# 	# ...an actual connection with the requested host is opened
+		# 	connection = remote.Connection(
+		# 		parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
 
 		# an object to copy svg files to a remote location is added to the list of *pre* processors
 		pre_transforms.append(transformer.SvgToHttp(

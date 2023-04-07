@@ -1,10 +1,13 @@
 import sys
+import socket
 import pathlib
 
 import paramiko
 
 from . import colors
 
+class CannotConnectException(Exception):
+	"Raised when a connection could not be established"
 
 class Connection:
 
@@ -24,9 +27,12 @@ class Connection:
 		# useful in `__del__` in the case the connection never gets established
 		self.connection = None
 
-		# self.connect()
-
 	def connect(self):
+
+		# if the connection has already been established...
+		if self.connection is not None:
+
+			return
 
 		if (self.password is not None) and (self.public_key is not None):
 
@@ -64,23 +70,39 @@ class Connection:
 			# connection is established
 			self.connection.connect(self.host, username=self.user, password=self.password, key_filename=public_key)
 
-		except paramiko.ssh_exception.AuthenticationException:
+		except paramiko.ssh_exception.AuthenticationException as authentication_exception:
 
-			# first character is not visible due to tqdm
-			print(
-				f'\n{colors.error}provided username {colors.reset}({self.user}){colors.error}'
-				f' and/or password are not valid {self.connection_not_available_help}')
+			# # first character is not visible due to tqdm
+			# print(
+			# 	f'\n{colors.error}provided username {colors.reset}({self.user}){colors.error}'
+			# 	f' and/or password are not valid {self.connection_not_available_help}')
 
-			sys.exit(1)
+			# sys.exit(1)
 
-		except paramiko.ssh_exception.SSHException:
+			raise CannotConnectException(
+				f'{colors.error}provided username {colors.reset}({self.user}){colors.error}'
+				f' and/or password are not valid {self.connection_not_available_help}'
+			) from authentication_exception
 
-			# first character is not visible due to tqdm
-			print(
+		except paramiko.ssh_exception.SSHException as ssh_exception:
+
+			# # first character is not visible due to tqdm
+			# print(
+			# 	f'\n{colors.error}the provided public key {colors.reset}({self.public_key}){colors.error}'
+			# 	f' is not valid or has not been decrypted {self.connection_not_available_help}')
+
+			# sys.exit(1)
+
+			raise CannotConnectException(
 				f'\n{colors.error}the provided public key {colors.reset}({self.public_key}){colors.error}'
-				f' is not valid or has not been decrypted {self.connection_not_available_help}')
+				f' is not valid or has not been decrypted {self.connection_not_available_help}'
+			) from ssh_exception
 
-			sys.exit(1)
+		except socket.gaierror as socket_exception:
+
+			raise CannotConnectException(
+				f'\n{colors.error}cannot connect to the host{colors.reset}'
+			) from socket_exception			
 
 		# FTP component of the connection
 		self.sftp = paramiko.SFTPClient.from_transport(self.connection.get_transport())
