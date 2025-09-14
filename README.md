@@ -40,7 +40,7 @@ If you rather clone this repository, (in order to, potentially, get the latest a
 pip install pyyaml paramiko tqdm colorama
 ```
 
-should install all the additional requirements. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make_conda_environment.sh` will make a proper environment (named `gift`).
+should install all the additional requirements. If you use [Anaconda](https://anaconda.org/), the [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) script `make-conda-environment.sh` will make a proper environment (named `gift`).
 
 After that, you should be able to run the program.
 
@@ -56,7 +56,7 @@ python wrap.py -h
 ```
 if you did a manual installation and `wrap.py` doesn't have execution permissions. 
 
-If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file whereas the latter is the actual *input file* in which you must write the questions.
+If you don't pass any argument, `parameters.yaml` and `bank.yaml` files are expected. The former is a settings file whereas the latter is the actual *input file* in which you must write the questions. It's fine if `parameters.yaml` is missing, though a warning (stating images are to be *embedded*) will be issued.
 
 The output will be a text file in GIFT format with the same name as the input (the file with the questions) but `.gift.txt` extension (thus, `bank.gift.txt`, by default). It seems that *sometimes* Moodle has troubles importing (recognizing) a text file if the extension is not `.txt`. 
 
@@ -77,7 +77,7 @@ If you run the program inside the `gift-wrapper` directory as is, it will proces
 `gift-wrapper` has been designed to work with [svg](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) images. Then, in order to include any image in a question, two scenarios are contemplated:
 
 * you already have an svg
-* you have a TeX file **that can be compiled with *pdflatex***
+* you have a $\TeX$ file **that can be compiled with *pdflatex***
 
 In any case, you just need to write the path to the file inside the text of the question (whether in the `statement`, the `answer` or the `feedbak`). If in the second scenario, i.e., you are including a *TeX* file, this will be compiled into a pdf with *pdflatex*, and then converted to an svg with *pdf2svg*. Hence, a *svg* file will be, in the end, available for every image.
 

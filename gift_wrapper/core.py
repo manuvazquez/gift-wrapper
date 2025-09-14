@@ -167,13 +167,6 @@ def wrap(parameters: str, questions_file: str, local_run: bool, no_checks: bool,
 			# ...a "fake" connection is instantiated
 			connection = remote.FakeConnection(parameters['images hosting']['copy']['host'])
 
-		# # if *no* local running was requested...
-		# else:
-
-		# 	# ...an actual connection with the requested host is opened
-		# 	connection = remote.Connection(
-		# 		parameters['images hosting']['copy']['host'], **parameters['images hosting']['ssh'])
-
 		# an object to copy svg files to a remote location is added to the list of *pre* processors
 		pre_transforms.append(transformer.SvgToHttp(
 			history, connection, parameters['images hosting']['copy']['public filesystem root'],
